@@ -12,6 +12,14 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isMac = /Mac|iPhone|iPad|iPod/i.test(
+    (navigator.userAgentData && navigator.userAgentData.platform) ||
+    navigator.platform ||
+    navigator.userAgent
+  );
+
+  // Show the visitor's own modifier key (⌘K on macOS/iOS, Ctrl K elsewhere)
+  $$("[data-kbd]").forEach((el) => { el.textContent = isMac ? "⌘K" : "Ctrl K"; });
 
   /* ── Command palette data ─────────────────────────────────────── */
   const COMMANDS = [
