@@ -367,6 +367,22 @@ html { scroll-behavior: smooth; }
 .dc-btc { color: #f7931a; }
 .dc-xmr { color: #ff6600; }
 
+.donate-card { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+.qr-card {
+    background: #fff;
+    padding: 8px;
+    border-radius: 12px;
+    line-height: 0;
+    box-shadow: 0 0 0 1px var(--border);
+}
+.qr-card img { display: block; width: 128px; height: 128px; }
+.dc-coin {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+}
+
 /* ── Back to top ──────────────────────────────────────────────── */
 .to-top {
     position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 40;

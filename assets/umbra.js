@@ -311,7 +311,7 @@
         el.classList.add("copied");
         const addr = el.querySelector(".dc-addr");
         const prev = addr ? addr.textContent : null;
-        if (addr) addr.textContent = "Copied to clipboard";
+        if (addr) addr.textContent = "Copied ✓";
         setTimeout(() => {
           el.classList.remove("copied");
           if (addr && prev !== null) addr.textContent = prev;
