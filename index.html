@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMBRASEC • Independent Defensive Security Research</title>
+    <meta name="description" content="UMBRASEC is a new, independent defensive security research project — detection engineering, threat analysis, and open-source defensive tooling, published openly.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="stylesheet" href="assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-x-2.5">
+                    <div class="w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-2xl tracking-[-0.03em]">UMBRASEC</span>
+                        <span class="font-mono text-xs text-[#a9b1d6] ml-1.5">2026</span>
+                    </div>
+                </a>
+
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="#research" class="nav-link">Research</a>
+                    <a href="#approach" class="nav-link">Approach</a>
+                    <a href="#opensource" class="nav-link">Open Source</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </div>
+
+                <div class="flex items-center gap-x-3">
+                    <button data-cmdk type="button"
+                            class="hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-[#2a2c38] hover:bg-[#16161e] transition-colors"
+                            title="Open command palette">
+                        <span>⌘K</span>
+                        <span class="text-[#a9b1d6]">Search</span>
+                    </button>
+                    <a href="https://github.com/umbrasec" target="_blank" rel="noopener"
+                       class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="max-w-[1280px] mx-auto px-8 pt-16 pb-20 tokyo-grid">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8 items-start">
+
+            <div class="lg:col-span-8">
+                <div class="max-w-[820px]">
+                    <div class="flex items-center gap-x-3 mb-6">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-xs font-mono tracking-[2px]">
+                            INDEPENDENT RESEARCH • EST. 2026
+                        </div>
+                    </div>
+
+                    <h1 class="hero-headline font-semibold tracking-[-0.045em] leading-none mb-2">
+                        <span class="ghost-line-1">Attackers improve.</span><br>
+                        <span class="ghost-line-2 text-[#7aa2f7]">Defenders should too.</span>
+                    </h1>
+
+                    <p class="max-w-[600px] text-xl text-[#a9b1d6] mt-8 leading-tight">
+                        UMBRASEC is a new, independent research project focused on the defensive side of security —
+                        detection engineering, honest threat analysis, and open-source tooling that helps defenders
+                        spot real techniques in their own logs.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3 mt-10">
+                        <a href="research/detecting-kerberoasting.html"
+                           class="inline-flex items-center px-8 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
+                            Read the first guide →
+                        </a>
+                        <a href="#approach"
+                           class="inline-flex items-center px-8 py-3.5 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
+                            What this project is
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right sidebar -->
+            <div class="lg:col-span-4 mt-12 lg:mt-0 lg:pl-8 border-l border-[#2a2c38]">
+                <div class="flex items-center gap-x-2 mb-3">
+                    <div class="w-2 h-2 rounded-full bg-[#9ece6a]"></div>
+                    <span class="font-mono text-xs tracking-[2px] text-[#9ece6a]">NEW &amp; BUILDING IN THE OPEN</span>
+                </div>
+
+                <div class="text-sm space-y-1 mb-6">
+                    <div class="font-medium">An independent, one-person research project.</div>
+                    <div class="text-[#a9b1d6]">Started 2026. No company, no clients, no track record to inflate — just published work you can check.</div>
+                </div>
+
+                <div class="flex items-center gap-x-5 mb-8">
+                    <a href="https://github.com/umbrasec" target="_blank" rel="noopener"
+                       class="text-[#a9b1d6] hover:text-white transition-colors" title="GitHub">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                    <a href="mailto:research@umbrasec.dev"
+                       class="text-[#a9b1d6] hover:text-[#7dcfff] transition-colors" title="Email">
+                        <i class="fa-regular fa-envelope text-xl"></i>
+                    </a>
+                </div>
+
+                <div class="text-xs space-y-2 text-[#a9b1d6] border-t border-[#2a2c38] pt-5">
+                    <div class="font-mono text-[#7aa2f7]">SCOPE</div>
+                    <div>Defensive research only — detection, analysis, and mitigation. No offensive tooling, exploits, or malware published here.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 01 Research -->
+    <section id="research" class="max-w-[1280px] mx-auto px-8 pt-12 pb-20 border-t border-[#2a2c38]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8">
+            <div class="lg:col-span-2 mb-8 lg:mb-0">
+                <div class="sticky top-20"><div class="section-label">01 · RESEARCH</div></div>
+            </div>
+
+            <div class="lg:col-span-10">
+                <h2 class="text-6xl font-semibold tracking-[-0.04em] mb-4">Research.</h2>
+                <p class="text-[#a9b1d6] max-w-[640px] mb-10">
+                    This is where writeups land. There's one published so far — the honest starting point for a
+                    project that's a few days old. Each piece is technical, sourced, and reproducible against your own data.
+                </p>
+
+                <!-- Featured / first article -->
+                <a href="research/detecting-kerberoasting.html" class="block">
+                    <div class="research-row grid grid-cols-1 md:grid-cols-12 gap-x-8 py-8 group">
+                        <div class="md:col-span-5">
+                            <div class="font-mono text-xs text-[#9ece6a] mb-2">DETECTION ENGINEERING</div>
+                            <div class="font-semibold text-xl group-hover:text-[#7aa2f7] transition-colors">
+                                Detecting Kerberoasting: A Practical Walkthrough with Sigma
+                            </div>
+                        </div>
+                        <div class="md:col-span-7 text-[#a9b1d6] mt-2 md:mt-0">
+                            A defender-focused breakdown of Kerberoasting (MITRE ATT&amp;CK T1558.003): how the technique
+                            works, why RC4 service tickets give it away, and a set of Sigma rules — with tuning notes — you
+                            can drop into your SIEM today.
+                            <div class="mt-3 flex items-center gap-x-3 text-xs font-mono">
+                                <span class="text-[#7aa2f7]">Jun 2026</span>
+                                <span class="text-[#565f89]">·</span>
+                                <span class="text-[#565f89]">~14 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="mt-8 text-sm text-[#565f89] font-mono">
+                    More writeups in progress. <a href="research/index.html" class="text-[#7aa2f7] hover:text-[#7dcfff]">See the research index →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 Approach -->
+    <section id="approach" class="max-w-[1280px] mx-auto px-8 py-16 border-t border-[#2a2c38]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8">
+            <div class="lg:col-span-2 mb-8 lg:mb-0">
+                <div class="sticky top-20"><div class="section-label">02 · APPROACH</div></div>
+            </div>
+            <div class="lg:col-span-10">
+                <h2 class="text-6xl font-semibold tracking-[-0.04em] mb-10">How this project works.</h2>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="text-[#7aa2f7] text-2xl mb-4"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                        <div class="text-2xl font-semibold tracking-tight mb-3">Sourced, not asserted</div>
+                        <p class="text-[#a9b1d6] text-sm">Every technical claim links back to primary sources — vendor advisories, MITRE ATT&amp;CK, CVE records, and reputable reporting. If it isn't cited, it isn't stated.</p>
+                    </div>
+
+                    <div class="p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="text-[#bb9af7] text-2xl mb-4"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="text-2xl font-semibold tracking-tight mb-3">Defensive by scope</div>
+                        <p class="text-[#a9b1d6] text-sm">The work explains how attacks function <em>so defenders can catch them</em> — detection logic, log artifacts, mitigations. No weaponized exploits, jailbreak libraries, or malware ship from here.</p>
+                    </div>
+
+                    <div class="p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="text-[#7dcfff] text-2xl mb-4"><i class="fa-solid fa-code-branch"></i></div>
+                        <div class="text-2xl font-semibold tracking-tight mb-3">Reproducible</div>
+                        <p class="text-[#a9b1d6] text-sm">Detections come as rules you can run, mapped to real event IDs and ATT&amp;CK techniques, with false-positive and tuning notes — so you can verify them against your own environment.</p>
+                    </div>
+                </div>
+
+                <div class="callout mt-8">
+                    <p class="text-sm text-[#a9b1d6]"><strong class="text-[#c0caf5]">On honesty:</strong> UMBRASEC is brand new. You won't find report counts, disclosure tallies, or claims of a long history on this site, because there isn't one yet. The reputation, if it comes, will come from work you can read and check.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 Open Source -->
+    <section id="opensource" class="max-w-[1280px] mx-auto px-8 py-16 border-t border-[#2a2c38]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8">
+            <div class="lg:col-span-2 mb-8 lg:mb-0">
+                <div class="sticky top-20"><div class="section-label">03 · OPEN SOURCE</div></div>
+            </div>
+            <div class="lg:col-span-10">
+                <h2 class="text-6xl font-semibold tracking-[-0.04em] mb-4">Defensive tooling.</h2>
+                <p class="text-[#a9b1d6] max-w-[640px] mb-10">
+                    Small, useful, open-source tools for defenders — built in the open on GitHub. Honest status labels;
+                    nothing here claims to be more finished than it is.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-5">
+                    <div class="p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="flex items-center gap-x-2 mb-2">
+                            <div class="font-semibold text-xl">kev-watch</div>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1a2e1a] text-[#9ece6a] border border-[#2a3a2a]">WORKING</span>
+                        </div>
+                        <p class="text-sm text-[#a9b1d6]">A zero-dependency Python monitor for the CISA Known Exploited Vulnerabilities (KEV) catalog. Tracks newly added, actively-exploited CVEs and flags ones that match products you care about. Public data only.</p>
+                        <a href="https://github.com/umbrasec" class="mt-6 inline-block text-sm text-[#7aa2f7] hover:text-[#7dcfff]">View on GitHub →</a>
+                    </div>
+
+                    <div class="p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="flex items-center gap-x-2 mb-2">
+                            <div class="font-semibold text-xl">sigma-pack</div>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#2a2410] text-[#e0af68] border border-[#3a341a]">PLANNED</span>
+                        </div>
+                        <p class="text-sm text-[#a9b1d6]">A curated, tested collection of the Sigma detection rules published in the research writeups — packaged for easy import, with documented false-positive profiles. Grows one writeup at a time.</p>
+                        <a href="#research" class="mt-6 inline-block text-sm text-[#7aa2f7] hover:text-[#7dcfff]">Tracks the research →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 Contact -->
+    <section id="contact" class="max-w-[1280px] mx-auto px-8 py-16 border-t border-[#2a2c38]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8">
+            <div class="lg:col-span-2 mb-8 lg:mb-0">
+                <div class="sticky top-20"><div class="section-label">04 · CONTACT</div></div>
+            </div>
+            <div class="lg:col-span-10">
+                <div class="max-w-2xl">
+                    <h2 class="text-6xl font-semibold tracking-[-0.04em] mb-8">Get in touch.</h2>
+                    <p class="text-xl text-[#a9b1d6] mb-8">
+                        Corrections, source suggestions, or a detection that didn't behave the way the writeup said it would?
+                        That's exactly the feedback this project wants. Open an issue on GitHub or send an email.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://github.com/umbrasec" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-x-2 px-6 py-3 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
+                            <i class="fa-brands fa-github"></i> github.com/umbrasec
+                        </a>
+                        <a href="mailto:research@umbrasec.dev"
+                           class="inline-flex items-center gap-x-2 px-6 py-3 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
+                            <i class="fa-regular fa-envelope"></i> research@umbrasec.dev
+                        </a>
+                    </div>
+                    <p class="text-xs text-[#565f89] mt-6 font-mono">No donation buttons, no paywalls, no email gate. Everything published here is free to read.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="font-mono text-xs text-[#a9b1d6]">
+                © 2026 UMBRASEC · Independent defensive research · Published openly
+            </div>
+            <div class="flex items-center gap-x-5">
+                <a href="https://github.com/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-white transition-colors" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="mailto:research@umbrasec.dev" class="text-[#a9b1d6] hover:text-[#7dcfff] transition-colors" title="Email"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/umbra.js" defer></script>
+</body>
+</html>

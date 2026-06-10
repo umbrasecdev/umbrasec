@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecting Kerberoasting with Sigma — UMBRASEC</title>
+    <meta name="description" content="A defender-focused walkthrough of Kerberoasting (MITRE ATT&CK T1558.003): how it works, why RC4 service tickets expose it, and Sigma rules with tuning notes you can run against your own logs.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="flex items-center gap-x-2.5">
+                    <div class="w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <span class="font-semibold text-2xl tracking-[-0.03em]">UMBRASEC</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link">Research</a>
+                    <a href="../index.html#approach" class="nav-link">Approach</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-[1280px] mx-auto px-8 py-16">
+        <!-- breadcrumb -->
+        <div class="font-mono text-xs text-[#565f89] mb-8">
+            <a href="../index.html" class="hover:text-[#7aa2f7]">home</a> /
+            <a href="index.html" class="hover:text-[#7aa2f7]">research</a> /
+            <span class="text-[#a9b1d6]">detecting-kerberoasting</span>
+        </div>
+
+        <header class="prose mx-auto">
+            <div class="flex items-center gap-x-3 mb-6 text-xs font-mono">
+                <span class="text-[#9ece6a]">DETECTION ENGINEERING</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">Jun 10, 2026</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">~14 min</span>
+            </div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] leading-[1.05] mb-6 text-[#c0caf5]">
+                Detecting Kerberoasting: A Practical Walkthrough with Sigma
+            </h1>
+            <p class="text-xl text-[#a9b1d6] leading-snug">
+                Kerberoasting is a decade old, requires no special privileges, and produces almost no noise — which is
+                exactly why it's still one of the most common post-compromise techniques in 2026. Here's how it works,
+                what it leaves behind in your logs, and a set of Sigma rules you can actually run.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ATT&amp;CK T1558.003</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Credential Access</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Active Directory</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Event ID 4769</span>
+            </div>
+        </header>
+
+        <div class="prose mx-auto mt-10">
+
+            <div class="callout">
+                <p class="text-sm"><strong>TL;DR for defenders.</strong> Turn on <em>Audit Kerberos Service Ticket Operations</em>
+                on your domain controllers, then watch Event ID <code>4769</code> for two things: (1) service-ticket requests
+                using <strong>RC4</strong> (<code>TicketEncryptionType 0x17</code>) in an environment that should be using AES,
+                and (2) a single account requesting tickets for an unusual <em>number</em> of distinct service principals.
+                A decoy "honeypot" SPN turns this from anomaly-hunting into a near-zero-false-positive alarm. Rules below.</p>
+            </div>
+
+            <h2>Why this is still worth your time in 2026</h2>
+            <p>
+                Kerberoasting has been public since Tim Medin presented it in 2014, so it's tempting to file it under
+                "solved." It isn't. CrowdStrike's 2025 Global Threat Report lists it among the top post-compromise
+                techniques they observe, and IBM X-Force reported a roughly <strong>100% year-over-year increase</strong>
+                in Kerberoasting seen during incident-response engagements. The reason it persists is structural: the
+                attack abuses how Kerberos is <em>supposed</em> to work, so there's no patch that makes it disappear.
+            </p>
+            <p>
+                There's also a 2026-specific wrinkle. Microsoft is finally retiring RC4: new Active Directory domains
+                built on <strong>Windows Server 2025</strong> have RC4 disabled by default as of Q1 2026. That's real
+                progress — but <em>existing</em> domains keep RC4 enabled for backward compatibility unless an admin
+                changes it. So for most organizations, the weak encryption that makes Kerberoasting fast is still sitting
+                there, and detection still matters.
+            </p>
+
+            <h2>How the attack actually works</h2>
+            <p>
+                Kerberos lets any authenticated domain user request a service ticket (a TGS) for any account that has a
+                Service Principal Name (SPN). That's not a bug — it's how a user gets access to, say, a SQL service. The
+                catch is what's <em>inside</em> the ticket: a portion encrypted with a key derived from the
+                <strong>service account's password</strong>.
+            </p>
+            <ol>
+                <li>The attacker, using any low-privilege domain account, enumerates accounts that have an SPN set (these are usually service accounts).</li>
+                <li>They request a TGS for one or more of those SPNs. The domain controller happily issues the tickets.</li>
+                <li>They extract the encrypted blob and crack it <strong>offline</strong>, on their own hardware, to recover the service account's plaintext password.</li>
+                <li>Because the cracking happens off the network, there are <strong>no failed logons</strong>, no account lockouts, and nothing to trip a brute-force alarm.</li>
+            </ol>
+            <p>
+                Service accounts are a juicy target precisely because they're often over-privileged, rarely rotated, and
+                set up years ago with passwords that predate any modern policy. Crack one and you may inherit a foothold
+                that's effectively permanent.
+            </p>
+
+            <h3>RC4 is the part that hurts</h3>
+            <p>
+                The crackability depends almost entirely on the ticket's encryption type. When a ticket is issued with
+                <strong>RC4-HMAC</strong> (<code>etype 0x17</code>, decimal 23), the key is derived directly from the
+                account's unsalted NT hash — fast to attack with a GPU. Modern cracking rigs running Hashcat exceed
+                <em>100 billion</em> guesses per second, so a weak service-account password falls in minutes.
+            </p>
+            <p>
+                AES tickets (<code>0x11</code>/AES-128 and <code>0x12</code>/AES-256) are dramatically harder — on the
+                order of tens of thousands of times more cracking effort — because of salting and key derivation. That's
+                why Kerberoasting tooling frequently <strong>requests RC4 on purpose</strong>: the attacker downgrades to
+                the weakest option the domain will hand out. <em>That deliberate downgrade is your single best detection
+                signal.</em>
+            </p>
+
+            <h2>What you need flowing into your SIEM</h2>
+            <p>
+                Everything here keys off one Windows event generated on <strong>domain controllers</strong>:
+                Event ID <code>4769 — "A Kerberos service ticket was requested."</code> If you're not collecting it yet:
+            </p>
+            <ul>
+                <li>Enable <strong>Audit Kerberos Service Ticket Operations</strong> (Success) via Group Policy:
+                    <code>Computer Configuration → Policies → Windows Settings → Security Settings → Advanced Audit Policy → Account Logon</code>.</li>
+                <li>Make sure your collector ships the Security log from <strong>every</strong> domain controller — a Kerberoasting request can be serviced by any DC, so a gap on one DC is a blind spot.</li>
+                <li>Expect volume. 4769 fires constantly during normal operation, which is why the filtering below matters as much as the matching.</li>
+            </ul>
+
+            <p>The fields you'll lean on in each 4769 event:</p>
+            <div class="table-wrap">
+                <table class="data">
+                    <thead><tr><th>Field</th><th>Why it matters</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>TicketEncryptionType</code></td><td><code>0x17</code> = RC4 (the downgrade signal). <code>0x12</code> = AES-256, <code>0x11</code> = AES-128.</td></tr>
+                        <tr><td><code>ServiceName</code> / <code>ServiceSid</code></td><td>The account whose ticket was requested — i.e. the roast target. Names ending in <code>$</code> are computer accounts (usually benign).</td></tr>
+                        <tr><td><code>TargetUserName</code> / Account Name</td><td>The principal that <em>made</em> the request — the account you'd investigate.</td></tr>
+                        <tr><td><code>TicketOptions</code></td><td>Roasting tools often produce recognizable option flags (commonly <code>0x40810000</code>), though this varies and shouldn't be relied on alone.</td></tr>
+                        <tr><td><code>Status</code></td><td><code>0x0</code> = the ticket was successfully issued.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Detection strategy</h2>
+            <p>
+                No single rule is a silver bullet. The reliable approach layers three detections, from highest-precision
+                to broadest. This mirrors MITRE ATT&amp;CK's own detection strategy for the technique
+                (<a href="https://attack.mitre.org/detectionstrategies/DET0157/" target="_blank" rel="noopener">DET0157</a>).
+            </p>
+
+            <h3>1. RC4 ticket requested in an AES environment (high precision)</h3>
+            <p>
+                If your domain functional level and accounts support AES, legitimate clients should almost never request
+                RC4. So an RC4 4769 becomes a strong signal. We exclude computer accounts (<code>$</code>) and
+                <code>krbtgt</code>, which generate benign RC4 traffic in many environments.
+            </p>
+            <pre><code>title: Kerberoasting - RC4 Service Ticket Requested
+id: 8f1e2c33-6a4b-4d9e-9a1f-2b7c0d5e4a10
+status: experimental
+description: >
+    A Kerberos TGS (Event 4769) was issued using RC4-HMAC encryption.
+    In AES-capable domains this is a common indicator of Kerberoasting,
+    where tooling downgrades to RC4 to ease offline cracking.
+references:
+    - https://attack.mitre.org/techniques/T1558/003/
+    - https://umbrasec.dev/research/detecting-kerberoasting.html
+author: UMBRASEC
+date: 2026/06/10
+tags:
+    - attack.credential_access
+    - attack.t1558.003
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        TicketEncryptionType: '0x17'   # RC4-HMAC
+        TicketOptions: '0x40810000'     # see tuning note - remove if too narrow
+    filter_machine:
+        ServiceName|endswith: '$'
+    filter_krbtgt:
+        ServiceName: 'krbtgt'
+    filter_failures:
+        Status: '0x1b'                  # only count issued tickets, drop S4U/failed
+    condition: selection and not 1 of filter_*
+falsepositives:
+    - Legacy applications or appliances that genuinely require RC4
+    - Some Linux/macOS or third-party Kerberos clients
+    - Accounts whose msDS-SupportedEncryptionTypes still allow only RC4
+level: medium</code></pre>
+
+            <div class="callout">
+                <p class="text-sm"><strong>Tuning note.</strong> The <code>TicketOptions: '0x40810000'</code> line tightens
+                precision but will miss tools that vary their flags. Start <em>without</em> it to measure your baseline of
+                RC4 requests, identify the legitimate RC4-only accounts, add those to <code>filter_machine</code> as an
+                allowlist, and only then decide whether the TicketOptions constraint earns its keep.</p>
+            </div>
+
+            <h3>2. One account, many service principals (velocity / fan-out)</h3>
+            <p>
+                Roasting frameworks frequently pull tickets for <em>every</em> SPN they can find in one burst. A normal
+                user touches a handful of services a day; an account requesting tickets for dozens of distinct SPNs in
+                minutes is anomalous regardless of encryption type. This one is best expressed as an aggregation, so it's
+                a natural fit for a Sigma <code>correlation</code> rule (or the equivalent <code>stats</code> query in your
+                SIEM):
+            </p>
+            <pre><code>title: Kerberoasting - High Volume of Distinct SPN Requests
+id: 1c9d4b77-2e55-4f01-bb3a-6d8e9f0a1b22
+status: experimental
+description: >
+    A single account requested Kerberos service tickets (4769) for an
+    unusually large number of distinct service principals in a short
+    window - consistent with bulk Kerberoasting enumeration.
+references:
+    - https://attack.mitre.org/techniques/T1558/003/
+author: UMBRASEC
+date: 2026/06/10
+tags:
+    - attack.credential_access
+    - attack.t1558.003
+correlation:
+    type: value_count
+    rules:
+        - kerberoasting_4769_base
+    group-by:
+        - TargetUserName
+    timespan: 5m
+    condition:
+        gte: 15
+        field: ServiceName
+---
+title: Kerberoasting 4769 base
+id: 2d0e5c88-3f66-4012-cc4b-7e9f0a1b2c33
+name: kerberoasting_4769_base
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        Status: '0x0'
+    filter_machine:
+        TargetUserName|endswith: '$'
+    condition: selection and not filter_machine</code></pre>
+            <p>
+                The <code>gte: 15</code> threshold and <code>5m</code> window are starting points, not gospel. Run it in
+                report-only mode for a week, look at your top talkers (vulnerability scanners and monitoring accounts will
+                show up — allowlist them), and set the threshold above your noisiest legitimate account.
+            </p>
+
+            <h3>3. The honeypot SPN (near-zero false positives)</h3>
+            <p>
+                This is the highest-value, lowest-effort detection in the whole post, and it deserves more attention than
+                it gets. Create a <strong>decoy service account</strong>:
+            </p>
+            <ul>
+                <li>Give it a tempting SPN (e.g. <code>MSSQLSvc/sql-prod-01.corp.example:1433</code>) so it shows up in any SPN enumeration.</li>
+                <li>Make sure <strong>nothing legitimately uses it</strong> — no real service, no app config points at it.</li>
+                <li>Give it a long, random password (so even if cracked, it's worthless) and minimal privileges.</li>
+            </ul>
+            <p>
+                Now <em>any</em> 4769 naming that account is suspicious by construction, because no honest workload ever
+                requests its ticket. This converts a fuzzy anomaly problem into a binary alarm.
+            </p>
+            <pre><code>title: Kerberoasting - Honeypot SPN Ticket Requested
+id: 3e1f6d99-4a77-4123-dd5c-8f0a1b2c3d44
+status: experimental
+description: >
+    A Kerberos service ticket (4769) was requested for a decoy service
+    account that no legitimate workload uses. Any hit is high-confidence
+    evidence of SPN enumeration / Kerberoasting.
+references:
+    - https://attack.mitre.org/techniques/T1558/003/
+author: UMBRASEC
+date: 2026/06/10
+tags:
+    - attack.credential_access
+    - attack.t1558.003
+    - attack.deception
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        ServiceName: 'svc-honeypot-sql'   # <-- your decoy sAMAccountName
+    condition: selection
+falsepositives:
+    - A misconfigured scanner that was pointed at the decoy (investigate anyway)
+level: high</code></pre>
+
+            <h2>Mitigation, not just detection</h2>
+            <p>
+                Detection buys you time; these changes shrink the attack surface. Microsoft's October 2024 guidance is the
+                authoritative reference and worth reading in full.
+            </p>
+            <ul>
+                <li><strong>Use Group Managed Service Accounts (gMSAs)</strong> where you can. They use 120-character,
+                    automatically-rotated passwords that are not practically crackable.</li>
+                <li><strong>Kill RC4.</strong> Move accounts and domains to AES-only (<code>msDS-SupportedEncryptionTypes</code>),
+                    after you've used detection #1 to find what still needs RC4. This is the same direction Microsoft is
+                    pushing with the Windows Server 2025 defaults.</li>
+                <li><strong>Fix weak service-account passwords.</strong> Long and random beats clever. AES raises the cost,
+                    but a short AES-protected password still falls eventually.</li>
+                <li><strong>Audit SPNs and privilege.</strong> Remove SPNs from accounts that don't need them, and strip
+                    service accounts of Domain Admin-tier rights they were over-granted years ago.</li>
+            </ul>
+
+            <h2>Honest limitations</h2>
+            <p>
+                A "low and slow" attacker who requests a <em>single</em> high-value ticket and waits will sail past the
+                velocity rule (#2) and, if they target an account that's still RC4-only for legitimate reasons, may not
+                stand out in rule #1 either. That's not a reason to skip these — it's the reason the honeypot (#3) exists,
+                and the reason mitigation matters as much as detection. Layer all three, and pair them with the
+                non-crackable passwords that make a stolen ticket useless even if it slips through.
+            </p>
+            <p>
+                These rules are written to be readable and tunable, not dropped in blind. Test them in report-only mode,
+                baseline your own environment, and treat the thresholds as dials. If one misbehaves for you, that's a great
+                <a href="https://github.com/umbrasec" target="_blank" rel="noopener">GitHub issue</a> — corrections make
+                the next version better.
+            </p>
+
+            <h2>References</h2>
+            <ul>
+                <li><a href="https://attack.mitre.org/techniques/T1558/003/" target="_blank" rel="noopener">MITRE ATT&amp;CK — T1558.003: Steal or Forge Kerberos Tickets: Kerberoasting</a></li>
+                <li><a href="https://attack.mitre.org/detectionstrategies/DET0157/" target="_blank" rel="noopener">MITRE ATT&amp;CK — Detection Strategy DET0157 (Detect Kerberoasting Attempts)</a></li>
+                <li><a href="https://www.microsoft.com/en-us/security/blog/2024/10/11/microsofts-guidance-to-help-mitigate-kerberoasting/" target="_blank" rel="noopener">Microsoft Security Blog — Guidance to help mitigate Kerberoasting (Oct 2024)</a></li>
+                <li><a href="https://www.crowdstrike.com/en-us/cybersecurity-101/cyberattacks/kerberoasting/" target="_blank" rel="noopener">CrowdStrike — What is a Kerberoasting Attack?</a></li>
+                <li><a href="https://thehackernews.com/2025/07/kerberoasting-detections-new-approach.html" target="_blank" rel="noopener">The Hacker News — Kerberoasting Detections: A New Approach to a Decade-Old Challenge (Jul 2025)</a></li>
+            </ul>
+
+            <div class="callout mt-10">
+                <p class="text-sm"><strong>Scope note.</strong> This is a defensive writeup. It explains the technique only
+                to the depth needed to detect and mitigate it, and deliberately does not provide roasting tooling or
+                cracking instructions. UMBRASEC publishes defense, not offense.</p>
+            </div>
+
+        </div>
+
+        <!-- footer nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38] flex items-center justify-between">
+            <a href="index.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">← All research</a>
+            <a href="../index.html#contact" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">Found an error? Tell me →</a>
+        </div>
+    </article>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8 mt-8">
+        <div class="font-mono text-xs text-[#a9b1d6]">
+            © 2026 UMBRASEC · Independent defensive research · Published openly
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>

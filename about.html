@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — UMBRASEC</title>
+    <meta name="description" content="UMBRASEC is a new, independent, one-person defensive security research project. What it is, what it publishes, and what it deliberately won't.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="stylesheet" href="assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="">
+
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center gap-x-2.5">
+                    <div class="w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <span class="font-semibold text-2xl tracking-[-0.03em]">UMBRASEC</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="research/index.html" class="nav-link">Research</a>
+                    <a href="index.html#approach" class="nav-link">Approach</a>
+                    <a href="about.html" class="nav-link text-[#c0caf5]">About</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="max-w-[1280px] mx-auto px-8 py-16">
+        <div class="prose mx-auto">
+            <div class="section-label mb-4">ABOUT</div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] mb-8 text-[#c0caf5]">About UMBRASEC.</h1>
+
+            <p class="text-xl text-[#a9b1d6]">
+                UMBRASEC is a new, independent, <strong>one-person</strong> defensive security research project, started
+                in 2026. It isn't a company, a collective, or a consultancy — it's an individual researcher publishing
+                detection engineering, threat analysis, and small open-source defensive tools, in the open.
+            </p>
+
+            <h2>What it publishes</h2>
+            <p>
+                Technical, defender-focused writeups: detection-engineering guides with rules you can run, breakdowns of
+                real techniques mapped to MITRE ATT&amp;CK, mitigation guidance, and honest analysis of current threats
+                and CVEs. Every factual claim is tied to a primary source — vendor advisories, ATT&amp;CK, CVE records,
+                or reputable reporting.
+            </p>
+
+            <h2>What it deliberately won't publish</h2>
+            <p>
+                No working exploits, no malware, no jailbreak libraries, no offensive tooling. The research describes how
+                attacks work only to the depth a defender needs to detect and stop them. This is a deliberate scope
+                choice: shipping functional attack material would make the project a liability, not an asset.
+            </p>
+
+            <h2>On the lack of a track record</h2>
+            <p>
+                You won't see report counts, disclosure tallies, or claims of years of operation here — because the
+                project is days old, and inventing those numbers would be dishonest. A brand-new site advertising a long
+                history is a red flag, and rightly so. The plan is the boring, honest one: publish genuinely useful work,
+                let it be checked, and let any reputation grow from there.
+            </p>
+
+            <h2>Who's behind it</h2>
+            <p>
+                The project is run under a handle rather than a legal name, which is common and accepted in security
+                research. What matters for trust isn't the name on it — it's whether the rules run, the sources check
+                out, and the analysis holds up. All three are things you can verify yourself.
+            </p>
+
+            <h2>Corrections welcome</h2>
+            <p>
+                If a detection misbehaves, a citation is wrong, or an analysis is off, that's exactly the feedback this
+                project wants. Open an issue on <a href="https://github.com/umbrasec" target="_blank" rel="noopener">GitHub</a>
+                or email <a href="mailto:research@umbrasec.dev">research@umbrasec.dev</a>. Corrections make the next
+                version better and are credited.
+            </p>
+
+            <div class="callout mt-10">
+                <p class="text-sm"><strong>Standing commitments:</strong> defensive scope only · every claim sourced ·
+                free to read, no paywall or email gate · no donation solicitation · honest about what exists and what
+                doesn't.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8">
+        <div class="font-mono text-xs text-[#a9b1d6]">
+            © 2026 UMBRASEC · Independent defensive research · Published openly
+        </div>
+    </footer>
+
+    <script src="assets/umbra.js" defer></script>
+</body>
+</html>
