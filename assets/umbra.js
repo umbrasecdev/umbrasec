@@ -23,7 +23,7 @@
     { group: "Navigate", label: "Contact", hint: "get in touch", icon: "fa-envelope", href: "index.html#contact", keywords: "email" },
     { group: "Articles", label: "Detecting Kerberoasting with Sigma", hint: "T1558.003", icon: "fa-shield-halved", href: "research/detecting-kerberoasting.html", keywords: "kerberos rc4 detection sigma active directory 4769" },
     { group: "External", label: "GitHub", hint: "github.com/umbrasec", icon: "fa-github", brand: true, href: "https://github.com/umbrasec", external: true },
-    { group: "External", label: "Email research@umbrasec.dev", hint: "mail", icon: "fa-paper-plane", href: "mailto:research@umbrasec.dev", external: true },
+    { group: "External", label: "Email 0xdev1@umbrasec.com", hint: "mail", icon: "fa-paper-plane", href: "mailto:0xdev1@umbrasec.com", external: true },
   ];
 
   /* ── Build command palette DOM ────────────────────────────────── */
