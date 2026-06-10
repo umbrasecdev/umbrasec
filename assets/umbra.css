@@ -337,6 +337,36 @@ html { scroll-behavior: smooth; }
 .copy-btn:hover { color: var(--text); border-color: var(--border-hi); }
 .copy-btn.copied { color: var(--green); border-color: #2a3a2a; }
 
+/* ── Donate / support chips ───────────────────────────────────── */
+.donate-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-soft);
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    transition: border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+.donate-chip:hover { border-color: var(--border-hi); color: var(--text); }
+.donate-chip:active { transform: translateY(1px); }
+.donate-chip .dc-tic { font-weight: 600; color: var(--text); }
+.donate-chip .dc-addr {
+    color: #565f89;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.donate-chip.copied { border-color: #2a3a2a; color: var(--green); }
+.donate-chip.copied .dc-tic { color: var(--green); }
+.dc-btc { color: #f7931a; }
+.dc-xmr { color: #ff6600; }
+
 /* ── Back to top ──────────────────────────────────────────────── */
 .to-top {
     position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 40;

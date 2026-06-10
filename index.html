@@ -258,7 +258,33 @@
                             <i class="fa-regular fa-envelope"></i> 0xdev1@umbrasec.com
                         </a>
                     </div>
-                    <p class="text-xs text-[#565f89] mt-6 font-mono">No donation buttons, no paywalls, no email gate. Everything published here is free to read.</p>
+                    <!-- Support block. NOTE: replace the data-copy placeholder strings below
+                         with your real BTC and Monero wallet addresses before going live. -->
+                    <div class="mt-10 pt-6 border-t border-[#2a2c38]">
+                        <div class="font-mono text-xs text-[#7aa2f7] mb-2">SUPPORT THIS PROJECT</div>
+                        <p class="text-sm text-[#a9b1d6] mb-4 max-w-xl">
+                            Everything here is free to read — no paywalls, no email gate. If the research saves you
+                            time, optional contributions help keep it independent. Click to copy an address.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <button type="button" class="donate-chip" data-copy="REPLACE_WITH_YOUR_BTC_ADDRESS" data-label="Bitcoin address">
+                                <i class="fa-brands fa-bitcoin dc-btc text-lg"></i>
+                                <span class="dc-tic">BTC</span>
+                                <span class="dc-addr">REPLACE_WITH_YOUR_BTC_ADDRESS</span>
+                            </button>
+                            <button type="button" class="donate-chip" data-copy="REPLACE_WITH_YOUR_XMR_ADDRESS" data-label="Monero address">
+                                <span class="dc-xmr inline-flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="18" height="18" fill="currentColor" aria-hidden="true">
+                                        <circle cx="50" cy="50" r="50"/>
+                                        <path fill="#16161e" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                                        <path fill="#16161e" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                                    </svg>
+                                </span>
+                                <span class="dc-tic">XMR</span>
+                                <span class="dc-addr">REPLACE_WITH_YOUR_XMR_ADDRESS</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -273,6 +299,14 @@
             <div class="flex items-center gap-x-5">
                 <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-white transition-colors" title="GitHub"><i class="fa-brands fa-github"></i></a>
                 <a href="mailto:0xdev1@umbrasec.com" class="text-[#a9b1d6] hover:text-[#7dcfff] transition-colors" title="Email"><i class="fa-regular fa-envelope"></i></a>
+                <a href="#contact" class="text-[#a9b1d6] hover:text-[#f7931a] transition-colors" title="Support with Bitcoin"><i class="fa-brands fa-bitcoin"></i></a>
+                <a href="#contact" class="text-[#a9b1d6] hover:text-[#ff6600] transition-colors" title="Support with Monero">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <circle cx="50" cy="50" r="50"/>
+                        <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                        <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </footer>

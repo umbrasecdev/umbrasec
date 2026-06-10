@@ -289,6 +289,37 @@
     });
   });
 
+  /* ── Copy-to-clipboard chips (donate addresses, etc.) ─────────── */
+  function copyText(text) {
+    if (navigator.clipboard) return navigator.clipboard.writeText(text);
+    return new Promise((resolve, reject) => {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); resolve(); } catch (e) { reject(e); }
+      document.body.removeChild(ta);
+    });
+  }
+
+  $$("[data-copy]").forEach((el) => {
+    el.addEventListener("click", () => {
+      const value = el.getAttribute("data-copy");
+      copyText(value).then(() => {
+        el.classList.add("copied");
+        const addr = el.querySelector(".dc-addr");
+        const prev = addr ? addr.textContent : null;
+        if (addr) addr.textContent = "Copied to clipboard";
+        setTimeout(() => {
+          el.classList.remove("copied");
+          if (addr && prev !== null) addr.textContent = prev;
+        }, 1500);
+      });
+    });
+  });
+
   /* ── Back to top ──────────────────────────────────────────────── */
   (function backToTop() {
     const btn = document.createElement("button");
