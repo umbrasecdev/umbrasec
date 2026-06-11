@@ -1,0 +1,34 @@
+title: Kerberoasting - RC4 Service Ticket Requested
+id: 8f1e2c33-6a4b-4d9e-9a1f-2b7c0d5e4a10
+status: experimental
+description: >
+    A Kerberos TGS (Event 4769) was issued using RC4-HMAC encryption.
+    In AES-capable domains this is a common indicator of Kerberoasting,
+    where tooling downgrades to RC4 to ease offline cracking.
+references:
+    - https://attack.mitre.org/techniques/T1558/003/
+    - https://umbrasec.dev/research/detecting-kerberoasting.html
+author: UMBRASEC
+date: 2026/06/10
+tags:
+    - attack.credential_access
+    - attack.t1558.003
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        TicketEncryptionType: '0x17'   # RC4-HMAC
+        TicketOptions: '0x40810000'     # see tuning note - remove if too narrow
+        Status: '0x0'                   # only count successfully issued tickets
+    filter_machine:
+        ServiceName|endswith: '$'
+    filter_krbtgt:
+        ServiceName: 'krbtgt'
+    condition: selection and not 1 of filter_*
+falsepositives:
+    - Legacy applications or appliances that genuinely require RC4
+    - Some Linux/macOS or third-party Kerberos clients
+    - Accounts whose msDS-SupportedEncryptionTypes still allow only RC4
+level: medium

@@ -1,0 +1,27 @@
+title: Kerberoasting - Honeypot SPN Ticket Requested
+id: 3e1f6d99-4a77-4123-dd5c-8f0a1b2c3d44
+status: experimental
+description: >
+    A Kerberos service ticket (4769) was requested for a decoy service
+    account that no legitimate workload uses. Any hit is high-confidence
+    evidence of SPN enumeration / Kerberoasting.
+references:
+    - https://attack.mitre.org/techniques/T1558/003/
+    - https://umbrasec.dev/research/detecting-kerberoasting.html
+author: UMBRASEC
+date: 2026/06/10
+tags:
+    - attack.credential_access
+    - attack.t1558.003
+    - attack.deception
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        ServiceName: 'svc-honeypot-sql'   # <-- your decoy sAMAccountName
+    condition: selection
+falsepositives:
+    - A misconfigured scanner that was pointed at the decoy (investigate anyway)
+level: high

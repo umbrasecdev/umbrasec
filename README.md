@@ -44,6 +44,11 @@ anything. See its [README](tools/kev-watch/README.md).
 python3 tools/kev-watch/kev_watch.py --watch fortinet ivanti
 ```
 
+[`tools/sigma-pack/`](tools/sigma-pack/) - the Sigma rules and KQL queries published in
+the research writeups, as runnable files: three Kerberoasting detections (T1558.003)
+and three OAuth consent-phishing queries (T1528) so far. Early and honest about it -
+the pack grows one writeup at a time. See its [README](tools/sigma-pack/README.md).
+
 ## Corrections
 
 Found a detection that misbehaves, a wrong citation, or an analysis that's off? That

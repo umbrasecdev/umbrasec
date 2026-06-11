@@ -1,0 +1,24 @@
+// UMBRASEC sigma-pack - OAuth consent phishing (T1528), detection 1 of 3
+// Entra ID audit: consent to an app requesting sensitive delegated scopes
+// Source writeup: https://umbrasec.dev/research/detecting-oauth-consent-phishing.html
+// Tuning: allowlist sanctioned AppIds; IsAdminConsent == "True" is the
+// high-severity branch (tenant-wide grant). Validate modifiedProperties
+// field names against your own tenant before alerting.
+AuditLogs
+| where OperationName == "Consent to application"
+| where Result == "success"
+| mv-expand TargetResources
+| extend mods = TargetResources.modifiedProperties
+| mv-expand mods
+| extend propName = tostring(mods.displayName), newVal = tostring(mods.newValue)
+| summarize props = make_bag(bag_pack(propName, newVal))
+        by CorrelationId, TimeGenerated,
+           Actor = tostring(InitiatedBy.user.userPrincipalName)
+| extend Permissions   = tostring(props["ConsentAction.Permissions"]),
+         IsAdminConsent = tostring(props["ConsentContext.IsAdminConsent"]),
+         AppDisplayName = tostring(props["TargetId.ServicePrincipalNames"])
+| where Permissions has_any (
+        "Mail.Read", "Mail.ReadWrite", "Mail.Send", "MailboxSettings.ReadWrite",
+        "Files.ReadWrite.All", "Sites.ReadWrite.All", "offline_access",
+        "User.Read.All", "Directory.Read.All")
+| project TimeGenerated, Actor, AppDisplayName, IsAdminConsent, Permissions
