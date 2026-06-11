@@ -60,9 +60,8 @@ hardening, and SOAR playbooks, ATT&CK-aligned. Served at
 Things you'll want to swap for your own details:
 
 - **Scheduling link** - `services.html` has a `Book a scoping call` button pointing at
-  the placeholder `https://cal.com/your-handle`. Make a free [Cal.com](https://cal.com)
-  (or Calendly) account and replace that one URL. It appears in exactly one place,
-  marked with a `<!-- SCHEDULING: ... -->` comment.
+  `https://cal.com/0xdev1`. To change it, edit that one URL (marked with a
+  `<!-- SCHEDULING: ... -->` comment).
 - **Contact email** - `0xdev1@umbrasec.dev`, used in `index.html`, `services.html`,
   `about.html`, and the palette in `assets/umbra.js`.
 - **GitHub** - `github.com/atraxsrc/umbrasec` throughout.
