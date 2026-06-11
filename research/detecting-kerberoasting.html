@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detecting Kerberoasting with Sigma — UMBRASEC</title>
+    <title>Detecting Kerberoasting with Sigma - UMBRASEC</title>
     <meta name="description" content="A defender-focused walkthrough of Kerberoasting (MITRE ATT&CK T1558.003): how it works, why RC4 service tickets expose it, and Sigma rules with tuning notes you can run against your own logs.">
     <link rel="canonical" href="https://umbrasec.dev/research/detecting-kerberoasting.html">
     <meta property="og:type" content="article">
@@ -14,7 +14,7 @@
     <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="UMBRASEC — Attackers improve. Defenders should too.">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
     <meta property="article:published_time" content="2026-06-10">
     <meta property="article:author" content="UMBRASEC">
     <meta property="article:section" content="Detection Engineering">
@@ -63,6 +63,7 @@
                 <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
                     <a href="index.html" class="nav-link">Research</a>
                     <a href="../index.html#approach" class="nav-link">Approach</a>
+                    <a href="../services.html" class="nav-link">Services</a>
                     <a href="../about.html" class="nav-link">About</a>
                     <a href="../index.html#contact" class="nav-link">Contact</a>
                 </div>
@@ -95,7 +96,7 @@
                 Detecting Kerberoasting: A Practical Walkthrough with Sigma
             </h1>
             <p class="text-xl text-[#a9b1d6] leading-snug">
-                Kerberoasting is a decade old, requires no special privileges, and produces almost no noise — which is
+                Kerberoasting is a decade old, requires no special privileges, and produces almost no noise - which is
                 exactly why it's still one of the most common post-compromise techniques in 2026. Here's how it works,
                 what it leaves behind in your logs, and a set of Sigma rules you can actually run.
             </p>
@@ -130,7 +131,7 @@
             <p>
                 There's also a 2026-specific wrinkle. Microsoft is finally retiring RC4: new Active Directory domains
                 built on <strong>Windows Server 2025</strong> have RC4 disabled by default as of Q1 2026. That's real
-                progress — but <em>existing</em> domains keep RC4 enabled for backward compatibility unless an admin
+                progress - but <em>existing</em> domains keep RC4 enabled for backward compatibility unless an admin
                 changes it. So for most organizations, the weak encryption that makes Kerberoasting fast is still sitting
                 there, and detection still matters.
             </p>
@@ -138,7 +139,7 @@
             <h2>How the attack actually works</h2>
             <p>
                 Kerberos lets any authenticated domain user request a service ticket (a TGS) for any account that has a
-                Service Principal Name (SPN). That's not a bug — it's how a user gets access to, say, a SQL service. The
+                Service Principal Name (SPN). That's not a bug - it's how a user gets access to, say, a SQL service. The
                 catch is what's <em>inside</em> the ticket: a portion encrypted with a key derived from the
                 <strong>service account's password</strong>.
             </p>
@@ -158,12 +159,12 @@
             <p>
                 The crackability depends almost entirely on the ticket's encryption type. When a ticket is issued with
                 <strong>RC4-HMAC</strong> (<code>etype 0x17</code>, decimal 23), the key is derived directly from the
-                account's unsalted NT hash — fast to attack with a GPU. Modern cracking rigs running Hashcat exceed
+                account's unsalted NT hash - fast to attack with a GPU. Modern cracking rigs running Hashcat exceed
                 <em>100 billion</em> guesses per second, so a weak service-account password falls in minutes.
             </p>
             <p>
-                AES tickets (<code>0x11</code>/AES-128 and <code>0x12</code>/AES-256) are dramatically harder — on the
-                order of tens of thousands of times more cracking effort — because of salting and key derivation. That's
+                AES tickets (<code>0x11</code>/AES-128 and <code>0x12</code>/AES-256) are dramatically harder - on the
+                order of tens of thousands of times more cracking effort - because of salting and key derivation. That's
                 why Kerberoasting tooling frequently <strong>requests RC4 on purpose</strong>: the attacker downgrades to
                 the weakest option the domain will hand out. <em>That deliberate downgrade is your single best detection
                 signal.</em>
@@ -172,12 +173,12 @@
             <h2>What you need flowing into your SIEM</h2>
             <p>
                 Everything here keys off one Windows event generated on <strong>domain controllers</strong>:
-                Event ID <code>4769 — "A Kerberos service ticket was requested."</code> If you're not collecting it yet:
+                Event ID <code>4769 - "A Kerberos service ticket was requested."</code> If you're not collecting it yet:
             </p>
             <ul>
                 <li>Enable <strong>Audit Kerberos Service Ticket Operations</strong> (Success) via Group Policy:
                     <code>Computer Configuration → Policies → Windows Settings → Security Settings → Advanced Audit Policy → Account Logon</code>.</li>
-                <li>Make sure your collector ships the Security log from <strong>every</strong> domain controller — a Kerberoasting request can be serviced by any DC, so a gap on one DC is a blind spot.</li>
+                <li>Make sure your collector ships the Security log from <strong>every</strong> domain controller - a Kerberoasting request can be serviced by any DC, so a gap on one DC is a blind spot.</li>
                 <li>Expect volume. 4769 fires constantly during normal operation, which is why the filtering below matters as much as the matching.</li>
             </ul>
 
@@ -187,8 +188,8 @@
                     <thead><tr><th>Field</th><th>Why it matters</th></tr></thead>
                     <tbody>
                         <tr><td><code>TicketEncryptionType</code></td><td><code>0x17</code> = RC4 (the downgrade signal). <code>0x12</code> = AES-256, <code>0x11</code> = AES-128.</td></tr>
-                        <tr><td><code>ServiceName</code> / <code>ServiceSid</code></td><td>The account whose ticket was requested — i.e. the roast target. Names ending in <code>$</code> are computer accounts (usually benign).</td></tr>
-                        <tr><td><code>TargetUserName</code> / Account Name</td><td>The principal that <em>made</em> the request — the account you'd investigate.</td></tr>
+                        <tr><td><code>ServiceName</code> / <code>ServiceSid</code></td><td>The account whose ticket was requested - i.e. the roast target. Names ending in <code>$</code> are computer accounts (usually benign).</td></tr>
+                        <tr><td><code>TargetUserName</code> / Account Name</td><td>The principal that <em>made</em> the request - the account you'd investigate.</td></tr>
                         <tr><td><code>TicketOptions</code></td><td>Roasting tools often produce recognizable option flags (commonly <code>0x40810000</code>), though this varies and shouldn't be relied on alone.</td></tr>
                         <tr><td><code>Status</code></td><td><code>0x0</code> = the ticket was successfully issued.</td></tr>
                     </tbody>
@@ -300,7 +301,7 @@ detection:
             <p>
                 The <code>gte: 15</code> threshold and <code>5m</code> window are starting points, not gospel. Run it in
                 report-only mode for a week, look at your top talkers (vulnerability scanners and monitoring accounts will
-                show up — allowlist them), and set the threshold above your noisiest legitimate account.
+                show up - allowlist them), and set the threshold above your noisiest legitimate account.
             </p>
 
             <h3>3. The honeypot SPN (near-zero false positives)</h3>
@@ -310,7 +311,7 @@ detection:
             </p>
             <ul>
                 <li>Give it a tempting SPN (e.g. <code>MSSQLSvc/sql-prod-01.corp.example:1433</code>) so it shows up in any SPN enumeration.</li>
-                <li>Make sure <strong>nothing legitimately uses it</strong> — no real service, no app config points at it.</li>
+                <li>Make sure <strong>nothing legitimately uses it</strong> - no real service, no app config points at it.</li>
                 <li>Give it a long, random password (so even if cracked, it's worthless) and minimal privileges.</li>
             </ul>
             <p>
@@ -365,24 +366,24 @@ level: high</code></pre>
             <p>
                 A "low and slow" attacker who requests a <em>single</em> high-value ticket and waits will sail past the
                 velocity rule (#2) and, if they target an account that's still RC4-only for legitimate reasons, may not
-                stand out in rule #1 either. That's not a reason to skip these — it's the reason the honeypot (#3) exists,
+                stand out in rule #1 either. That's not a reason to skip these - it's the reason the honeypot (#3) exists,
                 and the reason mitigation matters as much as detection. Layer all three, and pair them with the
                 non-crackable passwords that make a stolen ticket useless even if it slips through.
             </p>
             <p>
                 These rules are written to be readable and tunable, not dropped in blind. Test them in report-only mode,
                 baseline your own environment, and treat the thresholds as dials. If one misbehaves for you, that's a great
-                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener">GitHub issue</a> — corrections make
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener">GitHub issue</a> - corrections make
                 the next version better.
             </p>
 
             <h2>References</h2>
             <ul>
-                <li><a href="https://attack.mitre.org/techniques/T1558/003/" target="_blank" rel="noopener">MITRE ATT&amp;CK — T1558.003: Steal or Forge Kerberos Tickets: Kerberoasting</a></li>
-                <li><a href="https://attack.mitre.org/detectionstrategies/DET0157/" target="_blank" rel="noopener">MITRE ATT&amp;CK — Detection Strategy DET0157 (Detect Kerberoasting Attempts)</a></li>
-                <li><a href="https://www.microsoft.com/en-us/security/blog/2024/10/11/microsofts-guidance-to-help-mitigate-kerberoasting/" target="_blank" rel="noopener">Microsoft Security Blog — Guidance to help mitigate Kerberoasting (Oct 2024)</a></li>
-                <li><a href="https://www.crowdstrike.com/en-us/cybersecurity-101/cyberattacks/kerberoasting/" target="_blank" rel="noopener">CrowdStrike — What is a Kerberoasting Attack?</a></li>
-                <li><a href="https://thehackernews.com/2025/07/kerberoasting-detections-new-approach.html" target="_blank" rel="noopener">The Hacker News — Kerberoasting Detections: A New Approach to a Decade-Old Challenge (Jul 2025)</a></li>
+                <li><a href="https://attack.mitre.org/techniques/T1558/003/" target="_blank" rel="noopener">MITRE ATT&amp;CK - T1558.003: Steal or Forge Kerberos Tickets: Kerberoasting</a></li>
+                <li><a href="https://attack.mitre.org/detectionstrategies/DET0157/" target="_blank" rel="noopener">MITRE ATT&amp;CK - Detection Strategy DET0157 (Detect Kerberoasting Attempts)</a></li>
+                <li><a href="https://www.microsoft.com/en-us/security/blog/2024/10/11/microsofts-guidance-to-help-mitigate-kerberoasting/" target="_blank" rel="noopener">Microsoft Security Blog - Guidance to help mitigate Kerberoasting (Oct 2024)</a></li>
+                <li><a href="https://www.crowdstrike.com/en-us/cybersecurity-101/cyberattacks/kerberoasting/" target="_blank" rel="noopener">CrowdStrike - What is a Kerberoasting Attack?</a></li>
+                <li><a href="https://thehackernews.com/2025/07/kerberoasting-detections-new-approach.html" target="_blank" rel="noopener">The Hacker News - Kerberoasting Detections: A New Approach to a Decade-Old Challenge (Jul 2025)</a></li>
             </ul>
 
             <div class="callout mt-10">

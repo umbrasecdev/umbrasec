@@ -1,4 +1,4 @@
-/* UMBRASEC — shared interactivity
+/* UMBRASEC - shared interactivity
    Injects the ⌘K command palette, mobile menu, back-to-top button, and wires
    scroll-reveal, scrollspy, and code-copy buttons. Pages only need:
      <body data-base="">      (root pages)   or   data-base="../"  (subdirs)
@@ -27,6 +27,7 @@
     { group: "Navigate", label: "Research", hint: "all writeups", icon: "fa-flask", href: "research/index.html", keywords: "articles posts" },
     { group: "Navigate", label: "Approach", hint: "how this works", icon: "fa-compass", href: "index.html#approach", keywords: "method principles" },
     { group: "Navigate", label: "Open Source", hint: "tools", icon: "fa-code-branch", href: "index.html#opensource", keywords: "tools github kev" },
+    { group: "Navigate", label: "Services", hint: "work with us", icon: "fa-handshake", href: "services.html", keywords: "hire consulting detection engineering m365 hardening advisory incident response retainer" },
     { group: "Navigate", label: "About", hint: "the project", icon: "fa-circle-info", href: "about.html" },
     { group: "Navigate", label: "Contact", hint: "get in touch", icon: "fa-envelope", href: "index.html#contact", keywords: "email" },
     { group: "Articles", label: "Detecting OAuth Consent Phishing", hint: "T1528", icon: "fa-user-shield", href: "research/detecting-oauth-consent-phishing.html", keywords: "oauth consent phishing entra azure ad graph illicit grant token mfa m365 office 365" },
@@ -291,18 +292,30 @@
   });
 
   /* ── Copy-to-clipboard chips (donate addresses, etc.) ─────────── */
-  function copyText(text) {
-    if (navigator.clipboard) return navigator.clipboard.writeText(text);
+  function legacyCopy(text) {
     return new Promise((resolve, reject) => {
       const ta = document.createElement("textarea");
       ta.value = text;
       ta.style.position = "fixed";
+      ta.style.top = "0";
       ta.style.opacity = "0";
       document.body.appendChild(ta);
+      ta.focus();
       ta.select();
-      try { document.execCommand("copy"); resolve(); } catch (e) { reject(e); }
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
       document.body.removeChild(ta);
+      ok ? resolve() : reject(new Error("copy unavailable"));
     });
+  }
+  // Try the async Clipboard API; if it rejects (no focus / denied / insecure
+  // context) fall back to execCommand, and reject only if both fail — so a
+  // failed copy never silently leaves stale clipboard content behind.
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).catch(() => legacyCopy(text));
+    }
+    return legacyCopy(text);
   }
 
   $$("[data-copy]").forEach((el) => {
@@ -317,7 +330,7 @@
           el.classList.remove("copied");
           if (addr && prev !== null) addr.textContent = prev;
         }, 1500);
-      });
+      }).catch(() => { window.prompt("Copy this:", value); });
     });
   });
 
@@ -552,16 +565,19 @@
     }
     if (copy) {
       copy.addEventListener("click", () => {
-        copyText(link).then(() => {
-          copy.classList.add("copied");
-          const icon = copy.querySelector("i");
-          const prev = icon ? icon.className : null;
-          if (icon) icon.className = "fa-solid fa-check";
+        const icon = copy.querySelector("i");
+        const prev = icon ? icon.className : null;
+        const flash = (cls, ok) => {
+          copy.classList.toggle("copied", ok);
+          if (icon) icon.className = cls;
           setTimeout(() => {
             copy.classList.remove("copied");
             if (icon && prev) icon.className = prev;
           }, 1500);
-        });
+        };
+        copyText(link)
+          .then(() => flash("fa-solid fa-check", true))
+          .catch(() => { window.prompt("Copy this link:", link); });
       });
     }
   })();
@@ -618,7 +634,7 @@
         if (tag && data.synced) tag.title = "Latest CISA KEV additions · synced " + data.synced;
         strip.classList.remove("hidden");
       })
-      .catch(() => { /* leave the strip hidden — show real data or nothing */ });
+      .catch(() => { /* leave the strip hidden - show real data or nothing */ });
   })();
 
   /* ── Back to top ──────────────────────────────────────────────── */

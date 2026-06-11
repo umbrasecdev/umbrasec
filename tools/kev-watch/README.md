@@ -4,7 +4,7 @@ A small, **zero-dependency** Python monitor for the [CISA Known Exploited
 Vulnerabilities (KEV) catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog).
 
 It pulls CISA's public KEV feed, remembers what it has already seen, and reports
-newly added, **actively-exploited** CVEs — optionally filtered to the vendors and
+newly added, **actively-exploited** CVEs - optionally filtered to the vendors and
 products you actually run. Useful as a daily cron job or a quick manual check.
 
 > **Defensive, public-data-only.** kev-watch reads one public JSON feed. It does
@@ -43,7 +43,7 @@ hasn't seen before, then records everything it saw. So the **first** run is quie
 by design (it's establishing a baseline); subsequent runs surface only what's
 genuinely new. Use `--no-save` for a dry run that doesn't advance the baseline.
 
-The `--since` and `--due-soon` modes are independent queries — they never advance
+The `--since` and `--due-soon` modes are independent queries - they never advance
 the seen-state, so they won't hide future "new" results.
 
 ### Output
@@ -64,7 +64,7 @@ State is written next to the script by default; override with the
 
 ## Why this exists
 
-Part of [UMBRASEC](https://umbrasec.dev) — a defensive security research project.
+Part of [UMBRASEC](https://umbrasec.dev) - a defensive security research project.
 The KEV catalog is the single best public signal for "patch this now": it only
 lists vulnerabilities with confirmed in-the-wild exploitation. This tool just
 makes it easy to watch the slice of it that's relevant to you.

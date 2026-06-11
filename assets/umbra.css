@@ -1,4 +1,4 @@
-/* UMBRASEC shared styles — Tokyo Night palette
+/* UMBRASEC shared styles - Tokyo Night palette
    Layout utilities come from Tailwind (CDN); this file holds the
    custom typography, grid texture, and component styles reused across pages. */
 
@@ -72,7 +72,7 @@ body {
 }
 .nav-link:hover::after { transform: scaleX(1); }
 
-/* Hero headline — staggered fade-up on load, stays legible */
+/* Hero headline - staggered fade-up on load, stays legible */
 .ghost-line-1, .ghost-line-2 {
     display: inline-block;
     opacity: 0;
@@ -213,7 +213,7 @@ html { scroll-behavior: smooth; }
     .reveal { opacity: 1; transform: none; transition: none; }
 }
 
-/* active nav link (scrollspy) — reuses the hover underline */
+/* active nav link (scrollspy) - reuses the hover underline */
 .nav-link.active { color: var(--text); }
 .nav-link.active::after { transform: scaleX(1); }
 
@@ -493,7 +493,7 @@ html { scroll-behavior: smooth; }
     pointer-events: none;
 }
 
-/* Decode / scramble text — the cipher glyphs mid-resolve */
+/* Decode / scramble text - the cipher glyphs mid-resolve */
 .scramble-rnd { color: var(--purple); opacity: 0.9; }
 [data-scramble] { min-height: 1em; }
 
@@ -684,3 +684,13 @@ html { scroll-behavior: smooth; }
     padding: 2.25rem;
     text-align: center;
 }
+
+/* ── Footer crypto tip buttons (copy-on-click) ────────────────── */
+.footer-coin {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    line-height: 0;
+}
+.footer-coin.copied { color: var(--green); }

@@ -43,7 +43,7 @@
   <text x="88" y="416" font-size="84" font-weight="bold" fill="#7aa2f7" letter-spacing="-3">Defenders should too.</text>
 
   <!-- subtitle -->
-  <text x="90" y="486" font-size="27" fill="#a9b1d6">Independent defensive security research — detection engineering,</text>
+  <text x="90" y="486" font-size="27" fill="#a9b1d6">Independent defensive security research - detection engineering,</text>
   <text x="90" y="524" font-size="27" fill="#a9b1d6">threat analysis, and open-source tooling.</text>
 
   <!-- footer line -->
