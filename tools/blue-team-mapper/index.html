@@ -4,23 +4,23 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Blue Team Mapper v3.0</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
 <style>
 /* ═══════════════════════════════════════════════════════════
    TOKYO NIGHT PALETTE + EXTENDED VARIABLES
 ═══════════════════════════════════════════════════════════ */
 :root {
   --bg:           #1a1b26;
-  --bg-card:      #1e2030;
-  --bg-raised:    #24283b;
+  --bg-card:      #16161e;
+  --bg-raised:    #1c1d29;
   --bg-hover:     #292e42;
-  --border:       #3b4261;
-  --border-dim:   #2a2e42;
+  --border:       #2a2c38;
+  --border-dim:   #222431;
 
   --text:         #a9b1d6;
-  --text-bright:  #cdd6f4;
-  --text-dim:     #6c7086;
-  --text-muted:   #45475a;
+  --text-bright:  #c0caf5;
+  --text-dim:     #565f89;
+  --text-muted:   #414868;
 
   --blue:         #7aa2f7;
   --blue-dim:     rgba(122,162,247,0.12);
@@ -37,7 +37,7 @@
   --purple:       #bb9af7;
   --purple-dim:   rgba(187,154,247,0.12);
   --yellow:       #e0af68;
-  --magenta:      #c678dd;
+  --magenta:      #bb9af7;
 
   --sidebar-w:    260px;
   --content-max:  1120px;
@@ -55,7 +55,7 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
   font-size: 14px;
   line-height: 1.75;
   display: flex;
@@ -84,9 +84,9 @@ body {
 }
 
 .sidebar-logo .logo-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter Tight', sans-serif;
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--text-bright);
   letter-spacing: -0.3px;
   line-height: 1.2;
@@ -191,12 +191,12 @@ body {
 }
 
 .hero-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 42px;
-  font-weight: 800;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 46px;
+  font-weight: 600;
   color: var(--text-bright);
-  line-height: 1.1;
-  letter-spacing: -1px;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
   margin-bottom: 16px;
 }
 
@@ -314,7 +314,7 @@ body {
 }
 
 .section-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter Tight', sans-serif;
   font-size: 26px;
   font-weight: 700;
   color: var(--text-bright);
@@ -379,7 +379,7 @@ body {
 }
 
 .card h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter Tight', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: var(--text-bright);
@@ -734,8 +734,8 @@ footer strong { color: var(--text-dim); }
   }
   .mobile-topbar .mt-burger:hover { color: var(--blue); border-color: var(--blue); }
   .mobile-topbar .mt-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
     font-size: 14px;
     color: var(--text-bright);
     letter-spacing: -0.2px;
