@@ -315,7 +315,7 @@
     });
   }
   // Try the async Clipboard API; if it rejects (no focus / denied / insecure
-  // context) fall back to execCommand, and reject only if both fail — so a
+  // context) fall back to execCommand, and reject only if both fail - so a
   // failed copy never silently leaves stale clipboard content behind.
   function copyText(text) {
     if (navigator.clipboard && window.isSecureContext) {

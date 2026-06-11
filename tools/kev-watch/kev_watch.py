@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-kev-watch — monitor the CISA Known Exploited Vulnerabilities (KEV) catalog.
+kev-watch - monitor the CISA Known Exploited Vulnerabilities (KEV) catalog.
 
 A small, zero-dependency defensive tool. It pulls CISA's public KEV feed,
 remembers what it has seen before, and reports newly added, actively-exploited
-CVEs — optionally filtered to the vendors/products you actually run.
+CVEs - optionally filtered to the vendors/products you actually run.
 
 Public data only. Nothing here touches a target system or performs any scanning.
 
@@ -167,7 +167,7 @@ def render_human(rows: list[dict], catalog: dict, mode: str) -> None:
         )
         print(f"{C.BOLD}{C.CYAN}{cve}{C.RESET}{ran_flag}")
         print(f"  {C.BOLD}{v.get('vendorProject','?')} {v.get('product','?')}{C.RESET}"
-              f" — {v.get('vulnerabilityName','')}")
+              f" - {v.get('vulnerabilityName','')}")
         print(f"  {C.DIM}added{C.RESET} {v.get('dateAdded','?')}   "
               f"{C.DIM}remediate by{C.RESET} {C.YELLOW}{v.get('dueDate','?')}{C.RESET}")
         action = (v.get("requiredAction") or "").strip()
