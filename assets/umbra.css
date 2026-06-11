@@ -497,6 +497,113 @@ html { scroll-behavior: smooth; }
 .scramble-rnd { color: var(--purple); opacity: 0.9; }
 [data-scramble] { min-height: 1em; }
 
+/* ── Glitch wordmark (RGB-split on logo hover) ────────────────── */
+.glitch { position: relative; }
+.glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute; left: 0; top: 0;
+    width: 100%;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+.brand:hover .glitch::before {
+    color: var(--cyan);
+    clip-path: inset(0 0 55% 0);
+    animation: glitchTop 0.42s steps(2, end) 1;
+}
+.brand:hover .glitch::after {
+    color: #f7768e;
+    clip-path: inset(55% 0 0 0);
+    animation: glitchBot 0.42s steps(2, end) 1;
+}
+@keyframes glitchTop {
+    0% { opacity: 0.9; transform: translate(0,0); }
+    25% { transform: translate(-2px,-1px); }
+    50% { transform: translate(2px,1px); }
+    75% { transform: translate(-1px,0); }
+    100% { opacity: 0; transform: translate(0,0); }
+}
+@keyframes glitchBot {
+    0% { opacity: 0.9; transform: translate(0,0); }
+    25% { transform: translate(2px,1px); }
+    50% { transform: translate(-2px,-1px); }
+    75% { transform: translate(1px,0); }
+    100% { opacity: 0; transform: translate(0,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .brand:hover .glitch::before, .brand:hover .glitch::after { animation: none; opacity: 0; }
+}
+
+/* ── Reading progress bar (article pages) ─────────────────────── */
+.read-progress {
+    position: fixed; top: 0; left: 0;
+    height: 3px; width: 0;
+    background: linear-gradient(90deg, var(--blue), var(--purple), var(--cyan));
+    box-shadow: 0 0 10px rgba(122,162,247,0.5);
+    z-index: 60;
+    transition: width 0.1s linear;
+}
+
+/* ── CISA KEV live ticker (homepage) ──────────────────────────── */
+.kev-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-soft);
+}
+.kev-inner { display: flex; align-items: stretch; max-width: 1280px; margin: 0 auto; }
+.kev-tag {
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 0.55rem;
+    padding: 0 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    cursor: default;
+}
+.kev-live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    animation: kevPulse 2s ease-out infinite;
+}
+@keyframes kevPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(158,206,106,0.55); }
+    70%  { box-shadow: 0 0 0 7px rgba(158,206,106,0); }
+    100% { box-shadow: 0 0 0 0 rgba(158,206,106,0); }
+}
+.kev-viewport { overflow: hidden; flex: 1; position: relative; }
+.kev-viewport::before, .kev-viewport::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 1; pointer-events: none;
+}
+.kev-viewport::before { left: 0;  background: linear-gradient(90deg, var(--bg-soft), transparent); }
+.kev-viewport::after  { right: 0; background: linear-gradient(270deg, var(--bg-soft), transparent); }
+.kev-track {
+    display: flex; align-items: center; gap: 2.5rem;
+    width: max-content;
+    padding: 0.7rem 1.5rem;
+    animation: kevScroll 42s linear infinite;
+}
+.kev-viewport:hover .kev-track { animation-play-state: paused; }
+@keyframes kevScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.kev-item {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem;
+    white-space: nowrap;
+    color: var(--muted);
+}
+.kev-cve  { color: var(--blue); }
+.kev-prod { color: var(--text); }
+.kev-date { color: #565f89; }
+.kev-ransom { color: var(--orange); }
+@media (prefers-reduced-motion: reduce) {
+    .kev-track { animation: none; overflow-x: auto; max-width: 100%; }
+    .kev-live-dot { animation: none; }
+}
+
 /* ── Research filter chips + card grid ────────────────────────── */
 .filter-chip {
     font-family: 'JetBrains Mono', monospace;

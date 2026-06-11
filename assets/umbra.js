@@ -490,6 +490,61 @@
     });
   })();
 
+  /* ── Reading progress bar (pages with data-reading) ───────────── */
+  (function readingProgress() {
+    if (!document.body.hasAttribute("data-reading")) return;
+    const bar = document.createElement("div");
+    bar.className = "read-progress";
+    bar.setAttribute("aria-hidden", "true");
+    document.body.appendChild(bar);
+    const doc = document.documentElement;
+    let ticking = false;
+    function update() {
+      const max = doc.scrollHeight - doc.clientHeight;
+      bar.style.width = (max > 0 ? (doc.scrollTop / max) * 100 : 0) + "%";
+    }
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { update(); ticking = false; });
+    }, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  })();
+
+  /* ── CISA KEV live ticker (homepage) ──────────────────────────── */
+  (function kevTicker() {
+    const strip = $("[data-kev-ticker]");
+    if (!strip) return;
+    const track = $("[data-kev-track]", strip);
+    if (!track) return;
+
+    fetch(url("assets/kev-latest.json"), { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("http " + r.status))))
+      .then((data) => {
+        const items = (data.vulnerabilities || []).slice(0, 10);
+        if (!items.length) return; // nothing to show → stay hidden, never fake it
+
+        const row = () => items.map((v) => {
+          const ransom = v.knownRansomwareCampaignUse === "Known"
+            ? ' <i class="fa-solid fa-skull-crossbones kev-ransom" title="Known ransomware campaign use"></i>'
+            : "";
+          return '<span class="kev-item">' +
+              '<span class="kev-cve">' + escapeHtml(v.cveID) + "</span>" +
+              '<span class="kev-prod">' + escapeHtml((v.vendorProject + " " + v.product).trim()) + "</span>" +
+              ransom +
+              '<span class="kev-date">' + escapeHtml(v.dateAdded) + "</span>" +
+            "</span>";
+        }).join("");
+
+        track.innerHTML = row() + row(); // duplicate run for a seamless loop
+        const tag = $(".kev-tag", strip);
+        if (tag && data.synced) tag.title = "Latest CISA KEV additions · synced " + data.synced;
+        strip.classList.remove("hidden");
+      })
+      .catch(() => { /* leave the strip hidden — show real data or nothing */ });
+  })();
+
   /* ── Back to top ──────────────────────────────────────────────── */
   (function backToTop() {
     const btn = document.createElement("button");

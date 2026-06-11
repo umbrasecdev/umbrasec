@@ -1,0 +1,58 @@
+name: Sync CISA KEV ticker
+
+# Keeps assets/kev-latest.json fresh from the public CISA KEV catalog so the
+# homepage ticker shows real, current data without any client-side CORS calls.
+
+on:
+  schedule:
+    - cron: "17 6 * * *"   # daily, 06:17 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kev-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch and trim the KEV feed
+        run: |
+          python3 - <<'PY'
+          import json, urllib.request, datetime
+
+          URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+          req = urllib.request.Request(URL, headers={"User-Agent": "umbrasec-kev-sync"})
+          raw = json.load(urllib.request.urlopen(req, timeout=60))
+
+          vulns = sorted(raw["vulnerabilities"], key=lambda v: v["dateAdded"], reverse=True)[:10]
+          keep = ["cveID", "vendorProject", "product", "vulnerabilityName",
+                  "dateAdded", "knownRansomwareCampaignUse"]
+          out = {
+              "source": URL,
+              "catalogVersion": raw.get("catalogVersion"),
+              "synced": datetime.date.today().isoformat(),
+              "count": raw.get("count"),
+              "vulnerabilities": [{k: v[k] for k in keep} for v in vulns],
+          }
+          with open("assets/kev-latest.json", "w") as f:
+              f.write(json.dumps(out, indent=2) + "\n")
+          print("wrote", len(vulns), "entries; catalog", out["catalogVersion"])
+          PY
+
+      - name: Commit if changed
+        run: |
+          git config user.name "atraxsrc"
+          git config user.email "0xdev1@umbrasec.dev"
+          if git diff --quiet assets/kev-latest.json; then
+            echo "No KEV changes."
+          else
+            git add assets/kev-latest.json
+            git commit -m "Sync CISA KEV ticker data ($(date -u +%Y-%m-%d))"
+            git push
+          fi

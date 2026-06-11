@@ -24,7 +24,7 @@
                         <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
                     </div>
                     <div>
-                        <span class="font-semibold text-2xl tracking-[-0.03em]">UMBRASEC</span>
+                        <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
                         <span class="font-mono text-xs text-[#a9b1d6] ml-1.5">2026</span>
                     </div>
                 </a>
@@ -116,6 +116,18 @@
                     <div class="font-mono text-[#7aa2f7]">SCOPE</div>
                     <div>Defensive research only — detection, analysis, and mitigation. No offensive tooling, exploits, or malware published here.</div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CISA KEV live ticker — real data synced daily by .github/workflows/kev-sync.yml -->
+    <section data-kev-ticker class="kev-strip hidden" aria-label="Latest CISA Known Exploited Vulnerabilities">
+        <div class="kev-inner">
+            <div class="kev-tag" title="Latest CISA KEV additions">
+                <span class="kev-live-dot"></span> CISA&nbsp;KEV
+            </div>
+            <div class="kev-viewport">
+                <div class="kev-track" data-kev-track></div>
             </div>
         </div>
     </section>

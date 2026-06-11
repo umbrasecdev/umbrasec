@@ -1,0 +1,88 @@
+{
+  "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+  "catalogVersion": "2026.06.09",
+  "synced": "2026-06-11",
+  "count": 1617,
+  "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-11645",
+      "vendorProject": "Google",
+      "product": "Chromium V8",
+      "vulnerabilityName": "Google Chromium V8 Out-of-Bounds Read and Write Vulnerability",
+      "dateAdded": "2026-06-09",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-7473",
+      "vendorProject": "Arista",
+      "product": "Extensible Operating System",
+      "vulnerabilityName": "Arista Extensible Operating System Incomplete Comparison with Missing Factors Vulnerability",
+      "dateAdded": "2026-06-09",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-20245",
+      "vendorProject": "Cisco",
+      "product": "Catalyst SD-WAN Manager",
+      "vulnerabilityName": "Cisco Catalyst SD-WAN Manager Improper Encoding or Escaping of Output Vulnerability",
+      "dateAdded": "2026-06-09",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-42271",
+      "vendorProject": "BerriAI",
+      "product": "LiteLLM",
+      "vulnerabilityName": "BerriAI LiteLLM Command Injection Vulnerability",
+      "dateAdded": "2026-06-08",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-50751",
+      "vendorProject": "Check Point",
+      "product": "Security Gateway",
+      "vulnerabilityName": "Check Point Security Gateway Improper Authentication Vulnerability",
+      "dateAdded": "2026-06-08",
+      "knownRansomwareCampaignUse": "Known"
+    },
+    {
+      "cveID": "CVE-2026-28318",
+      "vendorProject": "SolarWinds",
+      "product": "Serv-U",
+      "vulnerabilityName": "SolarWinds Serv-U Uncontrolled Resource Consumption Vulnerability",
+      "dateAdded": "2026-06-05",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-45247",
+      "vendorProject": "Mirasvit",
+      "product": "Mirasvit Full Page Cache Warmer",
+      "vulnerabilityName": "Mirasvit Full Page Cache Warmer Deserialization of Untrusted Data Vulnerability",
+      "dateAdded": "2026-06-03",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2022-0492",
+      "vendorProject": "Linux",
+      "product": "Kernel",
+      "vulnerabilityName": "Linux Kernel Improper Authentication Vulnerability",
+      "dateAdded": "2026-06-02",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2025-48595",
+      "vendorProject": "Android",
+      "product": "Framework",
+      "vulnerabilityName": "Android Framework Integer Overflow Vulnerability",
+      "dateAdded": "2026-06-02",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2024-21182",
+      "vendorProject": "Oracle",
+      "product": "WebLogic Server",
+      "vulnerabilityName": "Oracle WebLogic Server Unspecified Vulnerability",
+      "dateAdded": "2026-06-01",
+      "knownRansomwareCampaignUse": "Unknown"
+    }
+  ]
+}
