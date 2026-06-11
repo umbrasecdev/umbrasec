@@ -29,6 +29,7 @@
     { group: "Navigate", label: "Open Source", hint: "tools", icon: "fa-code-branch", href: "index.html#opensource", keywords: "tools github kev" },
     { group: "Navigate", label: "About", hint: "the project", icon: "fa-circle-info", href: "about.html" },
     { group: "Navigate", label: "Contact", hint: "get in touch", icon: "fa-envelope", href: "index.html#contact", keywords: "email" },
+    { group: "Articles", label: "Detecting OAuth Consent Phishing", hint: "T1528", icon: "fa-user-shield", href: "research/detecting-oauth-consent-phishing.html", keywords: "oauth consent phishing entra azure ad graph illicit grant token mfa m365 office 365" },
     { group: "Articles", label: "Detecting Kerberoasting with Sigma", hint: "T1558.003", icon: "fa-shield-halved", href: "research/detecting-kerberoasting.html", keywords: "kerberos rc4 detection sigma active directory 4769" },
     { group: "External", label: "GitHub", hint: "github.com/atraxsrc/umbrasec", icon: "fa-github", brand: true, href: "https://github.com/atraxsrc/umbrasec", external: true },
     { group: "External", label: "Email 0xdev1@umbrasec.com", hint: "mail", icon: "fa-paper-plane", href: "mailto:0xdev1@umbrasec.com", external: true },

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecting OAuth Consent Phishing in Microsoft 365 — UMBRASEC</title>
+    <meta name="description" content="A defender-focused walkthrough of OAuth consent phishing / illicit consent grants (MITRE ATT&CK T1528) in Microsoft Entra ID: how it bypasses MFA, the audit-log artifacts it leaves, and KQL detections with tuning notes.">
+    <link rel="canonical" href="https://umbrasec.dev/research/detecting-oauth-consent-phishing.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/research/detecting-oauth-consent-phishing.html">
+    <meta property="og:title" content="Detecting OAuth Consent Phishing in Microsoft 365">
+    <meta property="og:description" content="How illicit OAuth consent grants (MITRE ATT&CK T1528) bypass MFA in Entra ID, the audit-log artifacts they leave, and KQL detections you can run.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC — Attackers improve. Defenders should too.">
+    <meta property="article:published_time" content="2026-06-11">
+    <meta property="article:author" content="UMBRASEC">
+    <meta property="article:section" content="Detection Engineering">
+    <meta property="article:tag" content="OAuth Consent Phishing">
+    <meta property="article:tag" content="MITRE ATT&CK T1528">
+    <meta property="article:tag" content="Microsoft Entra ID">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Detecting OAuth Consent Phishing in Microsoft 365">
+    <meta name="twitter:description" content="How illicit OAuth consent grants bypass MFA in Entra ID, the audit-log artifacts they leave, and KQL detections you can run.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Detecting OAuth Consent Phishing in Microsoft 365",
+      "description": "A defender-focused walkthrough of OAuth consent phishing / illicit consent grants (MITRE ATT&CK T1528) in Microsoft Entra ID: how it bypasses MFA, the audit-log artifacts it leaves, and KQL detections with tuning notes.",
+      "datePublished": "2026-06-11",
+      "author": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "publisher": { "@type": "Organization", "name": "UMBRASEC", "logo": { "@type": "ImageObject", "url": "https://umbrasec.dev/assets/og.png" } },
+      "image": "https://umbrasec.dev/assets/og.png",
+      "mainEntityOfPage": "https://umbrasec.dev/research/detecting-oauth-consent-phishing.html",
+      "about": "OAuth consent phishing (MITRE ATT&CK T1528) detection",
+      "keywords": "OAuth consent phishing, illicit consent grant, T1528, Microsoft Entra ID, Azure AD, KQL, detection engineering, Graph API"
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../" data-reading>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link">Research</a>
+                    <a href="../index.html#approach" class="nav-link">Approach</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-[1280px] mx-auto px-8 py-16">
+        <!-- breadcrumb -->
+        <div class="font-mono text-xs text-[#565f89] mb-8">
+            <a href="../index.html" class="hover:text-[#7aa2f7]">home</a> /
+            <a href="index.html" class="hover:text-[#7aa2f7]">research</a> /
+            <span class="text-[#a9b1d6]">detecting-oauth-consent-phishing</span>
+        </div>
+
+        <header class="prose mx-auto">
+            <div class="flex items-center gap-x-3 mb-6 text-xs font-mono">
+                <span class="text-[#9ece6a]">DETECTION ENGINEERING</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">Jun 11, 2026</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">~12 min</span>
+            </div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] leading-[1.05] mb-6 text-[#c0caf5]">
+                Detecting OAuth Consent Phishing in Microsoft 365
+            </h1>
+            <p class="text-xl text-[#a9b1d6] leading-snug">
+                There's a class of phishing that never asks for a password and sails straight through MFA, because the
+                victim isn't tricked into logging in — they're tricked into clicking <em>Accept</em>. Here's how illicit
+                OAuth consent grants work in Entra ID, what they leave in your audit logs, and the KQL to catch them.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ATT&amp;CK T1528</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Credential Access</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Microsoft Entra ID</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Graph API</span>
+            </div>
+        </header>
+
+        <div class="prose mx-auto mt-10 article-body">
+            <aside class="toc-rail" data-toc aria-label="On this page"></aside>
+
+            <div class="callout">
+                <p class="text-sm"><strong>TL;DR for defenders.</strong> An attacker registers an OAuth app and phishes a
+                user into <em>consenting</em> to delegated permissions like <code>Mail.Read</code> and
+                <code>offline_access</code>. No password is stolen and MFA is never challenged — the resulting refresh
+                token is a legitimate, durable key to the user's mailbox and files over Microsoft Graph. Watch Entra
+                <strong>audit logs</strong> for <code>Consent to application</code> events granting sensitive scopes, and
+                the <code>oauth2PermissionGrants</code> <strong>POST</strong> in Graph activity. Then shrink the blast
+                radius by turning off unrestricted user consent. Queries below.</p>
+            </div>
+
+            <h2>Why a click beats a credential</h2>
+            <p>
+                Most phishing aims at credentials, so most defenses are built around the login: MFA, conditional access,
+                impossible-travel rules. Consent phishing routes around all of it. The attacker doesn't want the user's
+                password — they want the user to authorize an application. The OAuth 2.0 authorization-code flow is
+                <em>designed</em> to let a third-party app act on a user's behalf, so when the victim clicks
+                <strong>Accept</strong> on a consent screen, everything that follows is, technically, working exactly as
+                intended.
+            </p>
+            <p>
+                The payoff is an access token plus, if <code>offline_access</code> was requested, a
+                <strong>refresh token</strong> — a long-lived credential the app can keep redeeming for new access tokens
+                without the user present. Because the app authenticates as itself and the consent already happened, the
+                attacker's subsequent Graph API calls don't trigger an interactive sign-in or an MFA prompt. Revoking the
+                user's password does nothing; you have to revoke the <em>grant</em>.
+            </p>
+            <p>
+                This isn't a lab curiosity. In January 2024 Microsoft disclosed that <strong>Midnight Blizzard</strong>
+                (APT29 / NOBELIUM) password-sprayed into a legacy test account, found a dormant OAuth application with
+                elevated access, then created additional malicious OAuth apps and granted them the Office 365 Exchange
+                Online <code>full_access_as_app</code> role to read corporate mailboxes — all routed through residential
+                proxies to blend in. Same primitive, nation-state hands.
+            </p>
+
+            <h2>How the attack actually works</h2>
+            <p>
+                Strip it down and consent phishing is four steps:
+            </p>
+            <ol>
+                <li><strong>Register an app.</strong> The attacker creates an app registration — in their own tenant, or
+                    a compromised one — and requests delegated Microsoft Graph permissions. The app's display name and
+                    publisher are often spoofed to look like something benign ("Annual Report Viewer", "0365 Secure
+                    Mail").</li>
+                <li><strong>Send the consent link.</strong> The victim receives a normal-looking link that points at a
+                    legitimate Microsoft endpoint (<code>login.microsoftonline.com/.../oauth2/v2.0/authorize</code>) with
+                    the attacker's <code>client_id</code> and a <code>scope</code> list. The domain is real, the TLS is
+                    valid, the page is Microsoft's — which is exactly why it's convincing.</li>
+                <li><strong>The user consents.</strong> If tenant settings allow user consent, clicking <em>Accept</em>
+                    writes an <code>oauth2PermissionGrant</code> and the app gains the requested scopes. If consent is
+                    restricted, the request is routed to an admin instead — which is the control we want.</li>
+                <li><strong>The app collects tokens and reads data.</strong> The app exchanges the authorization code for
+                    access and refresh tokens and starts calling Graph — <code>GET /me/messages</code>,
+                    <code>/me/drive</code>, and so on — from infrastructure that has nothing to do with the user.</li>
+            </ol>
+
+            <h3>The scopes that should make you nervous</h3>
+            <p>
+                Not every consent is hostile — users legitimately authorize apps all day. The risk lives in
+                <em>which</em> permissions were granted. Delegated scopes worth alerting on include:
+            </p>
+            <ul>
+                <li><code>Mail.Read</code>, <code>Mail.ReadWrite</code>, <code>Mail.Send</code> — full mailbox read, and
+                    the ability to send as the user (useful for internal spear-phishing).</li>
+                <li><code>MailboxSettings.ReadWrite</code> — lets an attacker create hidden inbox <em>rules</em> to
+                    auto-forward or auto-delete, a classic persistence trick.</li>
+                <li><code>Files.ReadWrite.All</code>, <code>Sites.ReadWrite.All</code> — OneDrive and SharePoint content.</li>
+                <li><code>offline_access</code> — the one that turns a momentary click into durable access by issuing a
+                    refresh token.</li>
+                <li>Anything <code>.All</code> or directory-wide (<code>User.Read.All</code>,
+                    <code>Directory.Read.All</code>) — reconnaissance reach far beyond the consenting user.</li>
+            </ul>
+
+            <h2>What you need flowing into your SIEM</h2>
+            <p>
+                The detections below assume you're shipping Entra ID logs into Microsoft Sentinel (or any Log Analytics
+                workspace). Make sure these are actually enabled and exported — the data is useless if it's only living
+                in the portal's 30-day view:
+            </p>
+            <ul>
+                <li><strong>Entra ID audit logs</strong> (<code>AuditLogs</code> table) — records the
+                    <code>Consent to application</code> and permission-grant operations. This is the primary source.</li>
+                <li><strong>Microsoft Graph activity logs</strong> (<code>MicrosoftGraphActivityLogs</code>) — per-request
+                    telemetry for Graph calls, including the write that creates the grant and the reads that follow it.</li>
+                <li><strong>Service principal sign-in logs</strong> (<code>AADServicePrincipalSignInLogs</code>) — shows
+                    the application itself authenticating, often from infrastructure unrelated to any of your users.</li>
+                <li>If you're licensed for it, mirror the <strong>Unified Audit Log</strong> in Microsoft Purview, where
+                    the same consent events surface for compliance search.</li>
+            </ul>
+
+            <h2>Detection strategy</h2>
+            <p>
+                Three layers, cheapest signal first. Treat the KQL as a starting point: the exact property paths inside
+                <code>modifiedProperties</code> shift between schema versions, so validate field names against your own
+                tenant before you alert on them.
+            </p>
+
+            <h3>1. Consent grants that include sensitive scopes</h3>
+            <p>
+                The bread-and-butter detection: a successful <code>Consent to application</code> where the granted
+                permissions touch mail, files, or directory data. Joining the consenting user and the
+                <code>IsAdminConsent</code> flag tells you immediately how bad it could be.
+            </p>
+            <pre><code>// Entra ID audit: consent to an app requesting sensitive delegated scopes
+AuditLogs
+| where OperationName == "Consent to application"
+| where Result == "success"
+| mv-expand TargetResources
+| extend mods = TargetResources.modifiedProperties
+| mv-expand mods
+| extend propName = tostring(mods.displayName), newVal = tostring(mods.newValue)
+| summarize props = make_bag(bag_pack(propName, newVal))
+        by CorrelationId, TimeGenerated,
+           Actor = tostring(InitiatedBy.user.userPrincipalName)
+| extend Permissions   = tostring(props["ConsentAction.Permissions"]),
+         IsAdminConsent = tostring(props["ConsentContext.IsAdminConsent"]),
+         AppDisplayName = tostring(props["TargetId.ServicePrincipalNames"])
+| where Permissions has_any (
+        "Mail.Read", "Mail.ReadWrite", "Mail.Send", "MailboxSettings.ReadWrite",
+        "Files.ReadWrite.All", "Sites.ReadWrite.All", "offline_access",
+        "User.Read.All", "Directory.Read.All")
+| project TimeGenerated, Actor, AppDisplayName, IsAdminConsent, Permissions</code></pre>
+            <p>
+                <strong>Tuning.</strong> Maintain an allowlist of <code>AppId</code>s for sanctioned applications and
+                exclude them. <code>IsAdminConsent == "True"</code> is the high-severity branch — a tenant-wide grant
+                exposes every user, not just the clicker.
+            </p>
+
+            <h3>2. The grant itself, in Graph activity (high fidelity)</h3>
+            <p>
+                The single highest-fidelity moment is the API write that creates the grant. A <code>POST</code> to a URI
+                containing <code>oauth2PermissionGrants</code> <em>is</em> the act of granting delegated permission. When
+                it's initiated by a non-privileged user — or from a residential-proxy IP, à la Midnight Blizzard — it
+                deserves a hard look.
+            </p>
+            <pre><code>// The moment a delegated permission grant is created via Microsoft Graph
+MicrosoftGraphActivityLogs
+| where RequestMethod == "POST"
+| where RequestUri has "oauth2PermissionGrants"
+| where ResponseStatusCode in (200, 201)
+| project TimeGenerated, UserId, AppId, IPAddress, RequestUri, ResponseStatusCode
+// Enrich UserId against your privileged-role list; grants from standard users
+// — or from hosting / proxy ASNs — are the ones to surface.</code></pre>
+            <p>
+                <strong>Tuning.</strong> Your own admins legitimately create grants during app onboarding. Scope this to
+                actors <em>outside</em> your identity/app-admin roles, or correlate the source IP against known
+                administrative networks.
+            </p>
+
+            <h3>3. Application (app-only) permission grants</h3>
+            <p>
+                The Midnight Blizzard variant didn't stop at delegated consent — it assigned an app <em>application</em>
+                permissions, which grant standing access that outlives any user session. New app-role assignments should
+                be change-controlled, so alert on them and reconcile against a ticket.
+            </p>
+            <pre><code>// App-role (application permission) assignments — standing, user-independent access
+AuditLogs
+| where OperationName in ("Add app role assignment to service principal",
+                          "Add app role assignment grant to user")
+| where Result == "success"
+| mv-expand TargetResources
+| extend mods = TargetResources.modifiedProperties
+| mv-expand mods
+| extend propName = tostring(mods.displayName), newVal = tostring(mods.newValue)
+| where propName in ("AppRole.Value", "ServicePrincipal.DisplayName")
+| project TimeGenerated, OperationName,
+          Actor = tostring(InitiatedBy.user.userPrincipalName), propName, newVal</code></pre>
+            <p>
+                <strong>Tuning.</strong> High-value app roles to flag by name include
+                <code>full_access_as_app</code> (Exchange), <code>Mail.ReadWrite</code>, and any
+                <code>*.ReadWrite.All</code>. These should be rare and deliberate.
+            </p>
+
+            <h2>Mitigation: shrink the consent surface</h2>
+            <p>
+                Detection tells you it happened; configuration stops most of it from happening at all. In order of
+                impact:
+            </p>
+            <ul>
+                <li><strong>Restrict user consent.</strong> Under <em>Identity &gt; Applications &gt; Enterprise apps
+                    &gt; Consent and permissions &gt; User consent settings</em>, move off "allow user consent for all
+                    apps." The recommended posture is to allow consent only for apps from <strong>verified
+                    publishers</strong>, for a defined set of low-risk permissions — everything else escalates.</li>
+                <li><strong>Turn on the admin consent workflow.</strong> When a user hits an app that needs more than
+                    they can grant, route an approval request to a reviewer instead of dead-ending them. This keeps
+                    productivity while putting a human between the click and the grant.</li>
+                <li><strong>Let Entra step up risky consent.</strong> Entra ID can detect a risky user-consent request
+                    and require admin approval automatically — keep that protection on.</li>
+                <li><strong>Review existing grants.</strong> The attacker you're worried about may already be in. Audit
+                    enterprise applications and their <code>oauth2PermissionGrants</code> regularly, and revoke anything
+                    unrecognized — refresh tokens persist until you do.</li>
+                <li><strong>Filter the lure.</strong> Defender for Office 365 can catch the consent-phishing email before
+                    the link is ever clicked; it's the cheapest layer when it works.</li>
+            </ul>
+
+            <h2>Honest limitations</h2>
+            <p>
+                None of this is a silver bullet, and pretending otherwise would be the opposite of useful:
+            </p>
+            <ul>
+                <li><strong>Scope strings are noisy.</strong> Plenty of legitimate apps request <code>Mail.Read</code>.
+                    These detections surface candidates for triage, not confirmed incidents — the verdict comes from
+                    <em>who</em> consented, to <em>what app</em>, and what the app did next.</li>
+                <li><strong>Schema drift is real.</strong> The shape of <code>modifiedProperties</code> has changed over
+                    time. A query that works today can silently return nothing after a platform update, so test for
+                    regressions.</li>
+                <li><strong>App-only grants need privilege.</strong> The application-permission path generally requires
+                    an already-privileged actor, so detection #3 is as much an insider/compromised-admin signal as a
+                    phishing one.</li>
+                <li><strong>This is Microsoft-shaped.</strong> The same consent-phishing pattern exists against Google
+                    Workspace and other OAuth providers; the artifacts and queries here are specific to Entra ID.</li>
+            </ul>
+
+            <h2>References</h2>
+            <ul>
+                <li><a href="https://attack.mitre.org/techniques/T1528/" target="_blank" rel="noopener">MITRE ATT&amp;CK — T1528: Steal Application Access Token</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/protect-against-consent-phishing" target="_blank" rel="noopener">Microsoft Entra — Protect against consent phishing</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent" target="_blank" rel="noopener">Microsoft Entra — Configure how users consent to applications</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/security/operations/incident-response-playbook-app-consent" target="_blank" rel="noopener">Microsoft — App consent grant investigation playbook</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/defender-office-365/detect-and-remediate-illicit-consent-grants" target="_blank" rel="noopener">Microsoft Defender for Office 365 — Detect and remediate illicit consent grants</a></li>
+                <li><a href="https://www.microsoft.com/en-us/security/blog/2024/01/25/midnight-blizzard-guidance-for-responders-on-nation-state-attack/" target="_blank" rel="noopener">Microsoft Security Blog — Midnight Blizzard: Guidance for responders (Jan 2024)</a></li>
+                <li><a href="https://www.cloud-architekt.net/detection-and-mitigation-consent-grant-attacks-azuread/" target="_blank" rel="noopener">Thomas Naunheim — Detection and mitigation of illicit consent grant attacks in Azure AD</a></li>
+                <li><a href="https://practical365.com/investigating-oauth-app-abuse-with-the-graph-activity-log/" target="_blank" rel="noopener">Practical 365 — Investigating OAuth app abuse with the Graph Activity Log</a></li>
+            </ul>
+
+            <div class="callout mt-10">
+                <p class="text-sm"><strong>Scope note.</strong> This is a defensive writeup. It explains consent phishing
+                only to the depth needed to detect and mitigate it, and deliberately ships no app-registration templates,
+                phishing kits, or token-abuse tooling. UMBRASEC publishes defense, not offense.</p>
+            </div>
+
+        </div>
+
+        <!-- end-of-article: share + nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38]">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="detecting-kerberoasting.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">← Detecting Kerberoasting</a>
+                <div class="flex items-center gap-2" data-share
+                     data-share-title="Detecting OAuth Consent Phishing in Microsoft 365"
+                     data-share-url="https://umbrasec.dev/research/detecting-oauth-consent-phishing.html">
+                    <span class="text-xs font-mono text-[#565f89] mr-1">Share</span>
+                    <a class="share-btn" data-share-x href="#" title="Share on X" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="share-btn" data-share-li href="#" title="Share on LinkedIn" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <button class="share-btn" data-share-copy type="button" title="Copy link" aria-label="Copy link"><i class="fa-regular fa-copy"></i></button>
+                </div>
+                <a href="index.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">All research →</a>
+            </div>
+        </div>
+    </article>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8 mt-8">
+        <div class="font-mono text-xs text-[#a9b1d6]">
+            © 2026 UMBRASEC · Independent defensive research · Published openly
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>

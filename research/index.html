@@ -57,7 +57,7 @@
         <h1 class="hero-headline font-semibold tracking-[-0.045em] mb-6" style="font-size:64px;">Research.</h1>
         <p class="max-w-[640px] text-xl text-[#a9b1d6]">
             Detection-engineering walkthroughs, threat analysis, and mitigation guides. Sourced, reproducible, and
-            defensive in scope. One published so far — this index grows as writeups ship.
+            defensive in scope. Two published so far — this index grows as writeups ship.
         </p>
     </section>
 
@@ -73,6 +73,26 @@
 
         <!-- Card grid -->
         <div data-research-grid class="grid md:grid-cols-2 gap-5">
+
+            <a href="detecting-oauth-consent-phishing.html"
+               class="research-card u-card block p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]" data-cat="detection">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-mono text-xs text-[#9ece6a]">DETECTION ENGINEERING</span>
+                    <span class="font-mono text-[10px] text-[#565f89]">~12 min</span>
+                </div>
+                <div class="research-card-title font-semibold text-xl leading-tight mb-3">
+                    Detecting OAuth Consent Phishing in Microsoft 365
+                </div>
+                <p class="text-sm text-[#a9b1d6] mb-5">
+                    The phishing class that never asks for a password and sails through MFA — illicit OAuth consent
+                    grants (MITRE ATT&amp;CK T1528) in Entra ID, the audit-log artifacts they leave, and KQL detections
+                    with tuning notes.
+                </p>
+                <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
+                    <span>Jun 11, 2026</span>
+                    <span class="research-card-arrow ml-auto">Read →</span>
+                </div>
+            </a>
 
             <a href="detecting-kerberoasting.html"
                class="research-card u-card block p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]" data-cat="detection">
