@@ -320,6 +320,176 @@
     });
   });
 
+  /* ── Research category filter (research index only) ───────────── */
+  (function researchFilter() {
+    const bar = $("[data-research-filter]");
+    const grid = $("[data-research-grid]");
+    if (!bar || !grid) return;
+    const cards = $$("[data-cat]", grid);
+    const empty = $("[data-research-empty]");
+
+    bar.addEventListener("click", (e) => {
+      const chip = e.target.closest(".filter-chip");
+      if (!chip) return;
+      const filter = chip.dataset.filter;
+      $$(".filter-chip", bar).forEach((c) => c.classList.toggle("active", c === chip));
+
+      let shown = 0;
+      cards.forEach((card) => {
+        const match = filter === "all" || card.dataset.cat === filter;
+        card.classList.toggle("hidden", !match);
+        if (match) shown++;
+      });
+      if (empty) empty.classList.toggle("hidden", shown > 0);
+    });
+  })();
+
+  /* ── Decode / scramble text ───────────────────────────────────── */
+  (function scrambleText() {
+    if (reduceMotion || !("IntersectionObserver" in window)) return;
+    const GLYPHS = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789!<>-_\\/[]{}=+*^?#%&";
+    const els = $$("[data-scramble], .section-label");
+    if (!els.length) return;
+
+    function run(el) {
+      if (el.dataset.scrambled) return;
+      el.dataset.scrambled = "1";
+      const finalText = el.textContent;
+      const queue = finalText.split("").map((ch) => {
+        if (ch === " ") return { ch, space: true };
+        const start = Math.floor(Math.random() * 12);
+        return { ch, start, end: start + 12 + Math.floor(Math.random() * 20), rnd: null };
+      });
+      let frame = 0;
+      (function tick() {
+        let out = "", done = 0;
+        for (const q of queue) {
+          if (q.space) { out += " "; done++; continue; }
+          if (frame >= q.end) { out += escapeHtml(q.ch); done++; }
+          else if (frame >= q.start) {
+            if (!q.rnd || Math.random() < 0.3) q.rnd = GLYPHS[(Math.random() * GLYPHS.length) | 0];
+            out += '<span class="scramble-rnd">' + escapeHtml(q.rnd) + "</span>";
+          }
+        }
+        el.innerHTML = out;
+        frame++;
+        if (done < queue.length) requestAnimationFrame(tick);
+        else el.textContent = finalText;
+      })();
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((en) => {
+        if (en.isIntersecting) { run(en.target); io.unobserve(en.target); }
+      }),
+      { threshold: 0.4 }
+    );
+    els.forEach((el) => io.observe(el));
+  })();
+
+  /* ── Hero network constellation (mouse-reactive) ──────────────── */
+  (function heroNetwork() {
+    if (reduceMotion) return;
+    const hero = $(".hero");
+    if (!hero || !("requestAnimationFrame" in window)) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.className = "hero-canvas";
+    canvas.setAttribute("aria-hidden", "true");
+    hero.insertBefore(canvas, hero.firstChild);
+    const ctx = canvas.getContext("2d");
+
+    const COUNT = 42, LINK = 132, MOUSE_R = 170;
+    let w, h, dpr, nodes = [], raf = null, running = true;
+    const mouse = { x: -9999, y: -9999 };
+
+    function size() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = hero.clientWidth; h = hero.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + "px"; canvas.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function seed() {
+      nodes = [];
+      for (let i = 0; i < COUNT; i++) {
+        nodes.push({
+          x: Math.random() * w, y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+        });
+      }
+    }
+    function step() {
+      ctx.clearRect(0, 0, w, h);
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx *= -1;
+        if (n.y < 0 || n.y > h) n.vy *= -1;
+      }
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < LINK) {
+            ctx.strokeStyle = "rgba(122,162,247," + (1 - d / LINK) * 0.22 + ")";
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+      }
+      for (const n of nodes) {
+        const dm = Math.hypot(n.x - mouse.x, n.y - mouse.y);
+        const near = dm < MOUSE_R;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, near ? 2.4 : 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = near
+          ? "rgba(187,154,247," + (0.5 + (1 - dm / MOUSE_R) * 0.5) + ")"
+          : "rgba(122,162,247,0.45)";
+        ctx.fill();
+        if (near) {
+          ctx.strokeStyle = "rgba(187,154,247," + (1 - dm / MOUSE_R) * 0.5 + ")";
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+        }
+      }
+      if (running) raf = requestAnimationFrame(step);
+    }
+
+    size(); seed(); step();
+    let rt;
+    window.addEventListener("resize", () => {
+      clearTimeout(rt);
+      rt = setTimeout(() => { size(); seed(); }, 150);
+    });
+    hero.addEventListener("mousemove", (e) => {
+      const r = hero.getBoundingClientRect();
+      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+    });
+    hero.addEventListener("mouseleave", () => { mouse.x = mouse.y = -9999; });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((es) => es.forEach((en) => {
+        running = en.isIntersecting;
+        if (running && raf === null) { raf = requestAnimationFrame(step); }
+        if (!running && raf !== null) { cancelAnimationFrame(raf); raf = null; }
+      }), { threshold: 0 }).observe(hero);
+    }
+  })();
+
+  /* ── Magnetic buttons ─────────────────────────────────────────── */
+  (function magneticButtons() {
+    if (reduceMotion || window.matchMedia("(hover: none)").matches) return;
+    $$(".btn-primary, .btn-ghost").forEach((btn) => {
+      btn.addEventListener("mousemove", (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * 0.3;
+        const y = (e.clientY - r.top - r.height / 2) * 0.3;
+        btn.style.transform = "translate(" + x + "px," + (y - 2) + "px)";
+      });
+      btn.addEventListener("mouseleave", () => { btn.style.transform = ""; });
+    });
+  })();
+
   /* ── Back to top ──────────────────────────────────────────────── */
   (function backToTop() {
     const btn = document.createElement("button");

@@ -461,3 +461,70 @@ html { scroll-behavior: smooth; }
 }
 .to-top.show { opacity: 1; pointer-events: auto; transform: none; }
 .to-top:hover { color: var(--text); border-color: var(--border-hi); }
+
+/* ── Hero radial glow ─────────────────────────────────────────── */
+.hero { position: relative; }
+.hero::before {
+    content: "";
+    position: absolute;
+    top: -8%; left: 4%;
+    width: 540px; height: 540px;
+    max-width: 80vw;
+    background: radial-gradient(circle,
+        rgba(122,162,247,0.18),
+        rgba(187,154,247,0.07) 45%,
+        transparent 70%);
+    filter: blur(14px);
+    pointer-events: none;
+    z-index: 0;
+    animation: heroGlow 14s ease-in-out infinite alternate;
+}
+.hero > * { position: relative; z-index: 1; }
+@keyframes heroGlow {
+    from { transform: translate(0, 0) scale(1);       opacity: 0.75; }
+    to   { transform: translate(48px, 26px) scale(1.12); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .hero::before { animation: none; } }
+
+/* Interactive network constellation (injected into .hero) */
+.hero canvas.hero-canvas {
+    position: absolute; inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Decode / scramble text — the cipher glyphs mid-resolve */
+.scramble-rnd { color: var(--purple); opacity: 0.9; }
+[data-scramble] { min-height: 1em; }
+
+/* ── Research filter chips + card grid ────────────────────────── */
+.filter-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.filter-chip:hover { border-color: var(--border-hi); color: var(--text); }
+.filter-chip.active { background: var(--blue); border-color: var(--blue); color: var(--bg); }
+
+.research-card-title { transition: color 0.15s ease; }
+.research-card:hover .research-card-title { color: var(--blue); }
+.research-card-arrow { transition: transform 0.2s ease; }
+.research-card:hover .research-card-arrow { transform: translateX(3px); }
+
+.research-empty {
+    border: 1px dashed var(--border);
+    border-radius: 18px;
+    background: var(--bg-soft);
+    color: #565f89;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    padding: 2.25rem;
+    text-align: center;
+}
