@@ -4,7 +4,7 @@
 security** - detection engineering, honest threat analysis, and open-source tooling
 that helps defenders spot real techniques in their own logs.
 
-Site: **[umbrasec.dev](https://umbrasec.dev)** · Contact: **0xdev1@umbrasec.com**
+Site: **[umbrasec.dev](https://umbrasec.dev)** · Contact: **0xdev1@umbrasec.dev**
 
 ## Who's behind it
 
