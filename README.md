@@ -49,6 +49,12 @@ the research writeups, as runnable files: three Kerberoasting detections (T1558.
 and three OAuth consent-phishing queries (T1528) so far. Early and honest about it -
 the pack grows one writeup at a time. See its [README](tools/sigma-pack/README.md).
 
+[`tools/blue-team-mapper/`](tools/blue-team-mapper/) - a comprehensive single-page
+defender reference covering the full defensive lifecycle: SIEM/log-source priority,
+detection engineering, incident-response flow chains, threat hunting, identity and cloud
+hardening, and SOAR playbooks, ATT&CK-aligned. Served at
+[umbrasec.dev/tools/blue-team-mapper/](https://umbrasec.dev/tools/blue-team-mapper/).
+
 ## Corrections
 
 Found a detection that misbehaves, a wrong citation, or an analysis that's off? That

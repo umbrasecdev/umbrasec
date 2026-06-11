@@ -27,6 +27,7 @@
     { group: "Navigate", label: "Research", hint: "all writeups", icon: "fa-flask", href: "research/index.html", keywords: "articles posts" },
     { group: "Navigate", label: "Approach", hint: "how this works", icon: "fa-compass", href: "index.html#approach", keywords: "method principles" },
     { group: "Navigate", label: "Open Source", hint: "tools", icon: "fa-code-branch", href: "index.html#opensource", keywords: "tools github kev" },
+    { group: "Tools", label: "Blue Team Mapper", hint: "defender reference", icon: "fa-shield-halved", href: "tools/blue-team-mapper/index.html", keywords: "blue team mapper detection siem incident response threat hunting hardening soc defender reference soar" },
     { group: "Navigate", label: "Services", hint: "work with us", icon: "fa-handshake", href: "services.html", keywords: "hire consulting detection engineering m365 hardening advisory incident response retainer" },
     { group: "Navigate", label: "Start a scoping conversation", hint: "free, low-pressure", icon: "fa-comments", href: "services.html#talk", keywords: "book call quote hire engage contact email talk" },
     { group: "Navigate", label: "About", hint: "the project", icon: "fa-circle-info", href: "about.html" },
