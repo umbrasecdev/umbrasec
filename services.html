@@ -79,7 +79,7 @@
                 before you ever send an email.
             </p>
             <div class="flex flex-wrap gap-3 mt-9">
-                <a href="mailto:0xdev1@umbrasec.com?subject=UMBRASEC%20engagement"
+                <a href="#talk"
                    class="btn-primary inline-flex items-center px-8 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
                     Start a conversation <span class="arrow ml-1.5">→</span>
                 </a>
@@ -203,15 +203,15 @@
     </section>
 
     <!-- CTA -->
-    <section class="max-w-[1280px] mx-auto px-8 py-16 border-t border-[#2a2c38]">
+    <section id="talk" class="max-w-[1280px] mx-auto px-8 py-16 border-t border-[#2a2c38]">
         <div class="max-w-2xl">
             <h2 class="text-5xl font-semibold tracking-[-0.04em] mb-6">Let's talk.</h2>
-            <p class="text-xl text-[#a9b1d6] mb-8">Tell me what you're dealing with - a noisy SIEM, an M365 tenant nobody's reviewed, a roadmap you need a second opinion on, or an incident in progress. A short email is the fastest start.</p>
+            <p class="text-xl text-[#a9b1d6] mb-8">Tell me what you're dealing with - a noisy SIEM, an M365 tenant nobody's reviewed, a roadmap you need a second opinion on, or an incident in progress. Click the address below to copy it and drop me a line.</p>
             <div class="flex flex-wrap gap-3">
-                <a href="mailto:0xdev1@umbrasec.com?subject=UMBRASEC%20engagement"
-                   class="btn-primary inline-flex items-center gap-x-2 px-7 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
-                    <i class="fa-regular fa-envelope"></i> 0xdev1@umbrasec.com
-                </a>
+                <button type="button" data-copy="0xdev1@umbrasec.com"
+                   class="copy-email btn-primary inline-flex items-center gap-x-2 px-7 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all" title="Click to copy email">
+                    <i class="fa-regular fa-envelope"></i> <span class="dc-addr">0xdev1@umbrasec.com</span>
+                </button>
                 <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
                    class="btn-ghost inline-flex items-center gap-x-2 px-7 py-3.5 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
                     <i class="fa-brands fa-github"></i> See the work first
@@ -229,8 +229,8 @@
             <div class="flex items-center gap-x-5">
                 <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-white transition-colors" title="GitHub"><i class="fa-brands fa-github"></i></a>
                 <a href="mailto:0xdev1@umbrasec.com" class="text-[#a9b1d6] hover:text-[#7dcfff] transition-colors" title="Email"><i class="fa-regular fa-envelope"></i></a>
-                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-copy="bc1q76cc4rle2uhtyuv4757c4rjx9r595vqkmy34s3" data-label="Bitcoin address" title="Copy BTC tip address"><i class="fa-brands fa-bitcoin"></i></button>
-                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-copy="851r1Ukbc5DUJVUfQPUhse4gMzDb22bfDRbtKpq9soBG9qgzxNQBVjzXTKPLNZQAv4ajBUq8QVEtxJGWUgzSdVouE8rsRxZ" data-label="Monero address" title="Copy XMR tip address">
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Show BTC tip QR"><i class="fa-brands fa-bitcoin"></i></button>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Show XMR tip QR">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
                         <circle cx="50" cy="50" r="50"/>
                         <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>

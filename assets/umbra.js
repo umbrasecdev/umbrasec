@@ -546,42 +546,6 @@
     entries.forEach((e) => io.observe(e.el));
   })();
 
-  /* ── Share buttons ────────────────────────────────────────────── */
-  (function shareButtons() {
-    const box = $("[data-share]");
-    if (!box) return;
-    const title = box.dataset.shareTitle || document.title;
-    const link = box.dataset.shareUrl || window.location.href;
-    const x = $("[data-share-x]", box);
-    const li = $("[data-share-li]", box);
-    const copy = $("[data-share-copy]", box);
-    if (x) {
-      x.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(title) + "&url=" + encodeURIComponent(link);
-      x.target = "_blank"; x.rel = "noopener";
-    }
-    if (li) {
-      li.href = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(link);
-      li.target = "_blank"; li.rel = "noopener";
-    }
-    if (copy) {
-      copy.addEventListener("click", () => {
-        const icon = copy.querySelector("i");
-        const prev = icon ? icon.className : null;
-        const flash = (cls, ok) => {
-          copy.classList.toggle("copied", ok);
-          if (icon) icon.className = cls;
-          setTimeout(() => {
-            copy.classList.remove("copied");
-            if (icon && prev) icon.className = prev;
-          }, 1500);
-        };
-        copyText(link)
-          .then(() => flash("fa-solid fa-check", true))
-          .catch(() => { window.prompt("Copy this link:", link); });
-      });
-    }
-  })();
-
   /* ── Reading progress bar (pages with data-reading) ───────────── */
   (function readingProgress() {
     if (!document.body.hasAttribute("data-reading")) return;
@@ -635,6 +599,83 @@
         strip.classList.remove("hidden");
       })
       .catch(() => { /* leave the strip hidden - show real data or nothing */ });
+  })();
+
+  /* ── QR tip popup (footer crypto coins) ───────────────────────── */
+  (function qrPopup() {
+    const triggers = $$("[data-qr]");
+    if (!triggers.length) return;
+
+    const XMR_SVG =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="18" height="18" fill="currentColor" aria-hidden="true">' +
+      '<circle cx="50" cy="50" r="50"/>' +
+      '<path fill="#1c1d29" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>' +
+      '<path fill="#1c1d29" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>' +
+      "</svg>";
+
+    const COINS = {
+      btc: { name: "Bitcoin", color: "#f7931a", icon: '<i class="fa-brands fa-bitcoin"></i>',
+             img: "assets/btc-qr.svg", addr: "bc1q76cc4rle2uhtyuv4757c4rjx9r595vqkmy34s3" },
+      xmr: { name: "Monero", color: "#ff6600", icon: XMR_SVG,
+             img: "assets/xmr-qr.svg", addr: "851r1Ukbc5DUJVUfQPUhse4gMzDb22bfDRbtKpq9soBG9qgzxNQBVjzXTKPLNZQAv4ajBUq8QVEtxJGWUgzSdVouE8rsRxZ" },
+    };
+
+    const overlay = document.createElement("div");
+    overlay.className = "qr-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.innerHTML =
+      '<div class="qr-pop">' +
+        '<button class="qr-close" aria-label="Close">&times;</button>' +
+        '<div class="qr-coin"><span class="qr-coin-ico"></span><span class="qr-coin-name"></span></div>' +
+        '<div class="qr-img-card"><img alt="" width="180" height="180"></div>' +
+        '<button class="qr-addr" type="button"><span class="qr-addr-text"></span><i class="fa-regular fa-copy"></i></button>' +
+        '<div class="qr-note">Optional tip - scan, or click the address to copy</div>' +
+      "</div>";
+    document.body.appendChild(overlay);
+
+    const pop = $(".qr-pop", overlay);
+    const ico = $(".qr-coin-ico", overlay);
+    const nameEl = $(".qr-coin-name", overlay);
+    const img = $("img", overlay);
+    const addrBtn = $(".qr-addr", overlay);
+    const addrText = $(".qr-addr-text", overlay);
+    let current = null;
+
+    function open(key) {
+      const c = COINS[key];
+      if (!c) return;
+      current = c;
+      ico.innerHTML = c.icon;
+      ico.style.color = c.color;
+      nameEl.textContent = c.name;
+      img.src = url(c.img);
+      img.alt = c.name + " tip address QR code";
+      addrText.textContent = c.addr;
+      addrBtn.classList.remove("copied");
+      overlay.classList.add("open");
+    }
+    function close() { overlay.classList.remove("open"); }
+
+    triggers.forEach((t) =>
+      t.addEventListener("click", () => open(t.getAttribute("data-qr")))
+    );
+    $(".qr-close", overlay).addEventListener("click", close);
+    overlay.addEventListener("mousedown", (e) => { if (e.target === overlay) close(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("open")) close();
+    });
+    addrBtn.addEventListener("click", () => {
+      if (!current) return;
+      copyText(current.addr).then(() => {
+        addrBtn.classList.add("copied");
+        addrText.textContent = "Copied to clipboard";
+        setTimeout(() => {
+          addrBtn.classList.remove("copied");
+          if (current) addrText.textContent = current.addr;
+        }, 1500);
+      }).catch(() => { window.prompt("Copy this address:", current.addr); });
+    });
   })();
 
   /* ── Back to top ──────────────────────────────────────────────── */

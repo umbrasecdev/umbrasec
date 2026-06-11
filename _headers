@@ -1,0 +1,9 @@
+# Cloudflare Pages headers.
+# Always revalidate CSS/JS so a deploy is picked up immediately instead of
+# being masked by a stale 4-hour browser cache. 304s keep it cheap.
+/assets/umbra.css
+  Cache-Control: public, max-age=0, must-revalidate
+/assets/umbra.js
+  Cache-Control: public, max-age=0, must-revalidate
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
