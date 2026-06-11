@@ -108,7 +108,8 @@
             </div>
         </header>
 
-        <div class="prose mx-auto mt-10">
+        <div class="prose mx-auto mt-10 article-body">
+            <aside class="toc-rail" data-toc aria-label="On this page"></aside>
 
             <div class="callout">
                 <p class="text-sm"><strong>TL;DR for defenders.</strong> Turn on <em>Audit Kerberos Service Ticket Operations</em>
@@ -392,10 +393,20 @@ level: high</code></pre>
 
         </div>
 
-        <!-- footer nav -->
-        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38] flex items-center justify-between">
-            <a href="index.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">← All research</a>
-            <a href="../index.html#contact" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">Found an error? Tell me →</a>
+        <!-- end-of-article: share + nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38]">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="index.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">← All research</a>
+                <div class="flex items-center gap-2" data-share
+                     data-share-title="Detecting Kerberoasting: A Practical Walkthrough with Sigma"
+                     data-share-url="https://umbrasec.dev/research/detecting-kerberoasting.html">
+                    <span class="text-xs font-mono text-[#565f89] mr-1">Share</span>
+                    <a class="share-btn" data-share-x href="#" title="Share on X" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="share-btn" data-share-li href="#" title="Share on LinkedIn" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <button class="share-btn" data-share-copy type="button" title="Copy link" aria-label="Copy link"><i class="fa-regular fa-copy"></i></button>
+                </div>
+                <a href="../index.html#contact" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">Found an error? Tell me →</a>
+            </div>
         </div>
     </article>
 

@@ -490,6 +490,81 @@
     });
   })();
 
+  /* ── Article table of contents + scrollspy ────────────────────── */
+  (function tableOfContents() {
+    const rail = $("[data-toc]");
+    if (!rail) return;
+    const headings = $$("article .prose h2");
+    if (!headings.length) return;
+
+    const slugify = (t) =>
+      t.toLowerCase().replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-").slice(0, 60) || "section";
+    const used = new Set();
+
+    let html = '<div class="toc"><div class="toc-title">On this page</div><nav>';
+    const entries = [];
+    headings.forEach((h) => {
+      let id = h.id || slugify(h.textContent);
+      while (used.has(id)) id += "-1";
+      used.add(id);
+      h.id = id;
+      html += '<a href="#' + id + '">' + escapeHtml(h.textContent) + "</a>";
+      entries.push({ el: h });
+    });
+    html += "</nav></div>";
+    rail.innerHTML = html;
+
+    const links = $$("a", rail);
+    links.forEach((a, i) => { entries[i].link = a; });
+
+    if (!("IntersectionObserver" in window)) return;
+    const linkFor = new Map(entries.map((e) => [e.el, e.link]));
+    const io = new IntersectionObserver(
+      (obs) => obs.forEach((en) => {
+        if (en.isIntersecting) {
+          links.forEach((l) => l.classList.remove("active"));
+          const link = linkFor.get(en.target);
+          if (link) link.classList.add("active");
+        }
+      }),
+      { rootMargin: "-80px 0px -70% 0px", threshold: 0 }
+    );
+    entries.forEach((e) => io.observe(e.el));
+  })();
+
+  /* ── Share buttons ────────────────────────────────────────────── */
+  (function shareButtons() {
+    const box = $("[data-share]");
+    if (!box) return;
+    const title = box.dataset.shareTitle || document.title;
+    const link = box.dataset.shareUrl || window.location.href;
+    const x = $("[data-share-x]", box);
+    const li = $("[data-share-li]", box);
+    const copy = $("[data-share-copy]", box);
+    if (x) {
+      x.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(title) + "&url=" + encodeURIComponent(link);
+      x.target = "_blank"; x.rel = "noopener";
+    }
+    if (li) {
+      li.href = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(link);
+      li.target = "_blank"; li.rel = "noopener";
+    }
+    if (copy) {
+      copy.addEventListener("click", () => {
+        copyText(link).then(() => {
+          copy.classList.add("copied");
+          const icon = copy.querySelector("i");
+          const prev = icon ? icon.className : null;
+          if (icon) icon.className = "fa-solid fa-check";
+          setTimeout(() => {
+            copy.classList.remove("copied");
+            if (icon && prev) icon.className = prev;
+          }, 1500);
+        });
+      });
+    }
+  })();
+
   /* ── Reading progress bar (pages with data-reading) ───────────── */
   (function readingProgress() {
     if (!document.body.hasAttribute("data-reading")) return;
