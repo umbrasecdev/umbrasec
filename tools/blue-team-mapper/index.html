@@ -700,9 +700,89 @@ footer strong { color: var(--text-dim); }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE TOPBAR + DRAWER (responsive)
+═══════════════════════════════════════════════════════════ */
+.mobile-topbar { display: none; }
+.sidebar-backdrop { display: none; }
+
+@media (max-width: 900px) {
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    padding: 0 16px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-dim);
+    z-index: 120;
+  }
+  .mobile-topbar .mt-burger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-raised);
+    color: var(--text);
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .mobile-topbar .mt-burger:hover { color: var(--blue); border-color: var(--blue); }
+  .mobile-topbar .mt-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--text-bright);
+    letter-spacing: -0.2px;
+  }
+  .mobile-topbar .mt-title span { color: var(--blue); }
+
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(10,10,16,0.6);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .sidebar-backdrop.open { display: block; opacity: 1; pointer-events: auto; }
+
+  .main {
+    margin-left: 0;
+    padding: 78px 22px 40px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .main { padding: 74px 16px 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar, .sidebar-backdrop { transition: none; }
+}
 </style>
 </head>
 <body>
+
+<!-- Mobile topbar (shown <=900px) -->
+<div class="mobile-topbar">
+  <button class="mt-burger" aria-label="Open navigation" aria-expanded="false"><i class="burger-icon">&#9776;</i></button>
+  <div class="mt-title">Blue Team <span>Mapper</span></div>
+</div>
+<div class="sidebar-backdrop" aria-hidden="true"></div>
 
 <!-- ═══════════════════════════════════════════════════════
      SIDEBAR
@@ -2536,6 +2616,29 @@ const observer = new IntersectionObserver((entries) => {
 }, { rootMargin: '-10% 0px -80% 0px' });
 
 sections.forEach(s => observer.observe(s));
+
+// Mobile drawer toggle
+(function () {
+  const burger = document.querySelector('.mt-burger');
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.querySelector('.sidebar-backdrop');
+  if (!burger || !sidebar || !backdrop) return;
+
+  function setOpen(open) {
+    sidebar.classList.toggle('open', open);
+    backdrop.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+  }
+  burger.addEventListener('click', () => setOpen(!sidebar.classList.contains('open')));
+  backdrop.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+  // close the drawer after picking a destination
+  sidebar.querySelectorAll('a[href^="#"]').forEach((a) =>
+    a.addEventListener('click', () => setOpen(false))
+  );
+})();
 </script>
 </body>
 </html>
