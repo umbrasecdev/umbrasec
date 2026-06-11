@@ -59,26 +59,49 @@ body {
     border-bottom-color: var(--border-hi);
 }
 
-.nav-link { color: var(--muted); transition: color 0.15s ease; }
+.nav-link { position: relative; color: var(--muted); transition: color 0.15s ease; }
 .nav-link:hover { color: var(--text); }
+.nav-link::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: -4px;
+    height: 1px;
+    background: var(--blue);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+.nav-link:hover::after { transform: scaleX(1); }
 
-/* Alternating headline animation (hero) */
+/* Hero headline — staggered fade-up on load, stays legible */
 .ghost-line-1, .ghost-line-2 {
     display: inline-block;
-    animation: ghostAlternate 9s ease-in-out infinite;
     opacity: 0;
+    animation: heroIn 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
 }
-.ghost-line-2 { animation-delay: 4.5s; }
+.ghost-line-1 { animation-delay: 0.05s; }
+.ghost-line-2 { animation-delay: 0.22s; }
 
-@keyframes ghostAlternate {
-    0%, 100% { opacity: 0; transform: scale(0.94) translateY(6px); filter: blur(3px); }
-    12%      { opacity: 1; transform: scale(1)    translateY(0);   filter: blur(0); }
-    38%      { opacity: 1; transform: scale(1)    translateY(0);   filter: blur(0); }
-    50%      { opacity: 0; transform: scale(0.94) translateY(6px); filter: blur(3px); }
+@keyframes heroIn {
+    from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+    to   { opacity: 1; transform: none;             filter: blur(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .ghost-line-1, .ghost-line-2 { animation: none; opacity: 1; }
+}
+
+/* Logo badge hover (scale + glow) */
+.logo-badge { transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s ease; }
+.brand:hover .logo-badge {
+    transform: rotate(-4deg) scale(1.08);
+    box-shadow: 0 6px 18px -4px rgba(122,162,247,0.6);
+}
+
+/* Themed keyboard focus ring */
+:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+    border-radius: 6px;
 }
 
 /* ── Article / long-form typography ───────────────────────────── */
@@ -190,17 +213,9 @@ html { scroll-behavior: smooth; }
     .reveal { opacity: 1; transform: none; transition: none; }
 }
 
-/* active nav link (scrollspy) */
+/* active nav link (scrollspy) — reuses the hover underline */
 .nav-link.active { color: var(--text); }
-.nav-link.active::after {
-    content: "";
-    display: block;
-    height: 1px;
-    background: var(--blue);
-    margin-top: 2px;
-    animation: navUnderline 0.3s ease forwards;
-}
-@keyframes navUnderline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.nav-link.active::after { transform: scaleX(1); }
 
 /* ── Mobile menu ──────────────────────────────────────────────── */
 .menu-btn {
@@ -381,6 +396,53 @@ html { scroll-behavior: smooth; }
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
     color: var(--text);
+}
+
+/* ── Interactive cards (hover lift + gradient top accent) ─────── */
+.u-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.28s cubic-bezier(0.16,1,0.3,1),
+                border-color 0.28s ease;
+}
+.u-card::before {
+    content: "";
+    position: absolute; left: 0; right: 0; top: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--purple));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.u-card:hover { transform: translateY(-4px); border-color: var(--border-hi); }
+.u-card:hover::before { transform: scaleX(1); }
+.u-ico { display: inline-block; transition: transform 0.28s cubic-bezier(0.16,1,0.3,1); }
+.u-card:hover .u-ico { transform: translateY(-2px) scale(1.08); }
+
+/* ── Buttons (lift + arrow nudge) ─────────────────────────────── */
+.btn-primary, .btn-ghost {
+    transition: transform 0.18s ease, background 0.2s ease,
+                border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px -12px rgba(122,162,247,0.55); }
+.btn-ghost:hover   { transform: translateY(-2px); border-color: var(--border-hi); }
+.btn-primary:active, .btn-ghost:active { transform: translateY(0); }
+.arrow { display: inline-block; transition: transform 0.2s ease; }
+.btn-primary:hover .arrow, .btn-ghost:hover .arrow { transform: translateX(4px); }
+
+/* ── Research row chevron (slides in on hover) ────────────────── */
+.row-chev {
+    color: var(--blue);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.research-row:hover .row-chev { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .u-card, .u-card::before, .u-ico,
+    .btn-primary, .btn-ghost, .arrow, .row-chev { transition: none; }
+    .u-card:hover, .btn-primary:hover, .btn-ghost:hover { transform: none; }
 }
 
 /* ── Back to top ──────────────────────────────────────────────── */

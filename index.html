@@ -19,8 +19,8 @@
     <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
         <div class="max-w-[1280px] mx-auto px-8">
             <div class="flex items-center justify-between h-16">
-                <a href="index.html" class="flex items-center gap-x-2.5">
-                    <div class="w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                <a href="index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
                         <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
                     </div>
                     <div>
@@ -78,11 +78,11 @@
 
                     <div class="flex flex-wrap gap-3 mt-10">
                         <a href="research/detecting-kerberoasting.html"
-                           class="inline-flex items-center px-8 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
-                            Read the first guide →
+                           class="btn-primary inline-flex items-center px-8 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
+                            Read the first guide <span class="arrow ml-1.5">→</span>
                         </a>
                         <a href="#approach"
-                           class="inline-flex items-center px-8 py-3.5 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
+                           class="btn-ghost inline-flex items-center px-8 py-3.5 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
                             What this project is
                         </a>
                     </div>
@@ -151,6 +151,7 @@
                                 <span class="text-[#7aa2f7]">Jun 2026</span>
                                 <span class="text-[#565f89]">·</span>
                                 <span class="text-[#565f89]">~14 min read</span>
+                                <span class="row-chev ml-auto">Read →</span>
                             </div>
                         </div>
                     </div>
@@ -173,20 +174,20 @@
                 <h2 class="text-6xl font-semibold tracking-[-0.04em] mb-10">How this project works.</h2>
 
                 <div class="grid md:grid-cols-3 gap-6">
-                    <div class="p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
-                        <div class="text-[#7aa2f7] text-2xl mb-4"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                    <div class="u-card p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="u-ico text-[#7aa2f7] text-2xl mb-4"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
                         <div class="text-2xl font-semibold tracking-tight mb-3">Sourced, not asserted</div>
                         <p class="text-[#a9b1d6] text-sm">Every technical claim links back to primary sources — vendor advisories, MITRE ATT&amp;CK, CVE records, and reputable reporting. If it isn't cited, it isn't stated.</p>
                     </div>
 
-                    <div class="p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
-                        <div class="text-[#bb9af7] text-2xl mb-4"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="u-card p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="u-ico text-[#bb9af7] text-2xl mb-4"><i class="fa-solid fa-shield-halved"></i></div>
                         <div class="text-2xl font-semibold tracking-tight mb-3">Defensive by scope</div>
                         <p class="text-[#a9b1d6] text-sm">The work explains how attacks function <em>so defenders can catch them</em> — detection logic, log artifacts, mitigations. No weaponized exploits, jailbreak libraries, or malware ship from here.</p>
                     </div>
 
-                    <div class="p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
-                        <div class="text-[#7dcfff] text-2xl mb-4"><i class="fa-solid fa-code-branch"></i></div>
+                    <div class="u-card p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="u-ico text-[#7dcfff] text-2xl mb-4"><i class="fa-solid fa-code-branch"></i></div>
                         <div class="text-2xl font-semibold tracking-tight mb-3">Reproducible</div>
                         <p class="text-[#a9b1d6] text-sm">Detections come as rules you can run, mapped to real event IDs and ATT&amp;CK techniques, with false-positive and tuning notes — so you can verify them against your own environment.</p>
                     </div>
@@ -213,7 +214,7 @@
                 </p>
 
                 <div class="grid md:grid-cols-2 gap-5">
-                    <div class="p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                    <div class="u-card p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
                         <div class="flex items-center gap-x-2 mb-2">
                             <div class="font-semibold text-xl">kev-watch</div>
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1a2e1a] text-[#9ece6a] border border-[#2a3a2a]">WORKING</span>
@@ -222,7 +223,7 @@
                         <a href="https://github.com/atraxsrc/umbrasec" class="mt-6 inline-block text-sm text-[#7aa2f7] hover:text-[#7dcfff]">View on GitHub →</a>
                     </div>
 
-                    <div class="p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                    <div class="u-card p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
                         <div class="flex items-center gap-x-2 mb-2">
                             <div class="font-semibold text-xl">sigma-pack</div>
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#2a2410] text-[#e0af68] border border-[#3a341a]">PLANNED</span>
