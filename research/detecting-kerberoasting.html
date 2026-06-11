@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detecting Kerberoasting with Sigma — UMBRASEC</title>
     <meta name="description" content="A defender-focused walkthrough of Kerberoasting (MITRE ATT&CK T1558.003): how it works, why RC4 service tickets expose it, and Sigma rules with tuning notes you can run against your own logs.">
+    <link rel="canonical" href="https://umbrasec.dev/research/detecting-kerberoasting.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/research/detecting-kerberoasting.html">
+    <meta property="og:title" content="Detecting Kerberoasting: A Practical Walkthrough with Sigma">
+    <meta property="og:description" content="How Kerberoasting (MITRE ATT&CK T1558.003) works, why RC4 service tickets expose it, and Sigma rules with tuning notes you can run against your own logs.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC — Attackers improve. Defenders should too.">
+    <meta property="article:published_time" content="2026-06-10">
+    <meta property="article:author" content="UMBRASEC">
+    <meta property="article:section" content="Detection Engineering">
+    <meta property="article:tag" content="Kerberoasting">
+    <meta property="article:tag" content="MITRE ATT&CK T1558.003">
+    <meta property="article:tag" content="Sigma">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Detecting Kerberoasting: A Practical Walkthrough with Sigma">
+    <meta name="twitter:description" content="How Kerberoasting works, why RC4 service tickets expose it, and Sigma rules with tuning notes you can run against your own logs.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Detecting Kerberoasting: A Practical Walkthrough with Sigma",
+      "description": "A defender-focused walkthrough of Kerberoasting (MITRE ATT&CK T1558.003): how it works, why RC4 service tickets expose it, and Sigma rules with tuning notes you can run against your own logs.",
+      "datePublished": "2026-06-10",
+      "author": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "publisher": { "@type": "Organization", "name": "UMBRASEC", "logo": { "@type": "ImageObject", "url": "https://umbrasec.dev/assets/og.png" } },
+      "image": "https://umbrasec.dev/assets/og.png",
+      "mainEntityOfPage": "https://umbrasec.dev/research/detecting-kerberoasting.html",
+      "about": "Kerberoasting (MITRE ATT&CK T1558.003) detection",
+      "keywords": "Kerberoasting, T1558.003, Sigma, detection engineering, Active Directory, RC4, Kerberos"
+    }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="'DejaVu Sans', sans-serif">
+  <defs>
+    <linearGradient id="badge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7aa2f7"/>
+      <stop offset="1" stop-color="#bb9af7"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="22%" cy="30%" r="60%">
+      <stop offset="0" stop-color="#7aa2f7" stop-opacity="0.20"/>
+      <stop offset="45%" stop-color="#bb9af7" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#1a1b26" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#7aa2f7" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#1a1b26"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- faint constellation dots -->
+  <g fill="#7aa2f7" fill-opacity="0.35">
+    <circle cx="980" cy="120" r="3"/><circle cx="1080" cy="190" r="2.5"/>
+    <circle cx="1010" cy="260" r="2"/><circle cx="1120" cy="300" r="3"/>
+    <circle cx="930" cy="210" r="2"/><circle cx="1060" cy="90" r="2"/>
+  </g>
+  <g stroke="#7aa2f7" stroke-opacity="0.18" stroke-width="1">
+    <line x1="980" y1="120" x2="1060" y2="90"/><line x1="980" y1="120" x2="1080" y2="190"/>
+    <line x1="1080" y1="190" x2="1010" y2="260"/><line x1="1080" y1="190" x2="1120" y2="300"/>
+    <line x1="930" y1="210" x2="1010" y2="260"/>
+  </g>
+
+  <!-- brand lockup -->
+  <g transform="translate(90, 96)">
+    <rect width="56" height="56" rx="12" fill="url(#badge)"/>
+    <text x="28" y="41" font-size="36" font-weight="bold" fill="#1a1b26" text-anchor="middle">U</text>
+    <text x="78" y="40" font-size="38" font-weight="bold" fill="#c0caf5" letter-spacing="-1">UMBRASEC</text>
+    <text x="345" y="38" font-size="18" fill="#a9b1d6" font-family="monospace">2026</text>
+  </g>
+
+  <!-- headline -->
+  <text x="88" y="320" font-size="84" font-weight="bold" fill="#c0caf5" letter-spacing="-3">Attackers improve.</text>
+  <text x="88" y="416" font-size="84" font-weight="bold" fill="#7aa2f7" letter-spacing="-3">Defenders should too.</text>
+
+  <!-- subtitle -->
+  <text x="90" y="486" font-size="27" fill="#a9b1d6">Independent defensive security research — detection engineering,</text>
+  <text x="90" y="524" font-size="27" fill="#a9b1d6">threat analysis, and open-source tooling.</text>
+
+  <!-- footer line -->
+  <rect x="90" y="566" width="34" height="3" rx="1.5" fill="#7aa2f7"/>
+  <text x="138" y="575" font-size="22" fill="#7dcfff" font-family="monospace">umbrasec.dev</text>
+</svg>

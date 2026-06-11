@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>UMBRASEC Research</title>
+    <link>https://umbrasec.dev/research/</link>
+    <atom:link href="https://umbrasec.dev/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Independent defensive security research — detection engineering, threat analysis, and open-source tooling.</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 11 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Detecting Kerberoasting: A Practical Walkthrough with Sigma</title>
+      <link>https://umbrasec.dev/research/detecting-kerberoasting.html</link>
+      <guid isPermaLink="true">https://umbrasec.dev/research/detecting-kerberoasting.html</guid>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <category>Detection Engineering</category>
+      <description>How Kerberoasting (MITRE ATT&amp;CK T1558.003) works, why RC4 service tickets give it away, and three layered Sigma detections — RC4 downgrade, request fan-out, and a honeypot SPN — with tuning and false-positive notes you can run against your own logs.</description>
+    </item>
+  </channel>
+</rss>
