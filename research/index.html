@@ -58,7 +58,7 @@
         <h1 class="hero-headline font-semibold tracking-[-0.045em] mb-6" style="font-size:64px;">Research.</h1>
         <p class="max-w-[640px] text-xl text-[#a9b1d6]">
             Detection-engineering walkthroughs, threat analysis, and mitigation guides. Sourced, reproducible, and
-            defensive in scope. Two published so far - this index grows as writeups ship.
+            defensive in scope. Three published so far - this index grows as writeups ship.
         </p>
     </section>
 
@@ -69,11 +69,32 @@
             <button type="button" class="filter-chip active" data-filter="all">All</button>
             <button type="button" class="filter-chip" data-filter="detection">Detection Engineering</button>
             <button type="button" class="filter-chip" data-filter="threat">Threat Analysis</button>
+            <button type="button" class="filter-chip" data-filter="ai">AI &amp; LLM Security</button>
             <button type="button" class="filter-chip" data-filter="tooling">Tooling</button>
         </div>
 
         <!-- Card grid -->
         <div data-research-grid class="grid md:grid-cols-2 gap-5">
+
+            <a href="owasp-llm-top-10-for-defenders.html"
+               class="research-card u-card block p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]" data-cat="ai">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-mono text-xs text-[#9ece6a]">AI &amp; LLM SECURITY</span>
+                    <span class="font-mono text-[10px] text-[#565f89]">~13 min</span>
+                </div>
+                <div class="research-card-title font-semibold text-xl leading-tight mb-3">
+                    Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders
+                </div>
+                <p class="text-sm text-[#a9b1d6] mb-5">
+                    The OWASP LLM Top 10 read as a defender's checklist: why prompt injection has no patch, the
+                    "lethal trifecta" behind incidents like EchoLeak (CVE-2025-32711), what to log in LLM-integrated
+                    apps, and canary, egress, and behavioral detections you can deploy today.
+                </p>
+                <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
+                    <span>Jun 11, 2026</span>
+                    <span class="research-card-arrow ml-auto">Read →</span>
+                </div>
+            </a>
 
             <a href="detecting-oauth-consent-phishing.html"
                class="research-card u-card block p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]" data-cat="detection">
@@ -125,8 +146,8 @@
         <div class="mt-12 p-8 border border-[#2a2c38] border-dashed rounded-3xl bg-[#16161e] max-w-[680px]">
             <div class="font-mono text-xs text-[#e0af68] mb-2">IN PROGRESS</div>
             <p class="text-[#a9b1d6] text-sm">
-                On the bench: an OWASP LLM Top 10 explainer (prompt injection as a defensive class) and a detection
-                guide for a recent CISA KEV-listed CVE. Want to suggest a topic or flag an error in what's published? <a href="https://github.com/atraxsrc/umbrasec" class="text-[#7aa2f7] hover:text-[#7dcfff]" target="_blank" rel="noopener">Open an issue →</a>
+                On the bench: a detection guide for a recent CISA KEV-listed CVE, and a hands-on guide to securing
+                tool-calling / agentic LLM apps. Want to suggest a topic or flag an error in what's published? <a href="https://github.com/atraxsrc/umbrasec" class="text-[#7aa2f7] hover:text-[#7dcfff]" target="_blank" rel="noopener">Open an issue →</a>
             </p>
         </div>
     </section>

@@ -11,6 +11,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://umbrasec.dev/research/detecting-oauth-consent-phishing.html</loc>
     <lastmod>2026-06-11</lastmod>
     <priority>0.9</priority>

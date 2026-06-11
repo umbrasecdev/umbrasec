@@ -24,14 +24,14 @@ tooling ships from here.
 - **Honest threat analysis** - technical breakdowns of real techniques and CVEs, every
   claim tied to a primary source.
 - **Open-source defensive tooling** - small, useful tools for defenders, built in the open.
+- **LLM / AI security** - defensive coverage of prompt injection and the OWASP LLM Top 10
+  as a class of risk (first writeup live).
 
 ## Roadmap (later)
 
 Planned directions as the project grows - not live yet, listed honestly as intent:
 
 - **Threat intelligence** - tracking and analysis of real-world campaigns and infrastructure.
-- **LLM / AI security** - defensive coverage of prompt injection and the OWASP LLM Top 10
-  as a class of risk.
 
 ## Tools
 

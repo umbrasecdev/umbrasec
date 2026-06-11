@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders - UMBRASEC</title>
+    <meta name="description" content="A defender-focused walkthrough of the OWASP Top 10 for LLM Applications: why prompt injection has no patch, what to log in LLM-integrated apps, and the canary, egress, and behavioral detections that work today.">
+    <link rel="canonical" href="https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html">
+    <meta property="og:title" content="Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders">
+    <meta property="og:description" content="Why prompt injection has no patch, what to log in LLM-integrated apps, and the canary, egress, and behavioral detections that work today.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+    <meta property="article:published_time" content="2026-06-11">
+    <meta property="article:author" content="UMBRASEC">
+    <meta property="article:section" content="AI &amp; LLM Security">
+    <meta property="article:tag" content="OWASP LLM Top 10">
+    <meta property="article:tag" content="Prompt Injection">
+    <meta property="article:tag" content="MITRE ATLAS">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders">
+    <meta name="twitter:description" content="Why prompt injection has no patch, what to log in LLM-integrated apps, and the detections that work today.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders",
+      "description": "A defender-focused walkthrough of the OWASP Top 10 for LLM Applications: why prompt injection has no patch, what to log in LLM-integrated apps, and the canary, egress, and behavioral detections that work today.",
+      "datePublished": "2026-06-11",
+      "author": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "publisher": { "@type": "Organization", "name": "UMBRASEC", "logo": { "@type": "ImageObject", "url": "https://umbrasec.dev/assets/og.png" } },
+      "image": "https://umbrasec.dev/assets/og.png",
+      "mainEntityOfPage": "https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html",
+      "about": "OWASP Top 10 for LLM Applications, prompt injection defense",
+      "keywords": "OWASP LLM Top 10, prompt injection, indirect prompt injection, MITRE ATLAS, AML.T0051, EchoLeak, CVE-2025-32711, LLM security, AI security, detection engineering"
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../" data-reading>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link">Research</a>
+                    <a href="../index.html#approach" class="nav-link">Approach</a>
+                    <a href="../services.html" class="nav-link">Services</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-[1280px] mx-auto px-8 py-16">
+        <!-- breadcrumb -->
+        <div class="font-mono text-xs text-[#565f89] mb-8">
+            <a href="../index.html" class="hover:text-[#7aa2f7]">home</a> /
+            <a href="index.html" class="hover:text-[#7aa2f7]">research</a> /
+            <span class="text-[#a9b1d6]">owasp-llm-top-10-for-defenders</span>
+        </div>
+
+        <header class="prose mx-auto">
+            <div class="flex items-center gap-x-3 mb-6 text-xs font-mono">
+                <span class="text-[#9ece6a]">AI &amp; LLM SECURITY</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">Jun 11, 2026</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">~13 min</span>
+            </div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] leading-[1.05] mb-6 text-[#c0caf5]">
+                Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders
+            </h1>
+            <p class="text-xl text-[#a9b1d6] leading-snug">
+                Your organization is shipping LLM features whether security signed off or not - chatbots, copilots,
+                RAG over internal documents, agents with tool access. Here's the OWASP LLM Top 10 read as a defender's
+                checklist, why prompt injection is an architecture problem rather than a bug, and the detections that
+                actually work today.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">OWASP LLM Top 10 (2025)</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ATLAS AML.T0051</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Prompt Injection</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">CVE-2025-32711</span>
+            </div>
+        </header>
+
+        <div class="prose mx-auto mt-10 article-body">
+            <aside class="toc-rail" data-toc aria-label="On this page"></aside>
+
+            <div class="callout">
+                <p class="text-sm"><strong>TL;DR for defenders.</strong> Treat every LLM in your stack as an
+                <em>untrusted component</em> that will eventually follow someone else's instructions. There is no patch
+                for prompt injection - the model reads instructions and data through the same channel, by design. What
+                works: least-privilege tool scopes, output handling as strict as you'd apply to user input, breaking
+                the data-exfiltration leg (egress controls on what the model can render or call), a <strong>canary
+                token</strong> in the system prompt as a leak tripwire, and logging prompts, completions, and tool
+                calls as first-class audit events. Details and starter detections below.</p>
+            </div>
+
+            <h2>Why this belongs in your threat model now</h2>
+            <p>
+                LLM-integrated applications stopped being experimental the moment they got access to real data and real
+                actions. The clearest proof point so far is <strong>EchoLeak</strong>
+                (<a href="https://nvd.nist.gov/vuln/detail/CVE-2025-32711" target="_blank" rel="noopener">CVE-2025-32711</a>,
+                CVSS 9.3): a zero-click vulnerability in Microsoft 365 Copilot disclosed in June 2025, where a crafted
+                email could make Copilot exfiltrate data from the user's context - mail, files, chat history - without
+                the victim ever clicking anything. Microsoft fixed it server-side, but the underlying class
+                (researchers called it an "LLM scope violation") is exactly what this writeup is about: untrusted
+                content steering a model that holds privileged access.
+            </p>
+            <p>
+                This wasn't novel in kind. Indirect prompt injection against LLM-integrated applications was described
+                systematically by <a href="https://arxiv.org/abs/2302.12173" target="_blank" rel="noopener">Greshake et
+                al. back in early 2023</a>, and it has been the number-one entry in every edition of the
+                <a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">OWASP Top 10 for LLM
+                Applications</a> since the list existed. The gap between "known since 2023" and "still shipping
+                exploitable in 2025's flagship products" tells you how hard the problem is - and why detection and
+                blast-radius design matter more than waiting for a fix.
+            </p>
+
+            <h2>The Top 10, in one defensive pass</h2>
+            <p>
+                The <a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">2025 list</a> in
+                production terms - what each risk looks like in an app you actually run, and the primary defense:
+            </p>
+            <div class="table-wrap">
+                <table class="data">
+                    <thead><tr><th>Risk</th><th>What it looks like in production</th><th>Primary defense</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>LLM01</code> Prompt Injection</td><td>Untrusted content (user input, a retrieved doc, an email) steers the model's behavior</td><td>Least privilege + egress control; assume it happens</td></tr>
+                        <tr><td><code>LLM02</code> Sensitive Information Disclosure</td><td>Model reveals other users' data, internal docs, or credentials it was given</td><td>Data minimization; don't give the model secrets</td></tr>
+                        <tr><td><code>LLM03</code> Supply Chain</td><td>Poisoned or backdoored third-party model, adapter, or dataset</td><td>Pin versions, verify sources, inventory models like packages</td></tr>
+                        <tr><td><code>LLM04</code> Data &amp; Model Poisoning</td><td>Attacker-influenced training or fine-tuning data changes behavior</td><td>Provenance and validation on anything you train on</td></tr>
+                        <tr><td><code>LLM05</code> Improper Output Handling</td><td>Model output flows into HTML, SQL, or a shell without encoding - classic injection, new source</td><td>Treat output as untrusted input; encode and parameterize</td></tr>
+                        <tr><td><code>LLM06</code> Excessive Agency</td><td>The model can call tools or APIs with more permission than the task needs</td><td>Scope tools per task; human approval for consequential actions</td></tr>
+                        <tr><td><code>LLM07</code> System Prompt Leakage</td><td>Instructions, and worse, any secrets inside them, get echoed out</td><td>No secrets in prompts; canary tripwire (below)</td></tr>
+                        <tr><td><code>LLM08</code> Vector &amp; Embedding Weaknesses</td><td>RAG retrieval pulls attacker-planted or cross-tenant content into context</td><td>Access control at retrieval time, source tagging</td></tr>
+                        <tr><td><code>LLM09</code> Misinformation</td><td>Confident wrong answers drive real decisions</td><td>Grounding, citations, human review where it matters</td></tr>
+                        <tr><td><code>LLM10</code> Unbounded Consumption</td><td>Token-burning abuse: denial of service or a shocking bill</td><td>Rate limits, quotas, per-identity cost caps</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                Notice the pattern: half of these are old vulnerability classes wearing a new interface.
+                <code>LLM05</code> is unescaped output, <code>LLM03</code> is supply chain, <code>LLM10</code> is
+                resource exhaustion. Your existing instincts apply. The genuinely new ones are <code>LLM01</code>,
+                <code>LLM06</code>, and <code>LLM08</code> - and they compound each other, which is where we go next.
+            </p>
+
+            <h2>Prompt injection, properly understood</h2>
+            <p>
+                SQL injection had a real fix: parameterized queries separate code from data. Prompt injection has no
+                equivalent, because a transformer has <em>one input channel</em>. System prompt, user message,
+                retrieved document, tool output - it's all tokens in the same context window, and the model's
+                "instruction following" is a statistical tendency, not a security boundary. MITRE ATLAS catalogs this
+                as <a href="https://atlas.mitre.org/techniques/AML.T0051" target="_blank" rel="noopener">AML.T0051</a>,
+                in two flavors that matter very differently for defense:
+            </p>
+            <ul>
+                <li><strong>Direct injection</strong> - the user attacks the model they're talking to ("ignore your
+                    instructions"). Mostly a content-policy and abuse problem; the attacker only holds their own
+                    session.</li>
+                <li><strong>Indirect injection</strong> - instructions hide in content the model <em>processes on
+                    someone else's behalf</em>: an email Copilot summarizes, a webpage an agent browses, a document
+                    RAG retrieves, a calendar invite. The victim never sees the payload. This is the one that turns
+                    into incidents, because the attacker reaches a session that isn't theirs.</li>
+            </ul>
+            <p>
+                A useful frame for when indirect injection becomes a real breach is what Simon Willison calls the
+                <a href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/" target="_blank" rel="noopener">lethal
+                trifecta</a>: an AI system that combines (1) access to private data, (2) exposure to untrusted content,
+                and (3) a way to communicate externally. All three together means attacker instructions can reach
+                private data and carry it out. EchoLeak was precisely this trifecta inside M365 Copilot - the crafted
+                email was the untrusted content, the user's mail and files were the private data, and image/link
+                rendering was the exfiltration channel. <strong>You usually can't remove legs one and two. Defense
+                concentrates on leg three.</strong>
+            </p>
+
+            <h2>What you need flowing into your SIEM</h2>
+            <p>
+                You cannot detect what you don't log, and most LLM apps today log almost nothing security-relevant.
+                Whether you build or buy, insist on these as structured, retained, queryable events:
+            </p>
+            <ul>
+                <li><strong>Prompts and completions</strong>, with user identity, session ID, model and version, and
+                    a hash of the system prompt in effect. Mind privacy: this is sensitive data; scope retention and
+                    access accordingly.</li>
+                <li><strong>Tool/function calls as first-class audit events</strong> - which tool, what arguments,
+                    triggered by which session, allowed or denied. For an agent, this is your process-creation log
+                    equivalent; it's where the impact happens.</li>
+                <li><strong>RAG retrieval events</strong> - which documents entered the context window, from which
+                    source, for which query. When an incident happens, "what did the model read" is the first
+                    question, and without this log it's unanswerable.</li>
+                <li><strong>Guardrail/filter verdicts</strong> - every block, flag, or rewrite from whatever safety
+                    layer you run, even when the request proceeds. These are your IDS alerts; today most of them go
+                    nowhere.</li>
+                <li>If you're in the Microsoft ecosystem: Copilot interactions surface in the <strong>Purview unified
+                    audit log</strong>, and Azure OpenAI deployments can emit request logs through Azure diagnostics -
+                    check what you're actually collecting; the default is usually "not enough."</li>
+            </ul>
+
+            <h2>Detection strategy</h2>
+            <p>
+                Same philosophy as every UMBRASEC writeup: layers, from highest precision to broadest. Schemas below
+                are illustrative - LLM apps don't share a standard log format yet, so adapt the field names to yours.
+            </p>
+
+            <h3>1. Canary token in the system prompt (near-zero false positives)</h3>
+            <p>
+                The honeypot-SPN trick, ported to LLMs. Plant a unique, meaningless marker in your system prompt and
+                alert if it ever appears in model output - because no legitimate completion has any reason to contain
+                it. One marker, two strong signals: your system prompt is leaking (<code>LLM07</code>), and the model
+                is disclosing context it was told not to - which often means an injection attempt is steering it.
+            </p>
+            <pre><code># System prompt (excerpt)
+# Integrity marker. Never include the following token in any response:
+# UMB-CANARY-3f91c2a8
+
+# Detection (pseudo-rule over completion logs)
+alert when:
+    response.text contains "UMB-CANARY-"
+severity: high
+action: capture full session (prompt chain, retrieved docs, tool calls)
+        for review; rotate the canary after any hit</code></pre>
+            <div class="callout">
+                <p class="text-sm"><strong>Tuning note.</strong> Use a random value per deployment, rotate it on a
+                schedule and after every hit, and make sure it's excluded from any prompt text you intentionally
+                publish. The same idea extends to RAG: seed a decoy document no honest query should retrieve, and
+                alert when it enters a context window - that's your honeypot for <code>LLM08</code>-style retrieval
+                abuse.</p>
+            </div>
+
+            <h3>2. Egress: watch what the model is allowed to render or call</h3>
+            <p>
+                EchoLeak exfiltrated through a rendered image URL - the data left in the query string of a request the
+                victim's client made automatically. That channel generalizes: markdown images, auto-fetched links, and
+                tool calls that take URLs are the standard exfiltration legs of the trifecta. Lock them down by
+                policy, and alert on the attempts:
+            </p>
+            <pre><code># Output policy (enforce before rendering / before the HTTP client fires)
+- strip or neutralize markdown images and links in model output
+  unless the host is on an explicit allowlist
+- block tool calls whose URL/domain argument is not allowlisted
+
+# Detection (pseudo-rule over output + tool-call logs)
+alert when:
+    output.contains_image_or_link AND destination.host not in allowlist
+or:
+    toolcall.name in ("http_get", "browse", "send_email")
+    AND toolcall.argument_domain not in allowlist
+    AND session.context_included_external_content == true</code></pre>
+            <p>
+                That last condition is the high-signal one: <em>the model read untrusted content, then immediately
+                tried to reach an unfamiliar destination</em>. Legitimate sessions do this rarely; injected ones do it
+                by construction.
+            </p>
+
+            <h3>3. Behavioral: tool-call fan-out and sequence anomalies</h3>
+            <p>
+                The agent equivalent of the Kerberoasting fan-out rule. A copilot answering a question touches one or
+                two tools; a hijacked agent enumerates - reading many documents, then calling a send/export/write tool
+                it rarely uses. Baseline per tool and per identity, then alert on the outliers:
+            </p>
+            <pre><code># Pseudo-aggregation over tool-call logs
+alert when, within 5m, a single session:
+    calls >= N distinct tools            # fan-out (baseline N first)
+    or reads >= M distinct documents     # bulk context-stuffing
+    or invokes a "consequential" tool    # send_email, create_rule,
+       it has never used before          # export, delete, payment
+severity: medium - this is a triage feed, not a pager rule</code></pre>
+            <p>
+                Run it report-only for a couple of weeks exactly like a SIEM correlation rule: find your noisy
+                legitimate automations, allowlist them, and set thresholds above your noisiest honest session.
+            </p>
+
+            <h2>Mitigation: design beats detection here</h2>
+            <p>
+                More than in any other writeup on this site, the architecture is the control. In order of impact:
+            </p>
+            <ul>
+                <li><strong>Scope tools to the task, not the product.</strong> A summarizer needs read access to one
+                    document, not a mailbox-wide search tool and an email sender. <code>LLM06</code> is a permissions
+                    decision you control completely, today.</li>
+                <li><strong>Put a human between the model and consequential actions.</strong> Sending mail, moving
+                    money, changing configs, deleting data - require approval. Keep the approval UI honest: show the
+                    actual action and arguments, not the model's summary of them.</li>
+                <li><strong>Break the exfiltration leg.</strong> No unrestricted outbound fetches, no rendering
+                    remote images from model output, allowlisted domains for every tool that touches the network.
+                    If the trifecta can't complete, injection becomes much less interesting.</li>
+                <li><strong>Keep secrets out of prompts.</strong> System prompts leak - assume <code>LLM07</code> -
+                    so API keys, internal hostnames, and customer data don't belong there. The canary should be the
+                    only "secret" in your prompt, and it's designed to leak loudly.</li>
+                <li><strong>Treat model output as untrusted input</strong> (<code>LLM05</code>): encode it before it
+                    hits HTML, parameterize it before it hits SQL, never pipe it to a shell. This one is fully solved
+                    technology; there's no excuse.</li>
+                <li><strong>Inventory and pin your models</strong> like any other dependency (<code>LLM03</code>),
+                    and put rate/cost limits on every endpoint (<code>LLM10</code>).</li>
+                <li>For the formal backing when you write policy: the joint
+                    <a href="https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development" target="_blank" rel="noopener">NCSC/CISA
+                    Guidelines for Secure AI System Development</a> and
+                    <a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST's AI
+                    RMF</a> map cleanly onto everything above.</li>
+            </ul>
+
+            <h2>Honest limitations</h2>
+            <ul>
+                <li><strong>There is no deterministic fix for prompt injection.</strong> Guardrail models and prompt
+                    classifiers are probabilistic - useful as a filter layer, bypassable by a motivated attacker.
+                    Anyone selling you a product that "solves" injection is selling you <code>LLM09</code>.</li>
+                <li><strong>The detections here are younger than the rest of this site's content.</strong> Windows
+                    eventing has decades of field testing; LLM telemetry has a couple of years and no standard schema.
+                    Expect to adapt everything to your own logging, and expect this writeup to age faster than the
+                    Kerberoasting one.</li>
+                <li><strong>The canary catches leakage, not all injection.</strong> An attack that quietly biases an
+                    answer, or exfiltrates without echoing the prompt, walks past rule #1. That's why the egress and
+                    behavioral layers exist, and why blast-radius design outranks all three.</li>
+                <li><strong>Vendor-hosted copilots limit your visibility.</strong> For M365 Copilot you get what
+                    Purview exposes, not raw model I/O. Push vendors on logging the same way you'd push a SaaS
+                    provider on audit APIs - it's the same ask.</li>
+            </ul>
+
+            <h2>References</h2>
+            <ul>
+                <li><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">OWASP - Top 10 for LLM Applications (2025)</a></li>
+                <li><a href="https://atlas.mitre.org/techniques/AML.T0051" target="_blank" rel="noopener">MITRE ATLAS - AML.T0051: LLM Prompt Injection</a></li>
+                <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-32711" target="_blank" rel="noopener">NVD - CVE-2025-32711 (M365 Copilot "EchoLeak" information disclosure)</a></li>
+                <li><a href="https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-32711" target="_blank" rel="noopener">Microsoft MSRC - CVE-2025-32711 advisory</a></li>
+                <li><a href="https://thehackernews.com/2025/06/zero-click-ai-vulnerability-exposes.html" target="_blank" rel="noopener">The Hacker News - Zero-click "EchoLeak" AI vulnerability in Microsoft 365 Copilot, found by Aim Labs (Jun 2025)</a></li>
+                <li><a href="https://arxiv.org/abs/2302.12173" target="_blank" rel="noopener">Greshake et al. - Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection (2023)</a></li>
+                <li><a href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/" target="_blank" rel="noopener">Simon Willison - The lethal trifecta for AI agents (Jun 2025)</a></li>
+                <li><a href="https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development" target="_blank" rel="noopener">NCSC / CISA - Guidelines for Secure AI System Development (Nov 2023)</a></li>
+                <li><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST - AI Risk Management Framework</a></li>
+            </ul>
+
+            <div class="callout mt-10">
+                <p class="text-sm"><strong>Scope note.</strong> This is a defensive writeup. It describes injection
+                classes only to the depth a defender needs to log, detect, and contain them - it deliberately contains
+                no working injection payloads, jailbreak strings, or evasion techniques. UMBRASEC publishes defense,
+                not offense.</p>
+            </div>
+
+        </div>
+
+        <!-- end-of-article: share + nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38]">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="detecting-oauth-consent-phishing.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">← Detecting OAuth Consent Phishing</a>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-[#565f89] mr-1">Share</span>
+                    <a class="share-btn" href="https://twitter.com/intent/tweet?text=Prompt%20Injection%20and%20the%20OWASP%20LLM%20Top%2010%3A%20A%20Field%20Guide%20for%20Defenders&url=https%3A%2F%2Fumbrasec.dev%2Fresearch%2Fowasp-llm-top-10-for-defenders.html" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fumbrasec.dev%2Fresearch%2Fowasp-llm-top-10-for-defenders.html" target="_blank" rel="noopener" title="Share on LinkedIn" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <a href="index.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">All research →</a>
+            </div>
+        </div>
+    </article>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8 mt-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="font-mono text-xs text-[#a9b1d6]">
+                © 2026 UMBRASEC · Independent defensive research · Published openly
+            </div>
+            <div class="flex items-center gap-x-5">
+                <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Found this useful? Tip</span>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Tip with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Tip with Monero">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <circle cx="50" cy="50" r="50"/>
+                        <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                        <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>
