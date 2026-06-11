@@ -232,12 +232,11 @@ detection:
         EventID: 4769
         TicketEncryptionType: '0x17'   # RC4-HMAC
         TicketOptions: '0x40810000'     # see tuning note - remove if too narrow
+        Status: '0x0'                   # only count successfully issued tickets
     filter_machine:
         ServiceName|endswith: '$'
     filter_krbtgt:
         ServiceName: 'krbtgt'
-    filter_failures:
-        Status: '0x1b'                  # only count issued tickets, drop S4U/failed
     condition: selection and not 1 of filter_*
 falsepositives:
     - Legacy applications or appliances that genuinely require RC4

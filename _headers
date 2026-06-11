@@ -1,9 +1,16 @@
 # Cloudflare Pages headers.
-# Always revalidate CSS/JS so a deploy is picked up immediately instead of
-# being masked by a stale 4-hour browser cache. 304s keep it cheap.
+# Pages serves HTML at extensionless paths (/about, /research/), so a
+# "/*.html" rule never matches a served page. Instead: revalidate everything
+# by default, then allow short caching for static assets - except the files
+# that change on deploy or daily, which must always revalidate. Later rules
+# override earlier ones for the same header. 304s keep revalidation cheap.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+/assets/*
+  Cache-Control: public, max-age=14400
 /assets/umbra.css
   Cache-Control: public, max-age=0, must-revalidate
 /assets/umbra.js
   Cache-Control: public, max-age=0, must-revalidate
-/*.html
+/assets/kev-latest.json
   Cache-Control: public, max-age=0, must-revalidate

@@ -38,7 +38,7 @@ jobs:
               "catalogVersion": raw.get("catalogVersion"),
               "synced": datetime.date.today().isoformat(),
               "count": raw.get("count"),
-              "vulnerabilities": [{k: v[k] for k in keep} for v in vulns],
+              "vulnerabilities": [{k: v.get(k, "") for k in keep} for v in vulns],
           }
           with open("assets/kev-latest.json", "w") as f:
               f.write(json.dumps(out, indent=2) + "\n")

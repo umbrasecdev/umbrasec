@@ -33,7 +33,7 @@
     { group: "Articles", label: "Detecting OAuth Consent Phishing", hint: "T1528", icon: "fa-user-shield", href: "research/detecting-oauth-consent-phishing.html", keywords: "oauth consent phishing entra azure ad graph illicit grant token mfa m365 office 365" },
     { group: "Articles", label: "Detecting Kerberoasting with Sigma", hint: "T1558.003", icon: "fa-shield-halved", href: "research/detecting-kerberoasting.html", keywords: "kerberos rc4 detection sigma active directory 4769" },
     { group: "External", label: "GitHub", hint: "github.com/atraxsrc/umbrasec", icon: "fa-github", brand: true, href: "https://github.com/atraxsrc/umbrasec", external: true },
-    { group: "External", label: "Email 0xdev1@umbrasec.com", hint: "mail", icon: "fa-paper-plane", href: "mailto:0xdev1@umbrasec.com", external: true },
+    { group: "External", label: "Email 0xdev1@umbrasec.dev", hint: "mail", icon: "fa-paper-plane", href: "mailto:0xdev1@umbrasec.dev", external: true },
   ];
 
   /* ── Build command palette DOM ────────────────────────────────── */
@@ -234,6 +234,9 @@
       if (sec) map.set(sec, a);
     });
     if (!map.size || !("IntersectionObserver" in window)) return;
+    // Activate when a section crosses a band in the upper-middle of the
+    // viewport - a visible-ratio threshold never fires on sections taller
+    // than the viewport.
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
@@ -245,7 +248,7 @@
           }
         });
       },
-      { threshold: 0.5 }
+      { rootMargin: "-35% 0px -55% 0px", threshold: 0 }
     );
     map.forEach((_, sec) => io.observe(sec));
   })();
@@ -586,14 +589,16 @@
             ? ' <i class="fa-solid fa-skull-crossbones kev-ransom" title="Known ransomware campaign use"></i>'
             : "";
           return '<span class="kev-item">' +
-              '<span class="kev-cve">' + escapeHtml(v.cveID) + "</span>" +
-              '<span class="kev-prod">' + escapeHtml((v.vendorProject + " " + v.product).trim()) + "</span>" +
+              '<span class="kev-cve">' + escapeHtml(v.cveID || "") + "</span>" +
+              '<span class="kev-prod">' + escapeHtml(((v.vendorProject || "") + " " + (v.product || "")).trim()) + "</span>" +
               ransom +
-              '<span class="kev-date">' + escapeHtml(v.dateAdded) + "</span>" +
+              '<span class="kev-date">' + escapeHtml(v.dateAdded || "") + "</span>" +
             "</span>";
         }).join("");
 
-        track.innerHTML = row() + row(); // duplicate run for a seamless loop
+        // duplicate run for a seamless loop - skip when the scroll animation
+        // is disabled, so reduced-motion users don't see every item twice
+        track.innerHTML = reduceMotion ? row() : row() + row();
         const tag = $(".kev-tag", strip);
         if (tag && data.synced) tag.title = "Latest CISA KEV additions · synced " + data.synced;
         strip.classList.remove("hidden");
