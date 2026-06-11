@@ -773,6 +773,18 @@ footer strong { color: var(--text-dim); }
 @media (prefers-reduced-motion: reduce) {
   .sidebar, .sidebar-backdrop { transition: none; }
 }
+
+/* Content cross-links (scoped so the sidebar nav is untouched) */
+.section a, .card a, .callout a {
+  color: var(--cyan);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(125,207,255,0.35);
+  transition: color 0.15s, border-color 0.15s;
+}
+.section a:hover, .card a:hover, .callout a:hover {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+}
 </style>
 </head>
 <body>
@@ -853,6 +865,13 @@ footer strong { color: var(--text-dim); }
     </a>
     <a class="nav-link" href="#cloud">
       <span class="nav-dot" style="background:var(--blue)"></span>Cloud Defense
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">AI &amp; LLM</div>
+    <a class="nav-link" href="#ai-llm">
+      <span class="nav-dot" style="background:var(--green)"></span>LLM App Defense
     </a>
   </div>
 
@@ -2318,6 +2337,91 @@ footer strong { color: var(--text-dim); }
         <li><strong>Secrets management</strong> — External Secrets Operator + HashiCorp Vault or AWS Secrets Manager. Never store secrets in ConfigMaps or environment variables in plain text.</li>
         <li><strong>Image scanning in CI/CD</strong> — Trivy/Grype in pipeline. Block images with critical CVEs before deployment. Sign images with Cosign and enforce signature verification at admission.</li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════════════
+     AI / LLM DEFENSE
+═══════════════════════════════════════════════════════ -->
+<section class="section" id="ai-llm">
+  <div class="section-head">
+    <div class="section-eyebrow col-green">AI &amp; LLM Defense</div>
+    <h2 class="section-title">Defending LLM-Integrated Apps</h2>
+    <p class="section-desc">Your org is shipping chatbots, copilots, RAG, and tool-calling agents whether security signed off or not. Treat every LLM as an <strong>untrusted component</strong> that will eventually follow someone else's instructions — there is no patch for prompt injection, so defense is least privilege, egress control, and logging. Full writeup: <a href="/research/owasp-llm-top-10-for-defenders.html">Prompt Injection &amp; the OWASP LLM Top 10 for Defenders</a>.</p>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <div>
+      <div class="callout-title">The Lethal Trifecta</div>
+      An LLM system becomes dangerous when it combines three things: (1) access to <strong>private data</strong>, (2) exposure to <strong>untrusted content</strong>, and (3) a way to <strong>communicate externally</strong>. All three together means attacker instructions in the untrusted content can reach private data and carry it out. Microsoft 365 Copilot's zero-click "EchoLeak" (<code class="c-orange">CVE-2025-32711</code>) was exactly this. You usually can't remove legs 1 and 2 — concentrate defense on breaking leg 3.
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-accent" style="background:var(--green)"></div>
+      <div class="card-tag" style="background:var(--green-dim);color:var(--green)">VISIBILITY</div>
+      <h3>What to Log in LLM Apps</h3>
+      <div class="card-sub">Most LLM apps log nothing security-relevant — you can't detect what you don't capture</div>
+      <ul class="item-list">
+        <li><strong>Prompts &amp; completions</strong> — with user identity, session ID, model/version, and a hash of the system prompt in effect. Treat as sensitive; scope retention and access.</li>
+        <li><strong>Tool / function calls</strong> — which tool, what arguments, which session, allowed or denied. For an agent this is your <code class="c-cyan">4688</code>-equivalent — where impact happens.</li>
+        <li><strong>RAG retrieval events</strong> — which documents entered context, from which source, for which query. "What did the model read" is the first IR question.</li>
+        <li><strong>Guardrail verdicts</strong> — every block, flag, or rewrite from your safety layer, even when the request proceeds. These are your IDS alerts.</li>
+        <li><strong>M365 specifics</strong> — Copilot interactions surface in the Purview unified audit log; Azure OpenAI can emit request logs via diagnostics. Confirm you actually collect them.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:var(--purple)"></div>
+      <div class="card-tag" style="background:var(--purple-dim);color:var(--purple)">DECEPTION</div>
+      <h3>System-Prompt Canary</h3>
+      <div class="card-sub">The honeypot-SPN trick, ported to LLMs — near-zero false positives</div>
+      <ul class="item-list">
+        <li><strong>Plant a unique marker</strong> in the system prompt (e.g. <code class="c-green">UMB-CANARY-3f91c2a8</code>) and alert if it <em>ever</em> appears in model output — no legitimate completion contains it.</li>
+        <li><strong>Two signals, one token</strong> — a hit means the system prompt is leaking (OWASP <code class="c-cyan">LLM07</code>) and the model is likely being steered to disclose its context.</li>
+        <li><strong>Rotate</strong> the value per deployment and after every hit; exclude it from any prompt text you publish.</li>
+        <li><strong>RAG canary</strong> — seed a decoy document no honest query should retrieve, and alert when it enters a context window. Honeypot for <code class="c-cyan">LLM08</code> retrieval abuse.</li>
+        <li><strong>On any hit</strong> — capture the full session (prompt chain, retrieved docs, tool calls) for review and rotate the canary.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:var(--red)"></div>
+      <div class="card-tag" style="background:var(--red-dim);color:var(--red)">EGRESS</div>
+      <h3>Break the Exfil Leg</h3>
+      <div class="card-sub">EchoLeak exfiltrated through a rendered image URL — that channel generalizes</div>
+      <ul class="item-list">
+        <li><strong>Neutralize markdown images &amp; links</strong> in model output unless the host is explicitly allowlisted — the data leaves in the query string of an auto-fetched URL.</li>
+        <li><strong>Allowlist tool-call destinations</strong> — block any <code class="c-cyan">http_get</code> / <code class="c-cyan">browse</code> / <code class="c-cyan">send_email</code> whose domain isn't approved.</li>
+        <li><strong>High-signal correlation</strong> — alert when a session <em>read untrusted content, then immediately tried to reach an unfamiliar destination</em>. Honest sessions do this rarely; injected ones do it by construction.</li>
+        <li><strong>If the trifecta can't complete</strong>, injection becomes far less interesting — this is the single highest-leverage control.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:var(--orange)"></div>
+      <div class="card-tag" style="background:var(--orange-dim);color:var(--orange)">BEHAVIORAL</div>
+      <h3>Agent Tool-Call Anomalies</h3>
+      <div class="card-sub">The Kerberoasting fan-out rule, applied to agents</div>
+      <ul class="item-list">
+        <li><strong>Fan-out</strong> — a copilot answering a question touches one or two tools; a hijacked agent enumerates. Alert on a session calling many distinct tools in a short window.</li>
+        <li><strong>Bulk context-stuffing</strong> — one session reading an unusual number of distinct documents in minutes.</li>
+        <li><strong>First use of a consequential tool</strong> — <code class="c-cyan">send_email</code>, <code class="c-cyan">create_rule</code>, export, delete, payment — that the session has never used before.</li>
+        <li><strong>Baseline first</strong> — run report-only for a couple of weeks, allowlist your noisy legitimate automations, set thresholds above the noisiest honest session. This is a triage feed, not a pager rule.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">🛡️</span>
+    <div>
+      <div class="callout-title">Design Beats Detection Here</div>
+      Scope tools to the task, not the product (a summarizer needs one document, not a mailbox-wide search + send). Put a human in front of consequential actions, showing the real arguments not the model's summary. Keep secrets out of prompts — they leak. Treat model output as untrusted input: encode before HTML, parameterize before SQL, never pipe to a shell. There is no deterministic fix for prompt injection — anyone selling you one is selling you OWASP <code class="c-cyan">LLM09</code> (misinformation). Map your policy to the <a href="https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development" target="_blank" rel="noopener">NCSC/CISA Secure AI guidelines</a> and the <a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">OWASP LLM Top 10</a>.
     </div>
   </div>
 </section>
