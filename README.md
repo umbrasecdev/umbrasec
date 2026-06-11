@@ -55,6 +55,20 @@ detection engineering, incident-response flow chains, threat hunting, identity a
 hardening, and SOAR playbooks, ATT&CK-aligned. Served at
 [umbrasec.dev/tools/blue-team-mapper/](https://umbrasec.dev/tools/blue-team-mapper/).
 
+## Customize
+
+Things you'll want to swap for your own details:
+
+- **Scheduling link** - `services.html` has a `Book a scoping call` button pointing at
+  the placeholder `https://cal.com/your-handle`. Make a free [Cal.com](https://cal.com)
+  (or Calendly) account and replace that one URL. It appears in exactly one place,
+  marked with a `<!-- SCHEDULING: ... -->` comment.
+- **Contact email** - `0xdev1@umbrasec.dev`, used in `index.html`, `services.html`,
+  `about.html`, and the palette in `assets/umbra.js`.
+- **GitHub** - `github.com/atraxsrc/umbrasec` throughout.
+- **Crypto tip addresses** - the BTC/XMR addresses and QR SVGs live in `assets/umbra.js`
+  (`COINS`) and `assets/btc-qr.svg` / `assets/xmr-qr.svg`.
+
 ## Corrections
 
 Found a detection that misbehaves, a wrong citation, or an analysis that's off? That

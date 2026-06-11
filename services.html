@@ -266,21 +266,23 @@
     <section id="talk" class="max-w-[1280px] mx-auto px-8 py-16 border-t border-[#2a2c38]">
         <div class="max-w-2xl">
             <h2 class="text-5xl font-semibold tracking-[-0.04em] mb-6">Let's talk.</h2>
-            <p class="text-xl text-[#a9b1d6] mb-8">Tell me what you're dealing with - a noisy SIEM, an M365 tenant nobody's reviewed, a roadmap you need a second opinion on, or an incident in progress. The button below opens a pre-structured email; or copy the address and write it your way.</p>
+            <p class="text-xl text-[#a9b1d6] mb-8">Tell me what you're dealing with - a noisy SIEM, an M365 tenant nobody's reviewed, a roadmap you need a second opinion on, or an incident in progress. Book a free scoping call and pick a time that works, or send a pre-structured email if you'd rather write first.</p>
             <div class="flex flex-wrap gap-3">
-                <a href="mailto:0xdev1@umbrasec.dev?subject=Scoping%20conversation&body=A%20rough%20outline%20helps%20me%20come%20prepared%20-%20edit%20freely%3A%0A%0AEnvironment%3A%20(M365%2FEntra%3F%20SIEM%3F%20rough%20team%20size%3F)%0AThe%20problem%3A%20(noisy%20alerts%2C%20unreviewed%20tenant%2C%20incident%2C%20roadmap%20question)%0ATimeline%3A%20(when%20do%20you%20need%20movement%3F)%0A"
+                <!-- SCHEDULING: replace https://cal.com/your-handle below with your real Cal.com or Calendly URL. It's the only place this link appears. -->
+                <a href="https://cal.com/your-handle" target="_blank" rel="noopener"
                    class="btn-primary inline-flex items-center gap-x-2 px-7 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
+                    <i class="fa-regular fa-calendar-check"></i> Book a scoping call
+                </a>
+                <a href="mailto:0xdev1@umbrasec.dev?subject=Scoping%20conversation&body=A%20rough%20outline%20helps%20me%20come%20prepared%20-%20edit%20freely%3A%0A%0AEnvironment%3A%20(M365%2FEntra%3F%20SIEM%3F%20rough%20team%20size%3F)%0AThe%20problem%3A%20(noisy%20alerts%2C%20unreviewed%20tenant%2C%20incident%2C%20roadmap%20question)%0ATimeline%3A%20(when%20do%20you%20need%20movement%3F)%0A"
+                   class="btn-ghost inline-flex items-center gap-x-2 px-7 py-3.5 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
                     <i class="fa-regular fa-envelope"></i> Start a scoping email
                 </a>
                 <button type="button" data-copy="0xdev1@umbrasec.dev"
                    class="copy-email btn-ghost inline-flex items-center gap-x-2 px-7 py-3.5 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all" title="Click to copy email">
                     <i class="fa-regular fa-copy"></i> <span class="dc-addr">0xdev1@umbrasec.dev</span>
                 </button>
-                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
-                   class="btn-ghost inline-flex items-center gap-x-2 px-7 py-3.5 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
-                    <i class="fa-brands fa-github"></i> See the work first
-                </a>
             </div>
+            <p class="mt-5 text-sm text-[#565f89]">Prefer to read the work first? <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener" class="text-[#7aa2f7] hover:text-[#7dcfff]">See everything on GitHub →</a></p>
         </div>
     </section>
 
