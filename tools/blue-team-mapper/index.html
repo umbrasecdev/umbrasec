@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Blue Team Mapper v3.0</title>
-<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg"/>
-<link rel="icon" type="image/png" sizes="512x512" href="../../assets/umbra-avatar.png"/>
-<link rel="apple-touch-icon" href="../../assets/umbra-avatar.png"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<title>Blue Team Mapper v4.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 /* ═══════════════════════════════════════════════════════════
    TOKYO NIGHT PALETTE + EXTENDED VARIABLES
@@ -458,6 +457,7 @@ code.c-teal   { background: var(--teal-dim);   color: var(--teal);   }
   padding: 28px 30px;
   margin-bottom: 24px;
   overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .mono-block h4 {
@@ -472,10 +472,14 @@ code.c-teal   { background: var(--teal-dim);   color: var(--teal);   }
 }
 
 .mono-block pre {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Cascadia Mono', 'Fira Code', 'Menlo', Consolas, 'Courier New', monospace;
   font-size: 12px;
-  line-height: 1.9;
+  line-height: 1.85;
   white-space: pre;
+  tab-size: 2;
+  font-variant-ligatures: none;
+  -webkit-font-feature-settings: "liga" 0;
+  font-feature-settings: "liga" 0;
 }
 
 .k  { color: var(--cyan);      font-weight: 600; }
@@ -806,7 +810,7 @@ footer strong { color: var(--text-dim); }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-title">Blue Team <span>Mapper</span></div>
-    <div class="logo-ver">v3.0 · DEFENDER REFERENCE</div>
+    <div class="logo-ver">v4.0 · DEFENDER REFERENCE</div>
     <a class="logo-home" href="/index.html">&larr; <b>UMBRASEC</b></a>
   </div>
 
@@ -2699,7 +2703,7 @@ footer strong { color: var(--text-dim); }
 </section>
 
 <footer>
-  <strong>Blue Team Mapper v3.0</strong> · Comprehensive Defender Reference · MITRE ATT&amp;CK Aligned<br>
+  <strong>Blue Team Mapper v4.0</strong> · Comprehensive Defender Reference · MITRE ATT&amp;CK Aligned<br>
   <span style="font-size:10px;margin-top:6px;display:block">Detection · Triage · Response · Hardening · Intel · Recovery</span>
 </footer>
 
