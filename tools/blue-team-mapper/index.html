@@ -1126,8 +1126,8 @@ footer strong { color: var(--text-dim); }
 ├── <span class="v">Windows Security Event Log</span>      <span class="cm">4624/4625 · 4688+cmdline · 4698 · 4662 · 4769</span>
 ├── <span class="v">Windows Sysmon</span>                  <span class="cm">Process · network · registry · file · DNS · pipe · WMI</span>
 ├── <span class="v">EDR Telemetry</span>                   <span class="cm">Behavioral events · process injection · memory anomalies</span>
-├── <span class="v">Network Firewall / IDS</span>           <span class="cm">Allowed + denied flows · lateral movement patterns</span>
-├── <span class="v">DNS Logs</span>                         <span class="cm">All queries with requesting process (Sysmon 22)</span>
+├── <span class="v">Network Firewall / IDS</span>          <span class="cm">Allowed + denied flows · lateral movement patterns</span>
+├── <span class="v">DNS Logs</span>                        <span class="cm">All queries with requesting process (Sysmon 22)</span>
 └── <span class="v">Identity Provider</span>               <span class="cm">Entra ID / Okta - sign-ins · MFA · CA · risk signals</span>
 
 <span class="k">TIER 2 - HIGH VALUE</span>
@@ -1146,9 +1146,9 @@ footer strong { color: var(--text-dim); }
 └── <span class="v">Application / WAF Logs</span>          <span class="cm">Web shell indicators · injection attempts</span>
 
 <span class="k">RETENTION GUIDANCE</span>
-├── <span class="ok">Hot (searchable)</span>   90 days minimum - 1 year preferred for enterprise
-├── <span class="wn">Warm (archived)</span>    1-3 years - regulatory and legal hold requirements
-└── <span class="er">Cold (tape/object)</span> 3-7 years - compliance-dependent, restore on demand
+├── <span class="ok">Hot (searchable)</span>    90 days minimum - 1 year preferred for enterprise
+├── <span class="wn">Warm (archived)</span>     1-3 years - regulatory and legal hold requirements
+└── <span class="er">Cold (tape/object)</span>  3-7 years - compliance-dependent, restore on demand
     </pre>
   </div>
 
@@ -1243,7 +1243,7 @@ footer strong { color: var(--text-dim); }
 └── <span class="ok">ObRegisterCallbacks</span>              Process handle access → LSASS access attempt detection
 
 <span class="k">ETW TELEMETRY</span>  <span class="cm">(rich but in-process patchable - Cobalt Strike patches ntdll ETW)</span>
-├── <span class="wn">Microsoft-Windows-Threat-Intelligence</span>   Kernel-sourced inject/read/write process memory events
+├── <span class="wn">Microsoft-Windows-Threat-Intelligence</span>     Kernel-sourced inject/read/write process memory events
 ├── <span class="wn">.NET CLR ETW</span>                              Assembly loads, JIT compilation, AppDomain creation
 ├── <span class="wn">PowerShell ETW (4104)</span>                     Script block content before execution · AMSI data
 └── <span class="wn">WMI-Activity Operational</span>                  WMI provider loads and subscription firing
@@ -1252,7 +1252,7 @@ footer strong { color: var(--text-dim); }
 ├── <span class="wn">MZ/PE header in executable regions</span>    Injected DLLs and reflective loaders
 ├── <span class="wn">Unbacked executable memory</span>            VirtualAlloc shellcode with no backing file
 ├── <span class="wn">Known shellcode signatures</span>            CS/Sliver/Metasploit stager patterns
-└── <span class="wn">RWX memory regions</span>                   Suspicious when combined with network activity
+└── <span class="wn">RWX memory regions</span>                    Suspicious when combined with network activity
 
 <span class="k">BEHAVIORAL ANALYTICS</span>  <span class="cm">(ML + heuristics - tuned per vendor)</span>
 ├── <span class="ok">Call stack analysis</span>          Shellcode detection via anomalous return addresses
@@ -1265,7 +1265,7 @@ footer strong { color: var(--text-dim); }
 ├── <span class="er">ETW patching</span>           Overwrites ntdll ETW function in-process memory (null-byte patch)
 ├── <span class="er">Direct syscalls</span>        Bypasses user-mode API hooks - EDR never sees the call
 ├── <span class="er">Process ghosting</span>       Deletes PE from disk before execution - no file on disk to scan
-└── <span class="er">Fork & run</span>            Spawns sacrificial process for post-ex - no memory in Beacon
+└── <span class="er">Fork & run</span>             Spawns sacrificial process for post-ex - no memory in Beacon
     </pre>
   </div>
 
@@ -1624,65 +1624,65 @@ footer strong { color: var(--text-dim); }
     <h4>Windows Security Events - Authentication & Privilege</h4>
     <pre>
 <span class="k">LOGON EVENTS</span>
-  <span class="ok">4624</span>  Successful logon       Type 2=interactive · Type 3=network · Type 9=runas · Type 10=RDP
-  <span class="er">4625</span>  Failed logon           Password spray · brute force identification
-  <span class="wn">4648</span>  Explicit credential    runas / Pass-the-Hash preparation indicator
-  <span class="wn">4634</span>  Logoff                 Session end - use to calculate session duration
-  <span class="wn">4647</span>  User initiated logoff  Explicit logout vs. session timeout
-  <span class="wn">4672</span>  Special privileges     Admin logon → track all Domain Admin interactive sessions
-  <span class="er">4776</span>  NTLM auth validation   Should be rare if Kerberos enforced - NTLM use is suspicious
+  <span class="ok">4624</span>  Successful logon               Type 2=interactive · Type 3=network · Type 9=runas · Type 10=RDP
+  <span class="er">4625</span>  Failed logon                   Password spray · brute force identification
+  <span class="wn">4648</span>  Explicit credential            runas / Pass-the-Hash preparation indicator
+  <span class="wn">4634</span>  Logoff                         Session end - use to calculate session duration
+  <span class="wn">4647</span>  User initiated logoff          Explicit logout vs. session timeout
+  <span class="wn">4672</span>  Special privileges             Admin logon → track all Domain Admin interactive sessions
+  <span class="er">4776</span>  NTLM auth validation           Should be rare if Kerberos enforced - NTLM use is suspicious
 
 <span class="k">ACCOUNT & PRIVILEGE EVENTS</span>
-  <span class="wn">4720</span>  Account created            Unauthorized new user account creation
-  <span class="er">4728</span>  Member added to global grp Domain Admins membership change - always alert
-  <span class="er">4756</span>  Member added to univ grp  Enterprise Admins / high-priv group membership
-  <span class="wn">4738</span>  User account changed       Pre-auth disabled (AS-REP roastable) · PwdNotRequired flag
-  <span class="er">4765</span>  SID History added          Privilege escalation via SID History injection
-  <span class="wn">4723</span>  Password change attempt    Self-service reset · verify intent
-  <span class="er">4724</span>  Password reset attempt     Admin reset of another account - verify authorization
+  <span class="wn">4720</span>  Account created                Unauthorized new user account creation
+  <span class="er">4728</span>  Member added to global grp     Domain Admins membership change - always alert
+  <span class="er">4756</span>  Member added to univ grp       Enterprise Admins / high-priv group membership
+  <span class="wn">4738</span>  User account changed           Pre-auth disabled (AS-REP roastable) · PwdNotRequired flag
+  <span class="er">4765</span>  SID History added              Privilege escalation via SID History injection
+  <span class="wn">4723</span>  Password change attempt        Self-service reset · verify intent
+  <span class="er">4724</span>  Password reset attempt         Admin reset of another account - verify authorization
 
 <span class="k">KERBEROS EVENTS</span>
-  <span class="wn">4768</span>  Kerberos AS ticket (TGT)   AS-REP roast: accounts with pre-auth disabled
-  <span class="er">4769</span>  Kerberos service ticket    Kerberoast: etype 0x17 (RC4) for service accounts
-  <span class="wn">4770</span>  Kerberos ticket renewed    Anomalous renewal patterns
-  <span class="wn">4771</span>  Kerberos pre-auth failed   Kerberos equivalent of failed password spray (4625)
+  <span class="wn">4768</span>  Kerberos AS ticket (TGT)       AS-REP roast: accounts with pre-auth disabled
+  <span class="er">4769</span>  Kerberos service ticket        Kerberoast: etype 0x17 (RC4) for service accounts
+  <span class="wn">4770</span>  Kerberos ticket renewed        Anomalous renewal patterns
+  <span class="wn">4771</span>  Kerberos pre-auth failed       Kerberos equivalent of failed password spray (4625)
 
 <span class="k">ACTIVE DIRECTORY EVENTS</span>
-  <span class="er">4662</span>  AD object access           DCSync: mask 0x100 on Domain object from non-DC source
-  <span class="wn">4741</span>  Computer account created   Unauthorized machine account (resource-based delegation abuse)
-  <span class="wn">4742</span>  Computer account changed   Service Principal Name changes → potential Kerberoast setup
+  <span class="er">4662</span>  AD object access               DCSync: mask 0x100 on Domain object from non-DC source
+  <span class="wn">4741</span>  Computer account created       Unauthorized machine account (resource-based delegation abuse)
+  <span class="wn">4742</span>  Computer account changed       Service Principal Name changes → potential Kerberoast setup
 
 <span class="k">CERTIFICATE SERVICES</span>
-  <span class="wn">4886</span>  Certificate issued          Monitor all issuances for privileged account templates
-  <span class="er">4887</span>  Certificate issued with SAN ESC1 exploitation: SAN containing privileged UPN
-  <span class="wn">4899</span>  Certificate template modified ESC4 attack: template modification for exploitation
+  <span class="wn">4886</span>  Certificate issued             Monitor all issuances for privileged account templates
+  <span class="er">4887</span>  Certificate issued with SAN    ESC1 exploitation: SAN containing privileged UPN
+  <span class="wn">4899</span>  Certificate template modified  ESC4 attack: template modification for exploitation
 
 <span class="k">PROCESS & EXECUTION</span>
-  <span class="ok">4688</span>  Process created            Must enable + command line audit policy for full value
-  <span class="wn">4698</span>  Scheduled task created     Attacker persistence - inspect task action and author
-  <span class="er">7045</span>  New service installed      PsExec / attacker service drop - review binary path
+  <span class="ok">4688</span>  Process created                Must enable + command line audit policy for full value
+  <span class="wn">4698</span>  Scheduled task created         Attacker persistence - inspect task action and author
+  <span class="er">7045</span>  New service installed          PsExec / attacker service drop - review binary path
     </pre>
   </div>
 
   <div class="mono-block">
     <h4>Sysmon Event IDs - High-Value Detection Events</h4>
     <pre>
-  <span class="ok">1</span>   Process Create      Hashes + full command line + parent process + user context
-  <span class="wn">2</span>   File time changed   Anti-forensic timestomping detection
-  <span class="wn">3</span>   Network Connect     Process→IP/domain with port. C2 beacon correlation source
-  <span class="wn">5</span>   Process terminated  Malware self-delete pattern (short-lived malicious processes)
-  <span class="wn">7</span>   Image loaded        DLL load with hash and signature status. Detect unsigned DLLs
-  <span class="er">8</span>   CreateRemoteThread  Cross-process injection - high confidence IOC when unexpected
-  <span class="er">10</span>  ProcessAccess       GrantedAccess 0x1FFFFF / 0x1010 from non-AV = LSASS dump
-  <span class="wn">11</span>  FileCreate          Malware dropping files to disk - monitor temp and user paths
-  <span class="wn">12</span>  RegistryCreateKey   Registry key creation - Run keys, services, COM entries
-  <span class="wn">13</span>  RegistrySetValue    Registry value modification - persistence mechanism monitoring
-  <span class="wn">15</span>  FileCreateStreamHash NTFS Alternate Data Stream creation - hiding data in streams
-  <span class="er">17</span>  PipeCreated         Named pipe creation - Cobalt Strike default pipe names detectable
-  <span class="er">18</span>  PipeConnected       Named pipe connection - lateral movement via named pipes (PsExec)
-  <span class="wn">22</span>  DNSEvent            DNS query + requesting process. C2-over-DNS detection anchor
-  <span class="wn">23</span>  FileDelete (archive) Malware deleting itself after execution
-  <span class="er">25</span>  ProcessTampering    Process image hollowing / herpaderping / doppelgänging
+  <span class="ok">1</span>   Process Create        Hashes + full command line + parent process + user context
+  <span class="wn">2</span>   File time changed     Anti-forensic timestomping detection
+  <span class="wn">3</span>   Network Connect       Process→IP/domain with port. C2 beacon correlation source
+  <span class="wn">5</span>   Process terminated    Malware self-delete pattern (short-lived malicious processes)
+  <span class="wn">7</span>   Image loaded          DLL load with hash and signature status. Detect unsigned DLLs
+  <span class="er">8</span>   CreateRemoteThread    Cross-process injection - high confidence IOC when unexpected
+  <span class="er">10</span>  ProcessAccess         GrantedAccess 0x1FFFFF / 0x1010 from non-AV = LSASS dump
+  <span class="wn">11</span>  FileCreate            Malware dropping files to disk - monitor temp and user paths
+  <span class="wn">12</span>  RegistryCreateKey     Registry key creation - Run keys, services, COM entries
+  <span class="wn">13</span>  RegistrySetValue      Registry value modification - persistence mechanism monitoring
+  <span class="wn">15</span>  FileCreateStreamHash  NTFS Alternate Data Stream creation - hiding data in streams
+  <span class="er">17</span>  PipeCreated           Named pipe creation - Cobalt Strike default pipe names detectable
+  <span class="er">18</span>  PipeConnected         Named pipe connection - lateral movement via named pipes (PsExec)
+  <span class="wn">22</span>  DNSEvent              DNS query + requesting process. C2-over-DNS detection anchor
+  <span class="wn">23</span>  FileDelete (archive)  Malware deleting itself after execution
+  <span class="er">25</span>  ProcessTampering      Process image hollowing / herpaderping / doppelgänging
     </pre>
   </div>
 </section>
@@ -1710,13 +1710,13 @@ footer strong { color: var(--text-dim); }
   └── <span class="ok">Tabletops</span>           Run scenarios quarterly - muscle memory reduces errors under stress
 
 <span class="k">PHASE 2: DETECTION & ANALYSIS</span>
-  ├── <span class="v">Initial triage</span>      True positive confirmation · severity classification · scope estimation
-  ├── <span class="v">Timeline build</span>      Patient zero → first malicious action → lateral spread → impact
+  ├── <span class="v">Initial triage</span>       True positive confirmation · severity classification · scope estimation
+  ├── <span class="v">Timeline build</span>       Patient zero → first malicious action → lateral spread → impact
   ├── <span class="wn">Avoid tunnel vision</span>  First compromised host ≠ only compromised host. Assume lateral movement
-  └── <span class="er">Preserve evidence</span>   Capture memory BEFORE rebooting. Preserve logs before rotation window closes
+  └── <span class="er">Preserve evidence</span>    Capture memory BEFORE rebooting. Preserve logs before rotation window closes
 
 <span class="k">PHASE 3: CONTAINMENT</span>
-  ├── <span class="v">Short-term</span>          Network isolate via EDR isolation or VLAN ACL change
+  ├── <span class="v">Short-term</span>           Network isolate via EDR isolation or VLAN ACL change
   ├── <span class="v">Account containment</span>  Disable accounts · revoke tokens · kill all active sessions
   ├── <span class="wn">Silent containment</span>   Attacker may accelerate (trigger ransomware / exfil) if they notice response
   └── <span class="er">Scope before acting</span>  Containing wrong host = attacker remains active. Scope is mandatory first step
@@ -2611,38 +2611,38 @@ footer strong { color: var(--text-dim); }
     <h4>Complete Tool Reference by Function Category</h4>
     <pre>
 <span class="k">SIEM / LOG MANAGEMENT</span>
-  <span class="v">Splunk</span> / <span class="v">Splunk ES</span> / <span class="v">Splunk SOAR</span>           <span class="cm">Enterprise SIEM, security analytics, and SOAR orchestration</span>
-  <span class="v">Microsoft Sentinel</span> / <span class="v">Defender XDR</span>          <span class="cm">Cloud-native SIEM with deep M365/Azure integration and KQL</span>
-  <span class="v">Elastic Security</span> / <span class="v">ELK Stack</span>              <span class="cm">Open-source SIEM with ML anomaly detection and EQL rules</span>
-  <span class="v">IBM QRadar</span> / <span class="v">LogRhythm</span>                    <span class="cm">Enterprise SIEM platforms with UBA modules</span>
-  <span class="v">Graylog</span> / <span class="v">OpenSearch Security</span>             <span class="cm">Open-source log management alternatives (lower cost)</span>
+  <span class="v">Splunk</span> / <span class="v">Splunk ES</span> / <span class="v">Splunk SOAR</span>        <span class="cm">Enterprise SIEM, security analytics, and SOAR orchestration</span>
+  <span class="v">Microsoft Sentinel</span> / <span class="v">Defender XDR</span>       <span class="cm">Cloud-native SIEM with deep M365/Azure integration and KQL</span>
+  <span class="v">Elastic Security</span> / <span class="v">ELK Stack</span>            <span class="cm">Open-source SIEM with ML anomaly detection and EQL rules</span>
+  <span class="v">IBM QRadar</span> / <span class="v">LogRhythm</span>                  <span class="cm">Enterprise SIEM platforms with UBA modules</span>
+  <span class="v">Graylog</span> / <span class="v">OpenSearch Security</span>           <span class="cm">Open-source log management alternatives (lower cost)</span>
 
 <span class="k">EDR / ENDPOINT DETECTION</span>
-  <span class="v">Microsoft Defender for Endpoint (MDE)</span>    <span class="cm">Native Windows EDR with ASR rules and Advanced Hunting KQL</span>
-  <span class="v">CrowdStrike Falcon</span>                       <span class="cm">Best-in-class behavioral EDR with custom IOA rules</span>
-  <span class="v">SentinelOne Singularity</span>                  <span class="cm">Autonomous EDR with ransomware VSS rollback capability</span>
-  <span class="v">Cortex XDR</span> (Palo Alto)                   <span class="cm">XDR platform with strong network and cloud integration</span>
-  <span class="v">Velociraptor</span>                             <span class="cm">Open-source DFIR hunt platform - VQL-based, scales to 10k+ hosts</span>
+  <span class="v">Microsoft Defender for Endpoint (MDE)</span>   <span class="cm">Native Windows EDR with ASR rules and Advanced Hunting KQL</span>
+  <span class="v">CrowdStrike Falcon</span>                      <span class="cm">Best-in-class behavioral EDR with custom IOA rules</span>
+  <span class="v">SentinelOne Singularity</span>                 <span class="cm">Autonomous EDR with ransomware VSS rollback capability</span>
+  <span class="v">Cortex XDR</span> (Palo Alto)                  <span class="cm">XDR platform with strong network and cloud integration</span>
+  <span class="v">Velociraptor</span>                            <span class="cm">Open-source DFIR hunt platform - VQL-based, scales to 10k+ hosts</span>
   <span class="v">Sysmon + Sysmon Modular</span>                 <span class="cm">Free telemetry enhancement - 25+ event types including DNS and pipes</span>
 
 <span class="k">NETWORK DETECTION & RESPONSE</span>
-  <span class="v">Zeek (Bro)</span>                               <span class="cm">Network security monitor with rich protocol analyzers</span>
-  <span class="v">Suricata</span>                                 <span class="cm">IDS/IPS with Emerging Threats Open ruleset (40k+ signatures)</span>
-  <span class="v">Arkime (Moloch)</span>                          <span class="cm">Full PCAP capture, indexing, and retrospective analysis</span>
-  <span class="v">RITA</span> / <span class="v">AC-Hunter</span>                         <span class="cm">Automated C2 beaconing detection via Zeek conn.log analysis</span>
-  <span class="v">Security Onion</span>                           <span class="cm">NSM distribution bundling Zeek + Suricata + Elastic + RITA</span>
-  <span class="v">ntopng</span> / <span class="v">NetFlow Analyzer</span>              <span class="cm">NetFlow/IPFIX visualization and east-west baseline analysis</span>
+  <span class="v">Zeek (Bro)</span>                              <span class="cm">Network security monitor with rich protocol analyzers</span>
+  <span class="v">Suricata</span>                                <span class="cm">IDS/IPS with Emerging Threats Open ruleset (40k+ signatures)</span>
+  <span class="v">Arkime (Moloch)</span>                         <span class="cm">Full PCAP capture, indexing, and retrospective analysis</span>
+  <span class="v">RITA</span> / <span class="v">AC-Hunter</span>                        <span class="cm">Automated C2 beaconing detection via Zeek conn.log analysis</span>
+  <span class="v">Security Onion</span>                          <span class="cm">NSM distribution bundling Zeek + Suricata + Elastic + RITA</span>
+  <span class="v">ntopng</span> / <span class="v">NetFlow Analyzer</span>               <span class="cm">NetFlow/IPFIX visualization and east-west baseline analysis</span>
 
 <span class="k">IDENTITY & ACCESS</span>
-  <span class="v">Microsoft Entra ID Protection</span>            <span class="cm">Risk-based identity protection - impossible travel, anomalous tokens</span>
+  <span class="v">Microsoft Entra ID Protection</span>           <span class="cm">Risk-based identity protection - impossible travel, anomalous tokens</span>
   <span class="v">CyberArk</span> / <span class="v">BeyondTrust</span> / <span class="v">Delinea</span>        <span class="cm">Privileged Access Management (PAM) with session recording</span>
-  <span class="v">Microsoft LAPS</span>                           <span class="cm">Unique local admin passwords per machine - built into Windows</span>
+  <span class="v">Microsoft LAPS</span>                          <span class="cm">Unique local admin passwords per machine - built into Windows</span>
   <span class="v">PingCastle</span> / <span class="v">Purple Knight</span>              <span class="cm">Active Directory security assessment and scoring</span>
   <span class="v">Locksmith</span>                               <span class="cm">ADCS vulnerability identification and remediation guidance</span>
   <span class="v">BloodHound CE</span> / <span class="v">Adalanche</span>               <span class="cm">AD attack path analysis from defender perspective</span>
 
 <span class="k">THREAT INTELLIGENCE</span>
-  <span class="v">MISP</span> / <span class="v">OpenCTI</span>                           <span class="cm">Open-source TIP with STIX/TAXII and ATT&CK integration</span>
+  <span class="v">MISP</span> / <span class="v">OpenCTI</span>                          <span class="cm">Open-source TIP with STIX/TAXII and ATT&CK integration</span>
   <span class="v">Recorded Future</span> / <span class="v">ThreatConnect</span>         <span class="cm">Commercial CTI platforms with dark web and technical intelligence</span>
   <span class="v">VirusTotal</span> / <span class="v">ANY.RUN</span>                    <span class="cm">Online malware analysis, sandbox detonation, and IOC correlation</span>
   <span class="v">CAPA</span> / <span class="v">FLOSS</span>                            <span class="cm">Capability extraction and obfuscated string deobfuscation</span>
@@ -2663,7 +2663,7 @@ footer strong { color: var(--text-dim); }
   <span class="v">Plaso / log2timeline</span>                    <span class="cm">Super-timeline generation from multiple forensic artifacts</span>
   <span class="v">Autopsy / Sleuth Kit</span>                    <span class="cm">Open-source disk forensics platform - free and court-admissible</span>
   <span class="v">FTK / Magnet AXIOM</span>                      <span class="cm">Commercial forensics platforms with advanced analysis capabilities</span>
-  <span class="v">winpmem</span> / <span class="v">LiME</span>                         <span class="cm">Memory acquisition - Windows (free) and Linux (kernel module)</span>
+  <span class="v">winpmem</span> / <span class="v">LiME</span>                          <span class="cm">Memory acquisition - Windows (free) and Linux (kernel module)</span>
   <span class="v">TheHive</span> / <span class="v">IRIS</span>                          <span class="cm">Open-source IR case management with evidence tracking</span>
 
 <span class="k">DECEPTION</span>
@@ -2673,14 +2673,14 @@ footer strong { color: var(--text-dim); }
   <span class="v">Attivo / SentinelOne Ranger</span>             <span class="cm">Enterprise deception platform with automated deception fabric</span>
 
 <span class="k">VULNERABILITY MANAGEMENT</span>
-  <span class="v">Tenable Nessus</span> / <span class="v">Tenable.io</span>            <span class="cm">Industry standard - credentialed scans, agent-based deployment</span>
-  <span class="v">Qualys VMDR</span> / <span class="v">Rapid7 InsightVM</span>         <span class="cm">Cloud-based VM platforms with risk-based prioritization scoring</span>
+  <span class="v">Tenable Nessus</span> / <span class="v">Tenable.io</span>             <span class="cm">Industry standard - credentialed scans, agent-based deployment</span>
+  <span class="v">Qualys VMDR</span> / <span class="v">Rapid7 InsightVM</span>          <span class="cm">Cloud-based VM platforms with risk-based prioritization scoring</span>
   <span class="v">Nuclei</span>                                  <span class="cm">Template-based CVE scanner with massive community template library</span>
-  <span class="v">Prowler</span> / <span class="v">ScoutSuite</span> / <span class="v">CloudFox</span>       <span class="cm">Cloud security posture assessment - multi-cloud open source</span>
-  <span class="v">Trivy</span> / <span class="v">Grype</span> / <span class="v">Checkov</span>               <span class="cm">Container and IaC security scanning for CI/CD pipeline integration</span>
+  <span class="v">Prowler</span> / <span class="v">ScoutSuite</span> / <span class="v">CloudFox</span>         <span class="cm">Cloud security posture assessment - multi-cloud open source</span>
+  <span class="v">Trivy</span> / <span class="v">Grype</span> / <span class="v">Checkov</span>                 <span class="cm">Container and IaC security scanning for CI/CD pipeline integration</span>
 
 <span class="k">DETECTION ENGINEERING</span>
-  <span class="v">SigmaHQ</span> / <span class="v">sigma-cli</span> / <span class="v">Uncoder.io</span>      <span class="cm">Generic detection rule format, compiler, and online translator</span>
+  <span class="v">SigmaHQ</span> / <span class="v">sigma-cli</span> / <span class="v">Uncoder.io</span>        <span class="cm">Generic detection rule format, compiler, and online translator</span>
   <span class="v">ATT&CK Navigator</span>                        <span class="cm">Coverage visualization, gap analysis, and threat actor overlay</span>
   <span class="v">Detection Lab</span>                           <span class="cm">Pre-built lab environment for detection testing and rule development</span>
   <span class="v">MITRE D3FEND</span>                            <span class="cm">Countermeasure knowledge base mapped to ATT&CK techniques</span>
