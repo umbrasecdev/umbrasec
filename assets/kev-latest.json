@@ -1,9 +1,25 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.06.09",
-  "synced": "2026-06-11",
-  "count": 1617,
+  "catalogVersion": "2026.06.12",
+  "synced": "2026-06-12",
+  "count": 1619,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-35273",
+      "vendorProject": "Oracle",
+      "product": " PeopleSoft Enterprise PeopleTools",
+      "vulnerabilityName": "Oracle PeopleSoft Enterprise PeopleTools Missing Authentication for Critical Function Vulnerability",
+      "dateAdded": "2026-06-12",
+      "knownRansomwareCampaignUse": "Known"
+    },
+    {
+      "cveID": "CVE-2026-10520",
+      "vendorProject": "Ivanti",
+      "product": "Sentry",
+      "vulnerabilityName": "Ivanti Sentry OS Command Injection Vulnerability",
+      "dateAdded": "2026-06-11",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-11645",
       "vendorProject": "Google",
@@ -66,22 +82,6 @@
       "product": "Kernel",
       "vulnerabilityName": "Linux Kernel Improper Authentication Vulnerability",
       "dateAdded": "2026-06-02",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2025-48595",
-      "vendorProject": "Android",
-      "product": "Framework",
-      "vulnerabilityName": "Android Framework Integer Overflow Vulnerability",
-      "dateAdded": "2026-06-02",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2024-21182",
-      "vendorProject": "Oracle",
-      "product": "WebLogic Server",
-      "vulnerabilityName": "Oracle WebLogic Server Unspecified Vulnerability",
-      "dateAdded": "2026-06-01",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
