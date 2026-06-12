@@ -27,6 +27,7 @@
     { group: "Navigate", label: "Research", hint: "all writeups", icon: "fa-flask", href: "research/index.html", keywords: "articles posts" },
     { group: "Guide", label: "SMB Security Guide", hint: "zero to defensible", icon: "fa-route", href: "guide/index.html", keywords: "smb maturity essential eight iso 27001 nist csf roadmap journey foundation identity detection governance vciso" },
     { group: "Guide", label: "Stage 1: Foundation", hint: "the cheap basics", icon: "fa-shield-halved", href: "guide/foundation.html", keywords: "foundation mfa backups patching admin asset inventory email phishing macros essential eight maturity level 1 basics" },
+    { group: "Guide", label: "Stage 2: Identity & Access", hint: "the login is the perimeter", icon: "fa-id-badge", href: "guide/identity-and-access.html", keywords: "identity access sso single sign on conditional access mfa passkeys fido2 admin privileged joiner mover leaver password manager service accounts oauth consent least privilege" },
     { group: "Navigate", label: "Approach", hint: "how this works", icon: "fa-compass", href: "index.html#approach", keywords: "method principles" },
     { group: "Navigate", label: "Open Source", hint: "tools", icon: "fa-code-branch", href: "index.html#opensource", keywords: "tools github kev" },
     { group: "Tools", label: "Blue Team Mapper", hint: "defender reference", icon: "fa-shield-halved", href: "tools/blue-team-mapper/index.html", keywords: "blue team mapper detection siem incident response threat hunting hardening soc defender reference soar" },

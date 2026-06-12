@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage 2: Identity &amp; Access - The SMB Security Guide | UMBRASEC</title>
+    <meta name="description" content="Identity is the perimeter now: one identity provider, stronger MFA, tiered admin access, a joiner-mover-leaver process, conditional access, and governed non-human identities - mapped to the Essential Eight, ISO 27001, and NIST CSF 2.0.">
+    <link rel="canonical" href="https://umbrasec.dev/guide/identity-and-access.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/guide/identity-and-access.html">
+    <meta property="og:title" content="Stage 2: Identity &amp; Access - The SMB Security Guide">
+    <meta property="og:description" content="Identity is the perimeter now. One identity provider, stronger MFA, tiered admin access, joiner-mover-leaver, conditional access, and non-human identities - what to do, why it matters, and roughly what it costs.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+    <meta property="article:section" content="SMB Security Guide">
+    <meta property="article:tag" content="Essential Eight">
+    <meta property="article:tag" content="ISO 27001">
+    <meta property="article:tag" content="NIST CSF 2.0">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stage 2: Identity &amp; Access - The SMB Security Guide">
+    <meta name="twitter:description" content="Identity is the perimeter now. One identity provider, stronger MFA, tiered admin access, joiner-mover-leaver, conditional access. Mapped to the Essential Eight, ISO 27001, and NIST CSF 2.0.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Stage 2: Identity & Access - The SMB Security Guide",
+      "description": "Identity is the perimeter now: one identity provider, stronger MFA, tiered admin access, a joiner-mover-leaver process, conditional access, and governed non-human identities, mapped to the ASD Essential Eight, ISO 27001:2022, and NIST CSF 2.0.",
+      "author": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "publisher": { "@type": "Organization", "name": "UMBRASEC", "logo": { "@type": "ImageObject", "url": "https://umbrasec.dev/assets/og.png" } },
+      "image": "https://umbrasec.dev/assets/og.png",
+      "mainEntityOfPage": "https://umbrasec.dev/guide/identity-and-access.html",
+      "isPartOf": { "@type": "Course", "name": "The SMB Security Guide", "url": "https://umbrasec.dev/guide/" },
+      "keywords": "SMB security, identity, access management, SSO, conditional access, joiner mover leaver, MFA, Essential Eight, ISO 27001, NIST CSF 2.0"
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/umbra-avatar.png">
+    <link rel="apple-touch-icon" href="../assets/umbra-avatar.png">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../" data-reading>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link text-[#c0caf5]">Guide</a>
+                    <a href="../research/index.html" class="nav-link">Research</a>
+                    <a href="../services.html" class="nav-link">Services</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-[1280px] mx-auto px-8 py-16">
+        <!-- breadcrumb -->
+        <div class="font-mono text-xs text-[#565f89] mb-8">
+            <a href="../index.html" class="hover:text-[#7aa2f7]">home</a> /
+            <a href="index.html" class="hover:text-[#7aa2f7]">guide</a> /
+            <span class="text-[#a9b1d6]">identity &amp; access</span>
+        </div>
+
+        <!-- Journey rail -->
+        <nav class="max-w-[860px] mx-auto mb-12" aria-label="Guide progress">
+            <div class="flex items-center gap-2 text-xs font-mono">
+                <a href="foundation.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">01 Foundation</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="identity-and-access.html" class="flex-1 px-3 py-2 rounded-lg bg-[#241a30] border border-[#3a2a50] text-[#bb9af7] text-center" aria-current="step">02 Identity</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="detection-and-response.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">03 Detection</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="governance-and-maturity.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">04 Governance</a>
+            </div>
+        </nav>
+
+        <header class="prose mx-auto">
+            <div class="flex items-center gap-x-3 mb-6 text-xs font-mono">
+                <span class="text-[#bb9af7]">STAGE 02 · IDENTITY &amp; ACCESS</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">Essential Eight ML2 territory</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">~15 min</span>
+            </div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] leading-[1.05] mb-6 text-[#c0caf5]">
+                Identity &amp; Access: the login is the perimeter now
+            </h1>
+            <p class="text-xl text-[#a9b1d6] leading-snug">
+                Your business almost certainly runs on cloud services, which means there is no network edge to defend -
+                whoever holds a valid login <em>is</em> inside. Attackers know it: they don't break in, they log in, with
+                phished, stolen, or never-revoked credentials. Stage 2 is about making the login hard to steal, limited
+                in what it can reach, and impossible to keep after someone leaves. Foundation turned MFA on; this stage
+                builds the identity layer around it.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ASD Essential Eight</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ISO 27001:2022</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">NIST CSF 2.0</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">CIS Controls v8.1 IG1-IG2</span>
+            </div>
+        </header>
+
+        <div class="prose mx-auto mt-10 article-body">
+            <aside class="toc-rail" data-toc aria-label="On this page"></aside>
+
+            <div class="callout">
+                <p class="text-sm"><strong>The short version.</strong> Put every app behind one identity provider so
+                there's one front door to defend. Raise MFA from "switched on" to genuinely strong, especially for
+                admins. Split admin access into separate, tightly-held accounts. Write a joiner-mover-leaver process so
+                access dies the day employment does. Use conditional access to judge every sign-in in context. Run a
+                password manager for everything that can't do single sign-on. And govern the accounts that aren't
+                people - service accounts, API keys, and OAuth app grants - because attackers target those too.</p>
+            </div>
+
+            <h2>Where Stage 1 left you</h2>
+            <p>
+                <a href="foundation.html">Foundation</a> got the basics in place: MFA is on, daily work happens in
+                non-admin accounts, and you have an inventory that says who has access to what. Stage 2 turns those
+                point-in-time wins into a system. Each step below keeps the same shape - <strong>What</strong> to do,
+                <strong>Why</strong> it matters, and roughly <strong>What it costs</strong> - and the mapping table at
+                the end ties every step back to the Essential Eight, ISO 27001:2022 Annex A, and NIST CSF 2.0.
+            </p>
+            <p>
+                Same honesty rule on money as Stage 1: public list prices get named, everything else is a
+                clearly-labelled rough range. Treat the cost notes as order of magnitude, current as of June 2026.
+            </p>
+
+            <h2>1. Put every login behind one identity provider</h2>
+            <p>
+                Most small businesses accumulate logins the way drawers accumulate cables: every SaaS tool with its own
+                username, password, and forgotten account list. Every one of those is a separate door an attacker can
+                try, and a separate place you have to remember to close when someone leaves. The fix is single sign-on:
+                one identity provider that every other application trusts.
+            </p>
+            <p><strong>What to do.</strong> Pick the identity provider you almost certainly already have - Microsoft
+                Entra ID if you're on Microsoft 365, Google if you're on Workspace - and connect your other business
+                applications to it via SSO, starting with the ones holding sensitive data. New apps don't get bought
+                unless they support SSO. The goal state: a person has one identity, protected by one strong login, and
+                disabling that identity cuts access to everything at once.</p>
+            <p><strong>Why it matters.</strong> One front door means one place to enforce MFA, one place to watch
+                sign-ins, and one switch to throw on departure. It's the prerequisite for nearly everything else in this
+                stage - conditional access and a working leaver process both assume identity is centralised. ISO 27001
+                frames this as identity management (A.5.16): every identity accounted for, one per person.</p>
+            <p><strong>Roughly what it costs.</strong> The identity provider is already in your Microsoft 365 or Google
+                Workspace subscription. The catch is the SaaS side: some vendors paywall SSO behind higher tiers (the
+                practice defenders call the "SSO tax"), so the real cost is per-app and worth checking before you renew.
+                Time-wise, budget a few hours per application to connect and test.</p>
+
+            <h2>2. Raise MFA from "on" to strong</h2>
+            <p>
+                Foundation turned MFA on. Stage 2 acknowledges an uncomfortable truth: not all MFA is equal, and
+                attackers have moved on to beating the weak kinds - real-time phishing pages that relay codes, and
+                push-notification fatigue attacks that spam approvals until someone taps yes.
+            </p>
+            <p><strong>What to do.</strong> Make MFA universal - every user, every service that supports it, no
+                exceptions for executives (they're the most-targeted accounts in the building). Prefer phishing-resistant
+                methods where you can: passkeys or FIDO2 hardware security keys, which cryptographically verify the site
+                and can't be relayed by a fake login page. At minimum, move admins onto them. If you use push
+                notifications, enable number matching so a tap can't be blind-approved. And treat MFA re-registration
+                like a password reset: verify the person before help desk resets it - attackers ring help desks for
+                exactly this.</p>
+            <p><strong>Why it matters.</strong> The Essential Eight's multi-factor authentication strategy climbs in
+                exactly this direction as maturity levels rise - broader coverage and phishing-resistant methods. The
+                OAIC's notifiable data breach reports consistently put compromised credentials among the leading causes
+                of reported breaches in Australia, and credential phishing is how most of them start.</p>
+            <p><strong>Roughly what it costs.</strong> Passkeys are free on platforms that support them. Hardware
+                security keys are a one-off, roughly AU$50-100 each at retail - buying two per admin (one as backup) for
+                a handful of admins is a few hundred dollars total, not a project. Number matching and authenticator
+                hardening are configuration, not licensing.</p>
+
+            <h2>3. Tier your admin access</h2>
+            <p>
+                Stage 1 separated daily work from admin work. Stage 2 tightens who holds admin at all, and what an admin
+                account is allowed to touch. The pattern that hurts small businesses: one all-powerful account, used by
+                whoever needs it, signed in everywhere, with the password in a shared document.
+            </p>
+            <p><strong>What to do.</strong> Keep the global-administrator list tiny - most platforms and Microsoft's own
+                guidance suggest a small handful, each a named person, never shared. Give everyone else the narrowest
+                admin role that does the job (helpdesk roles for password resets, billing roles for invoices). Privileged
+                accounts shouldn't browse the web or read email - that's the Essential Eight's explicit expectation as
+                maturity rises - and admin access should be requested and granted deliberately, not accumulated. Finally,
+                create one documented break-glass account with credentials stored offline (sealed envelope or safe), so
+                an MFA outage can't lock you out of your own tenant.</p>
+            <p><strong>Why it matters.</strong> "Restrict administrative privileges" is the Essential Eight strategy
+                whose higher maturity levels live exactly here: validated requests for privileged access, privileged
+                accounts blocked from internet and email, separate privileged environments. ISO 27001 A.8.2 requires
+                privileged access rights to be specifically managed. And practically: the difference between a phished
+                user and a phished admin is the difference between an incident and a disaster.</p>
+            <p><strong>Roughly what it costs.</strong> Free to do the core of it - role assignment and process. If
+                you're on Microsoft, Entra ID P2 adds just-in-time admin elevation (Privileged Identity Management) at a
+                published list price of about US$9 per user per month, but only the people who hold privileged roles need
+                it, and it's an optimisation, not a prerequisite.</p>
+
+            <h2>4. Write the joiner-mover-leaver process down</h2>
+            <p>
+                Ghost accounts - logins that outlive the employment, the contract, or the role change - are the quiet
+                failure mode of small-business identity. Nobody decided to leave the ex-employee's account active;
+                there was just no process that made someone turn it off.
+            </p>
+            <p><strong>What to do.</strong> Write a one-page checklist for each of the three events. <em>Joiner:</em>
+                access is requested by role (a template of what a salesperson gets, what an engineer gets), not copied
+                from "whatever Dave has". <em>Mover:</em> a role change triggers a review that removes the old role's
+                access, not just adds the new - this is how ten-year employees end up able to touch everything.
+                <em>Leaver:</em> on the person's last day, their identity is disabled in the identity provider, sessions
+                are revoked, mail is delegated, and any shared credentials they knew are rotated. Then close the loop:
+                a recurring calendar slot (quarterly is fine) where a human reviews the account list against the
+                staff list and the access inventory from Stage 1.</p>
+            <p><strong>Why it matters.</strong> ISO 27001 A.5.18 requires access rights to be reviewed and removed on
+                change or termination - it's one of the controls auditors and customer security questionnaires probe
+                first, because it's cheap to check and frequently failed. It's also an insider-risk and breach-cost
+                control: an account nobody owns is an account nobody notices being used.</p>
+            <p><strong>Roughly what it costs.</strong> Free. This is the highest-value document-and-discipline control
+                in the stage: a checklist, a calendar reminder, and the will to follow it. Automation exists in HR and
+                identity tooling as you grow, but the process has to exist before it can be automated.</p>
+
+            <h2>5. Make context part of every sign-in</h2>
+            <p>
+                A password plus MFA answers "is this probably the right person?" Conditional access also asks: from
+                where, on what device, using what protocol? It's the difference between a door with a lock and a door
+                with a lock and someone who notices you're trying it at 3am from a country you've never visited.
+            </p>
+            <p><strong>What to do.</strong> Three policies do most of the work. First, <strong>block legacy
+                authentication</strong> - older protocols (IMAP, POP, SMTP basic auth) that can't do MFA at all and are
+                the standard way around it; password-spray attacks specifically hunt for them. Second, require MFA on
+                every sign-in by policy, rather than per-user settings that drift. Third, if you manage devices, require
+                a known or compliant device for access to sensitive data. On Microsoft, free Security Defaults give you
+                a fixed version of the basics; custom Conditional Access policies need Entra ID P1. Whatever you build,
+                test policies in report-only mode first and always exclude the break-glass account.</p>
+            <p><strong>Why it matters.</strong> This is the control that catches stolen credentials being
+                <em>used</em> - the sign-in that's technically valid but contextually wrong. The Essential Eight's MFA
+                and admin-restriction strategies at higher maturity assume this kind of policy enforcement, and NIST CSF
+                2.0 PR.AA expects authentication appropriate to the risk of the transaction. It's also increasingly a
+                cyber-insurance question.</p>
+            <p><strong>Roughly what it costs.</strong> Security Defaults are free on every Microsoft tenant. Custom
+                conditional access comes with Entra ID P1 - about US$6 per user per month at Microsoft's published list
+                price, and already included in Microsoft 365 Business Premium, so check what you're licensed for before
+                buying anything. Google's equivalent (context-aware access) sits in Workspace's higher tiers. The design
+                and testing time is a day or two, not a project.</p>
+
+            <h2>6. Run a password manager for everything else</h2>
+            <p>
+                SSO won't cover everything - there's always the supplier portal, the social media login, the website
+                admin panel, the Wi-Fi password. Without a system, those end up reused, weak, or in a spreadsheet named
+                <code>passwords.xlsx</code>. That spreadsheet is the first thing an intruder searches for, by name.
+            </p>
+            <p><strong>What to do.</strong> Deploy a business password manager for every staff member, and make it the
+                only sanctioned place credentials live. Use it to generate long, unique, random passwords - uniqueness
+                is the property that kills credential stuffing. Use its shared vaults for genuinely shared credentials
+                so access is granted by group membership and revocable in one click - never by forwarding the password.
+                Follow modern guidance (NIST SP 800-63B and ASD's ISM agree here): long passphrases, no forced periodic
+                rotation - rotate on suspicion of compromise instead - and screen new passwords against known-breached
+                lists where your platform supports it.</p>
+            <p><strong>Why it matters.</strong> Reused passwords turn somebody else's breach into yours: credential
+                stuffing is exactly the replay of leaked passwords against your services. ISO 27001 A.5.17 requires
+                authentication information to be managed properly, and a password manager is the only realistic way a
+                small business does that at scale. It also quietly fixes the leaver problem for non-SSO accounts -
+                revoke vault access, rotate the handful of shared secrets, done.</p>
+            <p><strong>Roughly what it costs.</strong> Business password manager tiers cluster around US$2-8 per user
+                per month depending on vendor and plan (rough range; check current pricing). For a 20-person business
+                that's hundreds of dollars a year, against credential reuse being one of the most common ways in. This
+                is usually the first actual purchase the guide recommends - and it's a small one.</p>
+
+            <h2>7. Govern the identities that aren't people</h2>
+            <p>
+                Not every account belongs to a human. Service accounts, API keys, automation tokens, and third-party app
+                grants all hold standing access, rarely have MFA, and never resign - which makes them ideal for
+                attackers and invisible to a people-shaped leaver process.
+            </p>
+            <p><strong>What to do.</strong> Extend the Stage 1 inventory to non-human identities: every service account,
+                API key, and integration, each with a named human owner and a written purpose. Give them least
+                privilege and, where supported, rotate or expire their credentials. Then govern OAuth app consent in
+                your tenant: restrict users from granting applications access to company data on their own, and review
+                the apps already granted. Attackers actively abuse this - a malicious app that a user consents to gets
+                durable API access to mailboxes and files <em>without ever stealing a password</em>. We've published a
+                full defender's breakdown of that technique:
+                <a href="../research/detecting-oauth-consent-phishing.html">detecting OAuth consent phishing in
+                Microsoft 365</a>. Finally, give contractor and vendor accounts an expiry date at creation, so access
+                ends by default instead of by memory.</p>
+            <p><strong>Why it matters.</strong> ISO 27001 A.5.16 explicitly covers non-human identities, and NIST CSF
+                2.0 PR.AA-01 manages credentials for "users, services, and hardware". In practice this is where mature
+                small businesses still get burned: the forgotten integration with tenant-wide permissions, the API key
+                in a script that never rotates, the vendor login from a project that ended two years ago.</p>
+            <p><strong>Roughly what it costs.</strong> Free - inventory, ownership, and consent settings are
+                configuration and process. The OAuth consent restriction in particular is a single admin setting in
+                Microsoft 365 and Google Workspace tenants, and turning it on costs nothing but the occasional
+                legitimate app request needing an admin's approval.</p>
+
+            <h2>Where this maps</h2>
+            <p>
+                Same deal as Stage 1: every step ties to a recognised control, so the answer to "says who?" is the
+                frameworks. International readers: swap the Essential Eight column for CIS Controls v8.1 (Controls 5 and
+                6 cover this stage almost one-for-one); the ISO and NIST columns are unchanged.
+            </p>
+            <div class="table-wrap">
+                <table class="data">
+                    <thead>
+                        <tr><th>Identity &amp; Access step</th><th>ASD Essential Eight</th><th>ISO 27001:2022 Annex A</th><th>NIST CSF 2.0</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1. One identity provider / SSO</td><td>Enables MFA + admin restriction</td><td>A.5.16 Identity management</td><td>PR.AA-01 Identities &amp; credentials</td></tr>
+                        <tr><td>2. Strong, phishing-resistant MFA</td><td>Multi-factor authentication (ML2+)</td><td>A.8.5 Secure authentication</td><td>PR.AA-03 Users authenticated</td></tr>
+                        <tr><td>3. Tiered admin access</td><td>Restrict administrative privileges (ML2+)</td><td>A.8.2 Privileged access rights</td><td>PR.AA-05 Least privilege</td></tr>
+                        <tr><td>4. Joiner-mover-leaver process</td><td>(Supports admin restriction)</td><td>A.5.18 Access rights; A.5.16</td><td>PR.AA-01; PR.AA-05</td></tr>
+                        <tr><td>5. Conditional access</td><td>Supports MFA + admin restriction at ML2/3</td><td>A.5.15 Access control; A.8.5</td><td>PR.AA-03; PR.AA-05</td></tr>
+                        <tr><td>6. Password manager</td><td>(Supports MFA strategy)</td><td>A.5.17 Authentication information</td><td>PR.AA-01</td></tr>
+                        <tr><td>7. Non-human identities &amp; OAuth</td><td>Restrict admin privileges (service accounts)</td><td>A.5.16; A.5.18</td><td>PR.AA-01; PR.AA-05</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="callout mt-8">
+                <p class="text-sm"><strong>Doing this with help.</strong> Stage 2 is where licensing tiers, conditional
+                access design, and process writing start to benefit from someone who has done it before. That's the
+                <a href="../services.html#vciso" class="text-[#7aa2f7] hover:text-[#7dcfff]">virtual CISO engagement</a> -
+                the same method as this guide, assessed against your actual tenant and delivered alongside you. The
+                guide remains free and complete either way.</p>
+            </div>
+        </div>
+
+        <!-- end-of-stage: share + nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38]">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="foundation.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">&larr; Stage 1: Foundation</a>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-[#565f89] mr-1">Share</span>
+                    <a class="share-btn" href="https://twitter.com/intent/tweet?text=Identity%20%26%20Access%3A%20the%20login%20is%20the%20perimeter%20now&url=https%3A%2F%2Fumbrasec.dev%2Fguide%2Fidentity-and-access.html" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fumbrasec.dev%2Fguide%2Fidentity-and-access.html" target="_blank" rel="noopener" title="Share on LinkedIn" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <a href="detection-and-response.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">Stage 3: Detection &amp; Response &rarr;</a>
+            </div>
+        </div>
+    </article>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8 mt-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="font-mono text-xs text-[#a9b1d6]">
+                © 2026 UMBRASEC · Independent defensive research · Published openly
+            </div>
+            <div class="flex items-center gap-x-5">
+                <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Found this useful? Tip</span>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Tip with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Tip with Monero">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <circle cx="50" cy="50" r="50"/>
+                        <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                        <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>
