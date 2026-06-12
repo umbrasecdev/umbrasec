@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://umbrasec.dev"><img src="assets/umbra-avatar.png" alt="UMBRASEC logo" width="96" height="96"></a>
+</p>
+
 # UMBRASEC
 
 **Defensive security tooling and detection research** - runnable Sigma rules and KQL
