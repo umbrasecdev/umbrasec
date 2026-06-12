@@ -42,6 +42,7 @@ Public data only; it reads one JSON feed and never touches a target system.
 | [`tools/sigma-pack/`](tools/sigma-pack/) | The detection rules from the research writeups as runnable files: three Kerberoasting Sigma rules (T1558.003) and three OAuth consent-phishing KQL queries (T1528) so far, each with tuning and false-positive notes. |
 | [`tools/blue-team-mapper/`](tools/blue-team-mapper/) | A single-page defender reference covering the defensive lifecycle: SIEM/log-source priority, detection engineering, IR flow chains, threat hunting, identity and cloud hardening, SOAR playbooks - ATT&CK-aligned. [Use it live](https://umbrasec.dev/tools/blue-team-mapper/). |
 | [`research/`](https://umbrasec.dev/research/) | Detection writeups: [Kerberoasting](https://umbrasec.dev/research/detecting-kerberoasting.html), [OAuth consent phishing in M365](https://umbrasec.dev/research/detecting-oauth-consent-phishing.html), [OWASP LLM Top 10 for defenders](https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html). Every rule in `sigma-pack` comes from one of these. |
+| [`guide/`](https://umbrasec.dev/guide/) | A free, staged security guide for small and mid-sized businesses - from zero to a defensible baseline, with every recommendation mapped to the ASD Essential Eight, ISO 27001:2022, and NIST CSF 2.0, and each step explained as what it is, why it matters, and what it costs. |
 
 ## The KEV feed, as a feed
 
@@ -76,13 +77,17 @@ deliberately a recent-entries feed, not a mirror - for the full catalog, go to
 - **Open-source defensive tooling** - small, useful tools for defenders, built in the open.
 - **LLM / AI security** - defensive coverage of prompt injection and the OWASP LLM Top 10
   as a class of risk (first writeup live).
+- **SMB security guidance** - a free, framework-grounded [guide](https://umbrasec.dev/guide/)
+  taking a small business from zero to a defensible baseline, one stage at a time.
 
 ## Who's behind it
 
-UMBRASEC is run by **0xdev1** - a single, independent researcher. It isn't a company,
-a collective, or a consultancy, and it makes no claims of a track record it doesn't
-have yet: it's new, and says so. The plan is the honest one - publish genuinely useful,
-well-sourced work, let it be checked, and let any reputation grow from there.
+UMBRASEC is run by **0xdev1** - a single, independent practitioner. The research and
+tools here are free and open; there is also a one-person
+[vCISO advisory service](https://umbrasec.dev/services) for small and mid-sized
+businesses, honestly labelled as exactly that. It makes no claims of a track record it
+doesn't have yet: it's new, and says so. The plan is the honest one - publish genuinely
+useful, well-sourced work, let it be checked, and let any reputation grow from there.
 
 Everything published is **defensive in scope**. The research explains how attacks work
 *so defenders can detect and stop them* - no working exploits, malware, or offensive
