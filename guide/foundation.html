@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage 1: Foundation - The SMB Security Guide | UMBRASEC</title>
+    <meta name="description" content="The cheap, high-impact security basics every small business should do first: MFA, backups, patching, removing local admin, asset inventory, and email defence - mapped to the Essential Eight, ISO 27001, and NIST CSF 2.0.">
+    <link rel="canonical" href="https://umbrasec.dev/guide/foundation.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/guide/foundation.html">
+    <meta property="og:title" content="Stage 1: Foundation - The SMB Security Guide">
+    <meta property="og:description" content="The cheap, high-impact security basics every small business should do first - what to do, why it matters, and roughly what it costs. Mapped to the Essential Eight, ISO 27001, and NIST CSF 2.0.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+    <meta property="article:section" content="SMB Security Guide">
+    <meta property="article:tag" content="Essential Eight">
+    <meta property="article:tag" content="ISO 27001">
+    <meta property="article:tag" content="NIST CSF 2.0">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stage 1: Foundation - The SMB Security Guide">
+    <meta name="twitter:description" content="The cheap, high-impact security basics every small business should do first. Mapped to the Essential Eight, ISO 27001, and NIST CSF 2.0.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Stage 1: Foundation - The SMB Security Guide",
+      "description": "The cheap, high-impact security basics every small business should do first, mapped to the ASD Essential Eight, ISO 27001:2022, and NIST CSF 2.0.",
+      "author": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "publisher": { "@type": "Organization", "name": "UMBRASEC", "logo": { "@type": "ImageObject", "url": "https://umbrasec.dev/assets/og.png" } },
+      "image": "https://umbrasec.dev/assets/og.png",
+      "mainEntityOfPage": "https://umbrasec.dev/guide/foundation.html",
+      "isPartOf": { "@type": "Course", "name": "The SMB Security Guide", "url": "https://umbrasec.dev/guide/" },
+      "keywords": "SMB security, Essential Eight, MFA, backups, patching, asset inventory, ISO 27001, NIST CSF 2.0"
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../" data-reading>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link text-[#c0caf5]">Guide</a>
+                    <a href="../research/index.html" class="nav-link">Research</a>
+                    <a href="../services.html" class="nav-link">Services</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-[1280px] mx-auto px-8 py-16">
+        <!-- breadcrumb -->
+        <div class="font-mono text-xs text-[#565f89] mb-8">
+            <a href="../index.html" class="hover:text-[#7aa2f7]">home</a> /
+            <a href="index.html" class="hover:text-[#7aa2f7]">guide</a> /
+            <span class="text-[#a9b1d6]">foundation</span>
+        </div>
+
+        <!-- Journey rail -->
+        <nav class="max-w-[860px] mx-auto mb-12" aria-label="Guide progress">
+            <div class="flex items-center gap-2 text-xs font-mono">
+                <a href="foundation.html" class="flex-1 px-3 py-2 rounded-lg bg-[#1a2030] border border-[#2a3450] text-[#7aa2f7] text-center" aria-current="step">01 Foundation</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="identity-and-access.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">02 Identity</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="detection-and-response.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">03 Detection</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="governance-and-maturity.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">04 Governance</a>
+            </div>
+        </nav>
+
+        <header class="prose mx-auto">
+            <div class="flex items-center gap-x-3 mb-6 text-xs font-mono">
+                <span class="text-[#7aa2f7]">STAGE 01 · FOUNDATION</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">Essential Eight Maturity Level 1</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">~15 min</span>
+            </div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] leading-[1.05] mb-6 text-[#c0caf5]">
+                Foundation: the cheap moves that remove the most risk
+            </h1>
+            <p class="text-xl text-[#a9b1d6] leading-snug">
+                Before you spend a dollar on security tooling, there's a short list of basics that block the majority of
+                the attacks small businesses actually face. None of it is glamorous, most of it is free or already in
+                software you pay for, and all of it is what an auditor, insurer, or enterprise customer expects you to
+                have done first. This is Essential Eight Maturity Level 1 - the floor, not the ceiling.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ASD Essential Eight</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ISO 27001:2022</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">NIST CSF 2.0</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">CIS Controls v8.1 IG1</span>
+            </div>
+        </header>
+
+        <div class="prose mx-auto mt-10 article-body">
+            <aside class="toc-rail" data-toc aria-label="On this page"></aside>
+
+            <div class="callout">
+                <p class="text-sm"><strong>The short version.</strong> Turn on MFA everywhere. Get backups running and
+                actually test a restore. Patch operating systems and applications on a schedule. Stop using administrator
+                accounts for daily work. Write down what you own. Lock down Office macros and harden browsers. Protect
+                the inbox with email authentication and a little training. Do these eight things and you've closed the
+                doors most attackers walk through - at close to zero spend.</p>
+            </div>
+
+            <h2>How to read each step</h2>
+            <p>
+                Every recommendation below answers the three questions a CISO asks before approving anything:
+                <strong>What</strong> to do (the concrete action), <strong>Why</strong> it matters (the risk it removes
+                and the obligation it meets), and roughly <strong>What it costs</strong> (time and money, honestly). At
+                the end you'll find a single table mapping every step to the Essential Eight, ISO 27001:2022 Annex A, and
+                NIST CSF 2.0 - so when someone asks "says who?", the answer is the frameworks, not us.
+            </p>
+            <p>
+                A note on the cost figures: where a price is public and citable we name it; where it genuinely varies we
+                give a clearly-labelled rough range rather than invent a precise number. Treat the money notes as order
+                of magnitude, current as of June 2026.
+            </p>
+
+            <h2>1. Know what you own</h2>
+            <p>
+                You cannot protect what you don't know exists. Every other control on this page assumes you have a list
+                of your devices, accounts, and the software and cloud services your business depends on. It's the least
+                exciting step and the one most often skipped - which is exactly why attackers find the forgotten laptop,
+                the ex-employee's still-active login, or the shadow SaaS app nobody remembered.
+            </p>
+            <p><strong>What to do.</strong> Build and keep a simple inventory of four things: hardware (laptops, servers,
+                phones), software and SaaS (what's installed and what people sign into), user accounts (who has access to
+                what), and your data (what's sensitive and where it lives). A spreadsheet is a completely acceptable
+                start - the point is that it exists and gets reviewed, not that it's a fancy tool.</p>
+            <p><strong>Why it matters.</strong> Inventory is the foundation of every framework because it bounds the
+                problem. It's how you know which devices still need patching, which accounts to disable when someone
+                leaves, and what an attacker could reach. It's also the first thing a cyber-insurance questionnaire or a
+                customer security review asks about.</p>
+            <p><strong>Roughly what it costs.</strong> Free to start - the cost is time, not money. A few hours to build
+                the first version and a recurring calendar reminder to keep it honest. Tools that automate discovery
+                exist and help as you grow, but don't let "we don't have the tool" be the reason there's no list.</p>
+
+            <h2>2. Turn on MFA everywhere</h2>
+            <p>
+                Multi-factor authentication is the single highest-impact security control available to a small business,
+                and on most platforms it's already included in what you pay for. A stolen or guessed password is the most
+                common way in; MFA makes that password far less useful on its own.
+            </p>
+            <p><strong>What to do.</strong> Require a second factor on every account that supports it - starting with
+                email, your identity provider (Microsoft 365 / Entra ID, Google Workspace), remote access / VPN, and any
+                administrator account. Prefer an authenticator app or a hardware security key over SMS codes, which can be
+                intercepted. Turn it on for administrators first; they're the highest-value target.</p>
+            <p><strong>Why it matters.</strong> MFA is one of the eight Essential Eight mitigation strategies and a near
+                universal requirement on cyber-insurance applications - many insurers now decline cover without it. It
+                directly addresses the password-based attacks (phishing, credential stuffing, password spraying) that
+                dominate small-business incidents.</p>
+            <p><strong>Roughly what it costs.</strong> Effectively free. MFA is included in Microsoft 365 (including the
+                Business plans and via free Security Defaults), Google Workspace, and essentially every major identity
+                provider; authenticator apps are free. Hardware keys, if you choose them for admins, are a modest
+                per-key one-off. The real cost is the rollout effort and a little user-change management, not licensing.</p>
+
+            <h2>3. Patch operating systems and applications</h2>
+            <p>
+                Most successful intrusions exploit a vulnerability for which a fix already existed. Patching is how you
+                shut that window. It's unglamorous, ongoing, and one of the most reliable risk reductions you can make.
+            </p>
+            <p><strong>What to do.</strong> Enable automatic updates for operating systems and for the applications that
+                touch the internet most - browsers, email clients, PDF readers, Office. Set a cadence for everything
+                else and stick to it. The Essential Eight's baseline expectation is that internet-facing services and
+                applications with known exploited vulnerabilities get patched fast (within roughly 48 hours at the lower
+                maturity levels), with operating systems on a regular schedule.</p>
+            <p><strong>Why it matters.</strong> Two of the eight Essential Eight strategies are literally "patch
+                applications" and "patch operating systems." Unpatched systems were among the specific failings ASIC
+                pointed to in its enforcement action against FIIG Securities - this is the kind of basic that regulators
+                now treat as non-negotiable diligence.</p>
+            <p><strong>Roughly what it costs.</strong> The software is free - patching is built into the OS and apps. The
+                real cost is operational: time to test and deploy, and the maintenance windows and occasional reboots
+                that disrupt work. Budget the process, not a product.</p>
+
+            <h2>4. Back up - and test the restore</h2>
+            <p>
+                Backups are your last line against ransomware, hardware failure, and human error. The catch most
+                businesses learn the hard way: a backup you've never restored from is a hope, not a backup.
+            </p>
+            <p><strong>What to do.</strong> Follow the 3-2-1 principle - three copies of your data, on two different
+                media, with one kept off-site (or in a separate cloud account). Crucially, at least one copy should be
+                offline or immutable so ransomware can't encrypt your backups along with everything else. Then schedule a
+                real restore test, because the only way to know a backup works is to recover from it.</p>
+            <p><strong>Why it matters.</strong> "Regular backups" is the eighth Essential Eight strategy, and tested,
+                isolated backups are what turn a ransomware incident from an existential event into an expensive
+                inconvenience. Recoverability is also where the Cyber Security Act 2024's ransomware-reporting reality
+                bites: the better your backups, the less pressure to even consider a payment.</p>
+            <p><strong>Roughly what it costs.</strong> Varies with data volume - the cost is storage plus a backup tool,
+                and ranges from near-free for a small cloud-first business using built-in versioning to a meaningful
+                monthly line item at larger data sizes. The discipline of testing restores is free; not doing it is what's
+                expensive.</p>
+
+            <h2>5. Stop using administrator accounts for daily work</h2>
+            <p>
+                When an everyday account also has administrator rights, any malware or attacker who lands on it inherits
+                the keys to everything. Separating the two is free and dramatically limits the blast radius of a single
+                compromise.
+            </p>
+            <p><strong>What to do.</strong> Give people standard (non-admin) accounts for daily work - email, browsing,
+                documents. Where someone genuinely needs admin rights, that should be a separate account used only for
+                admin tasks. Remove local-administrator rights from regular user laptops, and review who holds privileged
+                access regularly, removing anyone who no longer needs it.</p>
+            <p><strong>Why it matters.</strong> "Restrict administrative privileges" is an Essential Eight strategy and a
+                core least-privilege principle in every framework. It's one of the cheapest ways to stop a routine
+                malware infection or phished login from becoming a full domain compromise.</p>
+            <p><strong>Roughly what it costs.</strong> Free - it's a configuration and process change, not a purchase.
+                The cost is a modest amount of friction (admins running a second account) and the discipline to keep the
+                privileged list short.</p>
+
+            <h2>6. Harden the obvious soft spots</h2>
+            <p>
+                Two of the most common malware delivery routes are malicious Office macros and over-permissive browsers.
+                Both are closed with configuration you already own.
+            </p>
+            <p><strong>What to do.</strong> Block macros in files that arrive from the internet, and only allow macros
+                where there's a demonstrated business need - Microsoft already blocks internet-sourced macros by default
+                in current Office, so the task is largely "don't undo that." Harden web browsers and PDF readers by
+                disabling unneeded plugins and legacy features, and remove software you don't use. These two steps are
+                the Essential Eight strategies "configure Microsoft Office macro settings" and "user application
+                hardening."</p>
+            <p><strong>Why it matters.</strong> Macros and vulnerable browser plugins are classic initial-access
+                vectors. Turning them off removes a large slice of commodity attacks for no licensing cost and little
+                ongoing effort.</p>
+            <p><strong>Roughly what it costs.</strong> Free. This is policy and configuration - applied through the
+                management tools built into Microsoft 365, Windows, or your device-management platform. The cost is the
+                time to set the policy and handle the occasional legitimate macro exception.</p>
+
+            <h2>7. Defend the inbox</h2>
+            <p>
+                Email is how most attacks begin - phishing for credentials, and business email compromise that redirects
+                a real payment to an attacker's account. A layer of email authentication plus basic awareness closes a
+                lot of it.
+            </p>
+            <p><strong>What to do.</strong> Publish the three email-authentication records for your domain - SPF, DKIM,
+                and DMARC - so others can detect and reject mail that spoofs you, and so your own mail is trusted. Turn
+                on the anti-phishing and anti-spoofing protections in your mail platform. Then run short, regular
+                security-awareness training so staff can recognise phishing and, critically, know to verify any change of
+                bank details through a second channel.</p>
+            <p><strong>Why it matters.</strong> Business email compromise and invoice fraud are among the costliest
+                incidents for small businesses - especially in sectors like construction, where large supplier payments
+                move regularly and a redirected invoice can cost six figures in one transaction. Awareness and email
+                authentication are the controls that catch it. Staff training is also an explicit ISO 27001 control.</p>
+            <p><strong>Roughly what it costs.</strong> The DNS records (SPF/DKIM/DMARC) are free to publish; DMARC
+                monitoring services have free tiers and paid options as you scale. The platform anti-phishing settings are
+                included in your mail subscription. Awareness training ranges from free internal sessions to a modest
+                per-user-per-year cost for a managed platform.</p>
+
+            <h2>One step that comes later: application control</h2>
+            <p>
+                The eighth Essential Eight strategy - <strong>application control</strong> (allowing only approved
+                software to run) - is genuinely powerful but harder to implement well, and it's where small businesses
+                most often stumble. It belongs on the roadmap rather than in day one of Foundation; you'll climb into it
+                as you move up the maturity levels in later stages. Getting the seven steps above solid first is the
+                right order.
+            </p>
+
+            <h2>Where this maps</h2>
+            <p>
+                Every step above ties to a recognised control. Here it is in one place - the answer to "is this just your
+                opinion?" It isn't; it's the baseline three frameworks already agree on.
+            </p>
+            <div class="table-wrap">
+                <table class="data">
+                    <thead>
+                        <tr><th>Foundation step</th><th>ASD Essential Eight</th><th>ISO 27001:2022 Annex A</th><th>NIST CSF 2.0</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1. Know what you own</td><td>Assumed prerequisite</td><td>A.5.9 Inventory of assets</td><td>ID.AM Asset Management</td></tr>
+                        <tr><td>2. MFA everywhere</td><td>Multi-factor authentication</td><td>A.8.5 Secure authentication</td><td>PR.AA Identity &amp; Access</td></tr>
+                        <tr><td>3. Patch OS &amp; apps</td><td>Patch applications; Patch operating systems</td><td>A.8.8 Technical vulnerabilities</td><td>ID.RA; PR.PS Platform Security</td></tr>
+                        <tr><td>4. Tested backups</td><td>Regular backups</td><td>A.8.13 Information backup</td><td>PR.DS; RC.RP Recovery</td></tr>
+                        <tr><td>5. Restrict admin rights</td><td>Restrict administrative privileges</td><td>A.8.2 Privileged access rights</td><td>PR.AA-05 Least privilege</td></tr>
+                        <tr><td>6. Harden macros &amp; apps</td><td>Configure Office macros; User application hardening</td><td>A.8.7 Malware; A.8.19 Software on systems</td><td>PR.PS Platform Security</td></tr>
+                        <tr><td>7. Defend the inbox</td><td>(Supports the above)</td><td>A.6.3 Awareness; A.8.7 Malware</td><td>PR.AT Awareness &amp; Training</td></tr>
+                        <tr><td>Later: application control</td><td>Application control</td><td>A.8.19 Software on systems</td><td>PR.PS Platform Security</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="callout mt-8">
+                <p class="text-sm"><strong>Doing this with help.</strong> Everything in Foundation is achievable in-house,
+                and this guide is meant to let you do exactly that. If you'd rather have it assessed, prioritised, and
+                implemented with you - and carried up through the later stages - that's the
+                <a href="../services.html#vciso" class="text-[#7aa2f7] hover:text-[#7dcfff]">virtual CISO engagement</a>:
+                the same method, delivered alongside you.</p>
+            </div>
+        </div>
+
+        <!-- end-of-stage: share + nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38]">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="index.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">&larr; Guide overview</a>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-[#565f89] mr-1">Share</span>
+                    <a class="share-btn" href="https://twitter.com/intent/tweet?text=Foundation%3A%20the%20cheap%20security%20moves%20that%20remove%20the%20most%20risk&url=https%3A%2F%2Fumbrasec.dev%2Fguide%2Ffoundation.html" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fumbrasec.dev%2Fguide%2Ffoundation.html" target="_blank" rel="noopener" title="Share on LinkedIn" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <a href="identity-and-access.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">Stage 2: Identity &amp; Access &rarr;</a>
+            </div>
+        </div>
+    </article>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8 mt-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="font-mono text-xs text-[#a9b1d6]">
+                © 2026 UMBRASEC · Independent defensive research · Published openly
+            </div>
+            <div class="flex items-center gap-x-5">
+                <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Found this useful? Tip</span>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Tip with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Tip with Monero">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <circle cx="50" cy="50" r="50"/>
+                        <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                        <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>

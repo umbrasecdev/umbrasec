@@ -25,10 +25,13 @@
   const COMMANDS = [
     { group: "Navigate", label: "Home", hint: "overview", icon: "fa-house", href: "index.html" },
     { group: "Navigate", label: "Research", hint: "all writeups", icon: "fa-flask", href: "research/index.html", keywords: "articles posts" },
+    { group: "Guide", label: "SMB Security Guide", hint: "zero to defensible", icon: "fa-route", href: "guide/index.html", keywords: "smb maturity essential eight iso 27001 nist csf roadmap journey foundation identity detection governance vciso" },
+    { group: "Guide", label: "Stage 1: Foundation", hint: "the cheap basics", icon: "fa-shield-halved", href: "guide/foundation.html", keywords: "foundation mfa backups patching admin asset inventory email phishing macros essential eight maturity level 1 basics" },
     { group: "Navigate", label: "Approach", hint: "how this works", icon: "fa-compass", href: "index.html#approach", keywords: "method principles" },
     { group: "Navigate", label: "Open Source", hint: "tools", icon: "fa-code-branch", href: "index.html#opensource", keywords: "tools github kev" },
     { group: "Tools", label: "Blue Team Mapper", hint: "defender reference", icon: "fa-shield-halved", href: "tools/blue-team-mapper/index.html", keywords: "blue team mapper detection siem incident response threat hunting hardening soc defender reference soar" },
     { group: "Navigate", label: "Services", hint: "work with us", icon: "fa-handshake", href: "services.html", keywords: "hire consulting detection engineering m365 hardening advisory incident response retainer" },
+    { group: "Navigate", label: "Virtual CISO (vCISO)", hint: "security strategy", icon: "fa-user-tie", href: "services.html#vciso", keywords: "vciso virtual ciso fractional ciso grc governance risk compliance strategy iso 27001 essential eight board policy uplift assess strategise implement run" },
     { group: "Navigate", label: "Start a scoping conversation", hint: "free, low-pressure", icon: "fa-comments", href: "services.html#talk", keywords: "book call quote hire engage contact email talk" },
     { group: "Navigate", label: "About", hint: "the project", icon: "fa-circle-info", href: "about.html" },
     { group: "Navigate", label: "Contact", hint: "get in touch", icon: "fa-envelope", href: "index.html#contact", keywords: "email" },

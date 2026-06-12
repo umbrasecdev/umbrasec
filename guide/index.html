@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The SMB Security Guide - From Zero to Defensible | UMBRASEC</title>
+    <meta name="description" content="A practical, framework-grounded security roadmap for small and medium businesses. Four stages from baseline to audit-ready, mapped to the ASD Essential Eight, ISO 27001:2022, and NIST CSF 2.0.">
+    <link rel="canonical" href="https://umbrasec.dev/guide/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/guide/">
+    <meta property="og:title" content="The SMB Security Guide - From Zero to Defensible">
+    <meta property="og:description" content="A staged, framework-grounded security roadmap for small and medium businesses - what to do, why it matters, and what it costs. Mapped to the Essential Eight, ISO 27001, and NIST CSF 2.0.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The SMB Security Guide - From Zero to Defensible">
+    <meta name="twitter:description" content="A staged, framework-grounded security roadmap for small and medium businesses. Mapped to the Essential Eight, ISO 27001, and NIST CSF 2.0.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "The SMB Security Guide - From Zero to Defensible",
+      "description": "A staged, framework-grounded security roadmap for small and medium businesses, mapped to the ASD Essential Eight, ISO 27001:2022, and NIST CSF 2.0.",
+      "provider": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "isAccessibleForFree": true
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link text-[#c0caf5]">Guide</a>
+                    <a href="../research/index.html" class="nav-link">Research</a>
+                    <a href="../services.html" class="nav-link">Services</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero max-w-[1280px] mx-auto px-8 pt-16 pb-20 tokyo-grid">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8 items-start">
+
+            <div class="lg:col-span-8">
+                <div class="max-w-[820px]">
+                    <div class="flex items-center gap-x-3 mb-6">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-xs font-mono tracking-[2px]">
+                            SMB SECURITY GUIDE • FRAMEWORK-GROUNDED
+                        </div>
+                    </div>
+
+                    <h1 class="hero-headline font-semibold tracking-[-0.045em] leading-none mb-2">
+                        <span data-scramble>From zero.</span><br>
+                        <span class="text-[#7aa2f7]" data-scramble>To defensible.</span>
+                    </h1>
+
+                    <p class="max-w-[620px] text-xl text-[#a9b1d6] mt-8 leading-tight">
+                        A practical, staged security roadmap for small and medium businesses - what to do, why it
+                        matters to the business, and what it roughly costs. Every recommendation is mapped to the
+                        ASD Essential Eight, ISO 27001:2022, and NIST CSF 2.0, so your decisions hold up to auditors,
+                        insurers, and your own board - not just opinion from a blog.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3 mt-10">
+                        <a href="foundation.html"
+                           class="btn-primary inline-flex items-center px-8 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
+                            Start at Stage 1 <span class="arrow ml-1.5">&rarr;</span>
+                        </a>
+                        <a href="#journey"
+                           class="btn-ghost inline-flex items-center px-8 py-3.5 rounded-2xl border border-[#2a2c38] hover:bg-[#16161e] transition-all">
+                            How the journey works
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right sidebar -->
+            <div class="lg:col-span-4 mt-12 lg:mt-0 lg:pl-8 border-l border-[#2a2c38]">
+                <div class="flex items-center gap-x-2 mb-3">
+                    <div class="w-2 h-2 rounded-full bg-[#9ece6a]"></div>
+                    <span class="font-mono text-xs tracking-[2px] text-[#9ece6a]">WHO THIS IS FOR</span>
+                </div>
+
+                <div class="text-sm space-y-2 mb-6 text-[#a9b1d6]">
+                    <div>Businesses without a dedicated security team. The IT manager already wearing the security
+                    hat. Founders who just got a security questionnaire from their biggest customer.</div>
+                </div>
+
+                <div class="text-xs space-y-2 text-[#a9b1d6] border-t border-[#2a2c38] pt-5">
+                    <div class="font-mono text-[#7aa2f7]">ON AUTHORITY</div>
+                    <div>This guide is structured the way a CISO plans a security program. The authority here is the
+                    frameworks it maps to - not a resume. Every claim is cited so you can check it yourself.</div>
+                </div>
+
+                <div class="text-xs space-y-2 text-[#a9b1d6] border-t border-[#2a2c38] pt-5 mt-5">
+                    <div class="font-mono text-[#bb9af7]">AUSTRALIAN-ANCHORED, GLOBALLY USABLE</div>
+                    <div>The technical baseline uses the ASD Essential Eight (Australia). International readers swap
+                    that for CIS Controls v8.1 - the ISO 27001 and NIST CSF 2.0 mappings stay the same.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 01 The journey -->
+    <section id="journey" class="max-w-[1280px] mx-auto px-8 pt-12 pb-16 border-t border-[#2a2c38]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8">
+            <div class="lg:col-span-2 mb-8 lg:mb-0">
+                <div class="sticky top-20"><div class="section-label">01 · THE JOURNEY</div></div>
+            </div>
+
+            <div class="lg:col-span-10">
+                <h2 class="text-6xl font-semibold tracking-[-0.04em] mb-4">Four stages.<br>One defensible program.</h2>
+                <p class="text-[#a9b1d6] max-w-[680px] mb-6">
+                    Security maturity isn't a product you buy - it's a sequence you climb. Each stage builds on the
+                    one before it. You don't start at zero if you've already done the basics; start where you
+                    honestly are and keep moving up.
+                </p>
+                <p class="text-[#a9b1d6] max-w-[680px] mb-10">
+                    The technical rungs follow the <strong class="text-[#c0caf5]">Essential Eight Maturity Model</strong>
+                    (Maturity Level 0 &rarr; 3), the Australian Signals Directorate's recommended baseline of eight
+                    mitigation strategies. The Essential Eight is deliberately <em>preventive</em>, though - it doesn't
+                    cover detection, response, or governance on its own, which is exactly why Stages&nbsp;3 and&nbsp;4
+                    lean on NIST CSF 2.0 and ISO 27001:2022 to fill those gaps.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-5">
+
+                    <!-- Stage 1 -->
+                    <a href="foundation.html" class="u-card block p-7 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-xs text-[#7aa2f7]">STAGE 01</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1a2030] text-[#7aa2f7] border border-[#2a3450]">mostly free + time</span>
+                        </div>
+                        <div class="font-semibold text-2xl tracking-tight mb-3">Foundation</div>
+                        <p class="text-sm text-[#a9b1d6] mb-5">
+                            The cheap, high-impact moves that remove the most risk: MFA everywhere, tested backups, a
+                            patching cadence, no day-to-day admin accounts, email protection, and an honest inventory
+                            of what you actually own. This is Essential Eight Maturity Level&nbsp;1.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono">
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#9ece6a] border border-[#2a3a2a]">Essential Eight ML1</span>
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#a9b1d6] border border-[#2a2c38]">CSF 2.0 ID/PR</span>
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#a9b1d6] border border-[#2a2c38]">ISO A.5 / A.8</span>
+                        </div>
+                    </a>
+
+                    <!-- Stage 2 -->
+                    <a href="identity-and-access.html" class="u-card block p-7 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-xs text-[#bb9af7]">STAGE 02</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#241a30] text-[#bb9af7] border border-[#3a2a50]">license tiers + process</span>
+                        </div>
+                        <div class="font-semibold text-2xl tracking-tight mb-3">Identity &amp; Access</div>
+                        <p class="text-sm text-[#a9b1d6] mb-5">
+                            Identity is the perimeter now. Least privilege, single sign-on, conditional access, and a
+                            joiner-mover-leaver process that doesn't leave ghost accounts behind after people change
+                            roles or leave.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono">
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#9ece6a] border border-[#2a3a2a]">E8: restrict admin + MFA</span>
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#a9b1d6] border border-[#2a2c38]">CSF PR.AA</span>
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#a9b1d6] border border-[#2a2c38]">ISO A.5.15-5.18</span>
+                        </div>
+                    </a>
+
+                    <!-- Stage 3 -->
+                    <a href="detection-and-response.html" class="u-card block p-7 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-xs text-[#7dcfff]">STAGE 03</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#16262e] text-[#7dcfff] border border-[#24414e]">the first real line item</span>
+                        </div>
+                        <div class="font-semibold text-2xl tracking-tight mb-3">Detection &amp; Response</div>
+                        <p class="text-sm text-[#a9b1d6] mb-5">
+                            Someone has to watch the logs. The build-vs-buy decision, honestly: a small in-house EDR
+                            capability with one or two trained people, versus an MDR / MSSP - what each realistically
+                            gets you, with rough cost ranges and the tradeoffs that don't make it into the sales deck.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono">
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#e0af68] border border-[#3a341a]">beyond E8: detection gap</span>
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#a9b1d6] border border-[#2a2c38]">CSF DE / RS</span>
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#a9b1d6] border border-[#2a2c38]">ISO A.5.24-5.30</span>
+                        </div>
+                    </a>
+
+                    <!-- Stage 4 -->
+                    <a href="governance-and-maturity.html" class="u-card block p-7 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-mono text-xs text-[#9ece6a]">STAGE 04</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#16261a] text-[#9ece6a] border border-[#2a3a2a]">time + maybe certification</span>
+                        </div>
+                        <div class="font-semibold text-2xl tracking-tight mb-3">Governance &amp; Maturity</div>
+                        <p class="text-sm text-[#a9b1d6] mb-5">
+                            Risk management, policies that fit on a page, and alignment to ISO 27001 and NIST CSF 2.0's
+                            new <strong class="text-[#c0caf5]">Govern</strong> function - so you can prove the program to
+                            auditors, insurers, and enterprise customers. In Australia, this is also where board and
+                            legal accountability gets managed deliberately.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono">
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#9ece6a] border border-[#2a3a2a]">E8 ML2 climb</span>
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#a9b1d6] border border-[#2a2c38]">CSF GV</span>
+                            <span class="px-2 py-0.5 rounded-full bg-[#16181f] text-[#a9b1d6] border border-[#2a2c38]">ISO 27001:2022</span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 How to use this -->
+    <section class="max-w-[1280px] mx-auto px-8 py-16 border-t border-[#2a2c38]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8">
+            <div class="lg:col-span-2 mb-8 lg:mb-0">
+                <div class="sticky top-20"><div class="section-label">02 · HOW TO USE IT</div></div>
+            </div>
+            <div class="lg:col-span-10">
+                <h2 class="text-6xl font-semibold tracking-[-0.04em] mb-10">Three questions, every step.</h2>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="u-card p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="u-ico text-[#7aa2f7] text-2xl mb-4"><i class="fa-solid fa-list-check"></i></div>
+                        <div class="text-2xl font-semibold tracking-tight mb-3">What to do</div>
+                        <p class="text-[#a9b1d6] text-sm">The concrete action, in plain language - the setting to turn on, the process to put in place, the decision to make. No jargon for its own sake.</p>
+                    </div>
+                    <div class="u-card p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="u-ico text-[#bb9af7] text-2xl mb-4"><i class="fa-solid fa-scale-balanced"></i></div>
+                        <div class="text-2xl font-semibold tracking-tight mb-3">Why it matters</div>
+                        <p class="text-[#a9b1d6] text-sm">The business case, not the fear pitch - the risk it removes, the obligation it meets, and the customer or insurer question it answers.</p>
+                    </div>
+                    <div class="u-card p-8 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                        <div class="u-ico text-[#7dcfff] text-2xl mb-4"><i class="fa-solid fa-coins"></i></div>
+                        <div class="text-2xl font-semibold tracking-tight mb-3">Roughly what it costs</div>
+                        <p class="text-[#a9b1d6] text-sm">Time and money, honestly. Public list prices where they exist; clearly-labelled rough ranges where they don't. No invented figures.</p>
+                    </div>
+                </div>
+
+                <div class="callout mt-8">
+                    <p class="text-sm text-[#a9b1d6]"><strong class="text-[#c0caf5]">A note on Australian obligations:</strong>
+                    cyber security in Australia is now a board and legal accountability issue, not just an IT one. The
+                    Privacy Act's Notifiable Data Breaches scheme, the Cyber Security Act 2024, and regulators like ASIC
+                    and APRA all expect demonstrable diligence. The guide flags where a control connects to a real
+                    obligation - so the case for doing it is "this is what's expected of us," not "hackers are scary."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 Guide vs vCISO -->
+    <section class="max-w-[1280px] mx-auto px-8 py-16 border-t border-[#2a2c38]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8">
+            <div class="lg:col-span-2 mb-8 lg:mb-0">
+                <div class="sticky top-20"><div class="section-label">03 · DO IT WITH ME</div></div>
+            </div>
+            <div class="lg:col-span-10">
+                <div class="max-w-2xl">
+                    <h2 class="text-6xl font-semibold tracking-[-0.04em] mb-8">The guide is the method.<br>The vCISO is me doing it with you.</h2>
+                    <p class="text-xl text-[#a9b1d6] mb-6">
+                        This guide teaches the method, openly and for free. If you'd rather not run it alone, the
+                        virtual CISO service is the same four-stage arc delivered as an engagement - I build the
+                        strategy with you: assess where you are, set the GRC foundation, implement the controls, then
+                        run the ongoing uplift as your fractional CISO.
+                    </p>
+                    <p class="text-[#a9b1d6] mb-8">
+                        Australian-based, working globally. No obligation - the guide stands on its own.
+                    </p>
+                    <a href="../services.html#vciso"
+                       class="btn-primary inline-flex items-center px-8 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
+                        See how the vCISO engagement works <span class="arrow ml-1.5">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="font-mono text-xs text-[#a9b1d6]">
+                © 2026 UMBRASEC · Independent defensive research · Published openly
+            </div>
+            <div class="flex items-center gap-x-5">
+                <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Donate</span>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Donate with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Donate with Monero">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <circle cx="50" cy="50" r="50"/>
+                        <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                        <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>
