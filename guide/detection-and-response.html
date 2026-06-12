@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage 3: Detection &amp; Response - The SMB Security Guide | UMBRASEC</title>
+    <meta name="description" content="Someone has to watch the logs: turning on visibility, EDR everywhere, the build-vs-buy MDR decision honestly, an incident response plan, and Australian reporting obligations - mapped to NIST CSF 2.0 and ISO 27001.">
+    <link rel="canonical" href="https://umbrasec.dev/guide/detection-and-response.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/guide/detection-and-response.html">
+    <meta property="og:title" content="Stage 3: Detection &amp; Response - The SMB Security Guide">
+    <meta property="og:description" content="Someone has to watch the logs. Visibility, EDR, the build-vs-buy MDR decision honestly, an IR plan, and reporting obligations - what to do, why it matters, and roughly what it costs.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+    <meta property="article:section" content="SMB Security Guide">
+    <meta property="article:tag" content="Essential Eight">
+    <meta property="article:tag" content="ISO 27001">
+    <meta property="article:tag" content="NIST CSF 2.0">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stage 3: Detection &amp; Response - The SMB Security Guide">
+    <meta name="twitter:description" content="Someone has to watch the logs. Visibility, EDR, build-vs-buy MDR honestly, an IR plan, and reporting obligations. Mapped to NIST CSF 2.0 and ISO 27001.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Stage 3: Detection & Response - The SMB Security Guide",
+      "description": "Someone has to watch the logs: turning on visibility, EDR everywhere, the build-vs-buy MDR decision honestly, an incident response plan, and Australian reporting obligations, mapped to NIST CSF 2.0 and ISO 27001:2022.",
+      "author": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "publisher": { "@type": "Organization", "name": "UMBRASEC", "logo": { "@type": "ImageObject", "url": "https://umbrasec.dev/assets/og.png" } },
+      "image": "https://umbrasec.dev/assets/og.png",
+      "mainEntityOfPage": "https://umbrasec.dev/guide/detection-and-response.html",
+      "isPartOf": { "@type": "Course", "name": "The SMB Security Guide", "url": "https://umbrasec.dev/guide/" },
+      "keywords": "SMB security, detection, incident response, EDR, MDR, MSSP, SOC, logging, tabletop exercise, notifiable data breaches, NIST CSF 2.0, ISO 27001"
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/umbra-avatar.png">
+    <link rel="apple-touch-icon" href="../assets/umbra-avatar.png">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../" data-reading>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="index.html" class="nav-link text-[#c0caf5]">Guide</a>
+                    <a href="../research/index.html" class="nav-link">Research</a>
+                    <a href="../services.html" class="nav-link">Services</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-[1280px] mx-auto px-8 py-16">
+        <!-- breadcrumb -->
+        <div class="font-mono text-xs text-[#565f89] mb-8">
+            <a href="../index.html" class="hover:text-[#7aa2f7]">home</a> /
+            <a href="index.html" class="hover:text-[#7aa2f7]">guide</a> /
+            <span class="text-[#a9b1d6]">detection &amp; response</span>
+        </div>
+
+        <!-- Journey rail -->
+        <nav class="max-w-[860px] mx-auto mb-12" aria-label="Guide progress">
+            <div class="flex items-center gap-2 text-xs font-mono">
+                <a href="foundation.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">01 Foundation</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="identity-and-access.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">02 Identity</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="detection-and-response.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16262e] border border-[#24414e] text-[#7dcfff] text-center" aria-current="step">03 Detection</a>
+                <span class="text-[#565f89]">&rsaquo;</span>
+                <a href="governance-and-maturity.html" class="flex-1 px-3 py-2 rounded-lg bg-[#16161e] border border-[#2a2c38] text-[#565f89] text-center hover:text-[#a9b1d6] transition-colors">04 Governance</a>
+            </div>
+        </nav>
+
+        <header class="prose mx-auto">
+            <div class="flex items-center gap-x-3 mb-6 text-xs font-mono">
+                <span class="text-[#7dcfff]">STAGE 03 · DETECTION &amp; RESPONSE</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">Beyond the Essential Eight</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">~15 min</span>
+            </div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] leading-[1.05] mb-6 text-[#c0caf5]">
+                Detection &amp; Response: someone has to watch the logs
+            </h1>
+            <p class="text-xl text-[#a9b1d6] leading-snug">
+                Stages 1 and 2 were prevention - and prevention will eventually miss. The Essential Eight is deliberately
+                preventive, which means it doesn't tell you that an attacker got through, and it doesn't tell you what to
+                do at 2am when one does. Stage 3 fills that gap: getting the signals, putting eyes on them, and knowing -
+                in writing, in advance - what happens when something fires. This is where the first real budget decision
+                of the journey lives.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">NIST CSF 2.0 DE / RS</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ISO 27001:2022</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ASD Essential Eight ML2+</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">CIS Controls v8.1</span>
+            </div>
+        </header>
+
+        <div class="prose mx-auto mt-10 article-body">
+            <aside class="toc-rail" data-toc aria-label="On this page"></aside>
+
+            <div class="callout">
+                <p class="text-sm"><strong>The short version.</strong> Turn on the logging you already pay for and keep it
+                long enough to investigate with. Put EDR on every endpoint, servers included. Set a handful of
+                high-signal identity and email alerts - new inbox rules, new OAuth grants, new admins. Then make the
+                stage's big decision honestly: who watches all of this - one or two trained people in-house during
+                business hours, or a managed detection provider around the clock. Write the incident response plan
+                before you need it, learn your legal reporting deadlines now (they're measured in hours), and run a
+                tabletop exercise to find the plan's holes while they're still free.</p>
+            </div>
+
+            <h2>Where Stages 1 and 2 left you</h2>
+            <p>
+                <a href="foundation.html">Foundation</a> closed the easy doors; <a href="identity-and-access.html">Identity
+                &amp; Access</a> made the login hard to steal and limited what any one account can reach. What you don't
+                have yet is the ability to notice the attack that gets through anyway - the phished session token, the
+                vulnerability exploited the day before the patch, the contractor laptop nobody hardened. Each step below
+                keeps the same shape - <strong>What</strong> to do, <strong>Why</strong> it matters, roughly
+                <strong>What it costs</strong> - with the framework mapping table at the end.
+            </p>
+            <p>
+                Same money rule as the earlier stages: public list prices get named; everything else is a
+                clearly-labelled rough range, order of magnitude only, current as of June 2026. This stage has the
+                widest ranges in the guide, because managed-detection pricing is quote-driven - treat every number here
+                as a sanity check for quotes, not a price list.
+            </p>
+
+            <h2>1. Turn on the visibility you already pay for</h2>
+            <p>
+                You can't detect what you don't record, and you can't investigate what you didn't keep. Most small
+                businesses already own substantial logging - it's just not turned on, not kept long enough, or nobody
+                has ever looked at it.
+            </p>
+            <p><strong>What to do.</strong> In Microsoft 365, confirm the unified audit log is enabled and know your
+                retention (180 days on standard licensing tiers); in Google Workspace, the equivalent audit and
+                investigation logs. Keep Entra ID / Workspace sign-in logs as long as your tier allows. Make sure your
+                firewall or router logs denied and allowed traffic somewhere persistent. Then write down, in the Stage 1
+                inventory, where each log lives and how far back it goes - in an incident, the first question is always
+                "what do we have?"</p>
+            <p><strong>Why it matters.</strong> Logging is the prerequisite for everything else in this stage, and it's
+                where the Essential Eight's higher maturity levels quietly go - ML2 and ML3 add event-log collection and
+                monitoring requirements across the strategies. ISO 27001 A.8.15 requires logging; A.8.16 requires
+                someone to actually monitor for anomalous activity. And practically: incident responders' fees climb
+                steeply when there are no logs to reconstruct from.</p>
+            <p><strong>Roughly what it costs.</strong> Mostly free - this is configuration of platforms you already
+                license. Longer retention is the first real cost decision: exporting logs to cheap storage is
+                inexpensive (cloud object storage is cents per gigabyte-month); full SIEM platforms that make logs
+                searchable are a Stage 3-and-beyond decision that usually arrives with the provider question in step 4.</p>
+
+            <h2>2. EDR on every endpoint - servers included</h2>
+            <p>
+                Traditional antivirus recognises known-bad files. Endpoint detection and response (EDR) watches
+                behaviour - processes, persistence, lateral movement - and gives a responder the ability to isolate a
+                machine remotely. It is the single most useful detection purchase a small business makes, and it's the
+                data source nearly every managed provider in step 4 will want to stand on.
+            </p>
+            <p><strong>What to do.</strong> Deploy EDR to every endpoint in the Stage 1 inventory - laptops, desktops,
+                and especially servers, which attackers prize and IT forgets. Coverage beats features: a gap in
+                deployment is exactly where an intruder will sit. If you're on Microsoft 365 Business Premium you
+                already own Defender for Business; turn it on everywhere, enable its automated investigation and
+                remediation, and confirm alerts go somewhere a human sees them. Don't buy a second product before the
+                one you own is fully deployed.</p>
+            <p><strong>Why it matters.</strong> EDR is how modern intrusions actually get caught: hands-on-keyboard
+                activity, living-off-the-land tooling, and ransomware staging all show up as endpoint behaviour first.
+                NIST CSF 2.0's Detect function (DE.CM - continuous monitoring) expects exactly this telemetry, and it's
+                a standing question on cyber-insurance forms. It's also the control that turns "we think something's
+                wrong" into "this machine, this account, isolated in one click."</p>
+            <p><strong>Roughly what it costs.</strong> Microsoft lists Defender for Business at about US$3 per user per
+                month standalone, and it's included in Business Premium - so for many small businesses the licence cost
+                is already sunk. Other reputable EDR vendors price in the same per-endpoint-per-month band, typically
+                single-digit to low-double-digit US dollars (rough range; quote-driven). The honest cost is attention:
+                EDR raises alerts, and an alert nobody reads is a control nobody has - which is the whole of step 4.</p>
+
+            <h2>3. Set the cheap, high-signal alerts</h2>
+            <p>
+                Before deciding who watches everything, set the handful of alerts that catch the attacks small
+                businesses actually get - they're nearly free, low-noise, and each one maps to a real technique.
+            </p>
+            <p><strong>What to do.</strong> Four alerts do disproportionate work. <em>New mailbox inbox rules</em> -
+                especially forward-and-delete rules - are the classic move after a business email compromise, used to
+                hide the attacker's correspondence. <em>New OAuth application grants</em> catch consent phishing, which
+                we've covered in detail in
+                <a href="../research/detecting-oauth-consent-phishing.html">our consent-phishing writeup</a> - the
+                detections there are runnable as-is. <em>New admin-role assignments</em> catch privilege escalation and
+                tell you when your own Stage 2 tiering is being eroded. And <em>impossible-travel or anomalous sign-ins</em>
+                from your identity provider catch stolen credentials in use. Route them somewhere with a human on the
+                other end - a monitored mailbox or chat channel beats a dashboard nobody opens.</p>
+            <p><strong>Why it matters.</strong> These alerts target the highest-frequency, highest-cost incidents in the
+                small-business world: BEC and invoice fraud, account takeover, and quiet persistence. They're also the
+                proof-of-concept for the whole stage - if nobody responds to four alerts, nobody will respond to four
+                thousand, and that tells you the answer to step 4 before you've spent anything.</p>
+            <p><strong>Roughly what it costs.</strong> Free to near-free: all four exist as built-in or
+                easily-configured alerts in Microsoft 365 and Google Workspace at common business tiers. The identity
+                risk detections are richer with Entra ID P2, but the core versions above don't wait for that. Budget an
+                afternoon to set up and a few minutes a day to triage.</p>
+
+            <h2>4. Decide who watches: build vs buy, honestly</h2>
+            <p>
+                This is the stage's real decision, and the one most surrounded by sales fog. Detection only works if a
+                qualified human reads the alerts and can act on them - at 2am, on Christmas, during the week your IT
+                person is on leave. There are two honest ways to get that, and one dishonest way to pretend you have it.
+            </p>
+            <p><strong>What to do.</strong> Choose deliberately between three options. <em>Build:</em> one or two
+                trained people in-house who own the alert queue as part of their role. Honest version: this buys you
+                business-hours coverage only - genuine 24/7 in-house needs four or more analysts once nights, weekends,
+                and leave are covered, which is why almost no small business should attempt it. <em>Buy:</em> a managed
+                detection and response (MDR) provider or MSSP watching your EDR and identity telemetry around the
+                clock. Honest version: quality varies enormously - the questions that separate real MDR from an alert
+                relay are "do you <em>contain</em> on our behalf (isolate hosts, disable accounts), or just notify us?",
+                "what's your median time from alert to human triage?", "do you watch identity and cloud or only
+                endpoints?", and "what exactly happens at 2am - walk me through it?" <em>Pretend:</em> buying tools with
+                no owner and calling it covered. That's the only wrong answer. For most businesses at this stage, the
+                right shape is a hybrid: an MDR for around-the-clock eyes, plus one named internal person who owns the
+                relationship, the escalations, and the steps below.</p>
+            <p><strong>Why it matters.</strong> This is the gap the Essential Eight openly leaves - it's a prevention
+                baseline, not a monitoring program - and it's precisely what NIST CSF 2.0's Detect and Respond functions
+                and ISO 27001's A.8.16 (monitoring) exist to cover. Insurers increasingly ask not "do you have EDR?"
+                but "who monitors it?" The difference shows up in outcomes: intrusions caught in hours are an incident
+                report; intrusions caught in weeks are a data breach notification.</p>
+            <p><strong>Roughly what it costs.</strong> Rough order of magnitude only - this market is quote-driven.
+                MDR for a small business is commonly priced per endpoint or per user per month, and small-business
+                engagements tend to land in the hundreds to low thousands of Australian dollars per month for a few
+                dozen endpoints, varying with scope (endpoint-only versus endpoint plus identity plus cloud) and
+                response authority. In-house, the cost is salary: a capable security-leaning IT professional is a
+                six-figure AUD salary, which is why the hybrid shape wins on value for most. Get at least two quotes
+                and make providers answer the four questions above in writing.</p>
+
+            <h2>5. Write the incident response plan before you need it</h2>
+            <p>
+                In a real incident the expensive failures are rarely technical - they're decision failures: nobody knew
+                who could authorise shutting down the server, nobody had the insurer's hotline number, somebody wiped
+                and reinstalled the one machine that held the evidence. A short, written plan prevents most of them.
+            </p>
+            <p><strong>What to do.</strong> Keep it to a few pages. Who declares an incident and who decides (a named
+                deputy for when they're on leave). The contact card: your MDR or IT provider, your cyber insurer's
+                24/7 hotline (most policies require calling them early - some cover hinges on it), legal counsel, and
+                ASD's ReportCyber / 1300 CYBER1. Severity in plain words ("one laptop is weird" versus "finance can't
+                work" versus "data is being demanded for ransom"). First moves: isolate, don't wipe - contain machines
+                via EDR rather than reinstalling them, and preserve logs and evidence before recovery. Out-of-band
+                comms for when email itself is compromised. And the Stage 1 backups are your recovery path - the plan
+                should say who restores what, in which order. Print it; an encrypted server is a bad place to keep the
+                plan for the encrypted-server day.</p>
+            <p><strong>Why it matters.</strong> ISO 27001 A.5.24-A.5.26 require exactly this - planned, assessed,
+                documented response - and NIST CSF 2.0's Respond function is its strategic frame. It's also a
+                cyber-insurance condition in practice: late notification and destroyed evidence are the classic ways
+                claims get complicated. Mostly, though, it converts your worst day from improvisation into checklist.</p>
+            <p><strong>Roughly what it costs.</strong> Free - a day of writing and arguing about who decides what. An
+                incident-response retainer with a DFIR firm (pre-agreed terms and response times, often a modest annual
+                fee credited against use) is a worthwhile upgrade as you grow, but the document costs nothing.</p>
+
+            <h2>6. Know your reporting clock - it's measured in hours</h2>
+            <p>
+                Australian law now puts deadlines on incident reporting, and they're short enough that "we'll figure it
+                out during the incident" is a plan to miss them. Knowing the triggers in advance is itself a control.
+            </p>
+            <p><strong>What to do.</strong> Put three obligations in the IR plan with their clocks. Under the Privacy
+                Act's <em>Notifiable Data Breaches</em> scheme, if personal information is involved you have 30 days to
+                assess whether serious harm is likely, and must notify the OAIC and affected people as soon as
+                practicable if it is. Under the <em>Cyber Security Act 2024</em>, businesses over the turnover threshold
+                (AU$3 million) that make a ransomware or cyber-extortion payment must report it within 72 hours - check
+                the current rules on the Home Affairs site, and note the obligation sits on payment, which your insurer
+                and lawyer must be part of deciding anyway. Sector add-ons: APRA-regulated entities have CPS 234's
+                72-hour incident notification; critical-infrastructure operators have SOCI Act timelines shorter still.
+                Reporting to ASD's ReportCyber is good practice regardless and feeds national defence.</p>
+            <p><strong>Why it matters.</strong> This is where Stage 3 meets the board-accountability thread running
+                through this guide: regulators have pursued companies over cyber failures, and missed statutory
+                deadlines are the easiest failure to prove. Pre-written notification criteria also remove the panic
+                decision - whether something is reportable gets decided by your plan, not by 3am adrenaline.</p>
+            <p><strong>Roughly what it costs.</strong> Free to know; expensive to not know. An hour with the OAIC and
+                Home Affairs guidance pages, the triggers written into the IR plan, and - if you have legal counsel - a
+                one-time review of the thresholds against your business.</p>
+
+            <h2>7. Test it: run a tabletop exercise</h2>
+            <p>
+                A plan that has never been exercised is in the same category as a backup that has never been restored -
+                a hope. A tabletop exercise is two hours around a table, no systems touched, walking through a scenario
+                and finding the holes while they're free.
+            </p>
+            <p><strong>What to do.</strong> Twice a year, pick a scenario that matches your real risk: ransomware hits
+                Monday 7am, or finance receives a convincing change-of-bank-details email from a known supplier and
+                pays it. Walk the plan step by step with the actual decision-makers in the room - including the owner
+                or CEO, because in a real incident they will absolutely be in the room. Inject complications ("the
+                file server backups failed last night", "a journalist is calling"). Write down every gap - the missing
+                phone number, the unclear authority, the backup nobody can locate - and fix them. ASD publishes free
+                exercise-in-a-box style materials to base scenarios on.</p>
+            <p><strong>Why it matters.</strong> ISO 27001 expects response plans to be tested, and CSF 2.0's Improvement
+                category (ID.IM) is built on exactly this loop. Tabletops are also the cheapest leadership buy-in
+                generator in security: an executive who has sat through a simulated ransomware Monday stops treating
+                the security budget as abstract. That makes this step the natural bridge into
+                Stage 4's governance work.</p>
+            <p><strong>Roughly what it costs.</strong> Free - a meeting room, two hours, and honesty. Facilitated
+                exercises run by external firms exist and add realism, at a typical one-off consulting-day cost, but
+                don't let their absence stop you: a self-run tabletop this quarter beats a facilitated one someday.</p>
+
+            <h2>Where this maps</h2>
+            <p>
+                Stage 3 is where the guide moves past the Essential Eight on purpose - the E8 column below gets thin
+                because the E8 is a prevention baseline, and this stage covers the detection and response functions it
+                explicitly leaves to other frameworks. International readers: CIS Controls v8.1 covers this stage in
+                Controls 8 (audit logs), 13 (network monitoring), and 17 (incident response).
+            </p>
+            <div class="table-wrap">
+                <table class="data">
+                    <thead>
+                        <tr><th>Detection &amp; Response step</th><th>ASD Essential Eight</th><th>ISO 27001:2022 Annex A</th><th>NIST CSF 2.0</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1. Turn on visibility / logging</td><td>ML2/ML3 event-log requirements</td><td>A.8.15 Logging</td><td>DE.CM Continuous monitoring</td></tr>
+                        <tr><td>2. EDR everywhere</td><td>(Beyond E8 - detection gap)</td><td>A.8.7 Malware; A.8.16 Monitoring</td><td>DE.CM; DE.AE Adverse events</td></tr>
+                        <tr><td>3. High-signal alerts</td><td>(Beyond E8 - detection gap)</td><td>A.8.16 Monitoring activities</td><td>DE.AE; DE.CM</td></tr>
+                        <tr><td>4. Build vs buy monitoring</td><td>(Beyond E8 - detection gap)</td><td>A.8.16; A.5.24 IR planning</td><td>DE; RS.MA Incident management</td></tr>
+                        <tr><td>5. Incident response plan</td><td>(Beyond E8)</td><td>A.5.24-5.26 IR; A.5.28 Evidence</td><td>RS.MA; RC.RP Recovery</td></tr>
+                        <tr><td>6. Reporting obligations</td><td>(Beyond E8)</td><td>A.5.5 Authorities; A.6.8 Event reporting</td><td>RS.CO Communications</td></tr>
+                        <tr><td>7. Tabletop exercises</td><td>(Beyond E8)</td><td>A.5.27 Learning from incidents</td><td>ID.IM Improvement</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="callout mt-8">
+                <p class="text-sm"><strong>Doing this with help.</strong> Stage 3's decisions - what to log, which MDR
+                quotes are real, what the IR plan must say for <em>your</em> obligations - are where an experienced
+                outside voice pays for itself fastest. That's the
+                <a href="../services.html#vciso" class="text-[#7aa2f7] hover:text-[#7dcfff]">virtual CISO engagement</a>:
+                same method as this guide, applied to your actual environment, including sitting on your side of the
+                table when providers pitch. The guide stays free and complete either way.</p>
+            </div>
+        </div>
+
+        <!-- end-of-stage: share + nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38]">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="identity-and-access.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">&larr; Stage 2: Identity &amp; Access</a>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-[#565f89] mr-1">Share</span>
+                    <a class="share-btn" href="https://twitter.com/intent/tweet?text=Detection%20%26%20Response%3A%20someone%20has%20to%20watch%20the%20logs&url=https%3A%2F%2Fumbrasec.dev%2Fguide%2Fdetection-and-response.html" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fumbrasec.dev%2Fguide%2Fdetection-and-response.html" target="_blank" rel="noopener" title="Share on LinkedIn" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <a href="governance-and-maturity.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">Stage 4: Governance &amp; Maturity &rarr;</a>
+            </div>
+        </div>
+    </article>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8 mt-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="font-mono text-xs text-[#a9b1d6]">
+                © 2026 UMBRASEC · Independent defensive research · Published openly
+            </div>
+            <div class="flex items-center gap-x-5">
+                <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Found this useful? Tip</span>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Tip with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Tip with Monero">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <circle cx="50" cy="50" r="50"/>
+                        <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                        <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>
