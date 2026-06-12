@@ -1,0 +1,32 @@
+title: LiteLLM MCP Test Endpoint Requested
+id: 2c8e5b41-6d77-4a90-bb1e-3f0a9c2d4e56
+status: experimental
+description: >
+    A request hit one of LiteLLM's MCP preview endpoints. These accept a
+    full MCP server config and, for the stdio transport, spawn the
+    supplied command on the proxy host (CVE-2026-42271). They are an
+    admin-only preview feature, so requests - especially from untrusted
+    sources - warrant review. Chained with CVE-2026-48710 (Starlette
+    BadHost) the path becomes unauthenticated RCE.
+references:
+    - https://nvd.nist.gov/vuln/detail/CVE-2026-42271
+    - https://github.com/BerriAI/litellm/security/advisories/GHSA-v4p8-mg3p-g94g
+    - https://umbrasec.dev/research/detecting-litellm-command-injection.html
+author: UMBRASEC
+date: 2026/06/13
+tags:
+    - attack.initial_access
+    - attack.t1190
+logsource:
+    category: webserver
+detection:
+    selection:
+        cs-method: 'POST'
+        cs-uri-stem|contains:
+            - '/mcp-rest/test/connection'
+            - '/mcp-rest/test/tools/list'
+    condition: selection
+falsepositives:
+    - An administrator legitimately previewing an MCP server in the LiteLLM UI
+    - Vulnerability scanners probing the path after public disclosure
+level: medium

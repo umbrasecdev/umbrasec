@@ -1,0 +1,46 @@
+title: LiteLLM Proxy Spawning Shell or Recon Utility
+id: 7b3a1f02-9c5d-4e88-a1b6-2f4c7d9e0a13
+status: experimental
+description: >
+    The LiteLLM proxy process (Python/uvicorn/gunicorn) spawned a shell
+    or a common recon/download utility. A web proxy has no legitimate
+    reason to do this; consistent with exploitation of CVE-2026-42271,
+    where the MCP stdio preview endpoints spawn an attacker-supplied
+    command on the proxy host.
+references:
+    - https://nvd.nist.gov/vuln/detail/CVE-2026-42271
+    - https://github.com/BerriAI/litellm/security/advisories/GHSA-v4p8-mg3p-g94g
+    - https://umbrasec.dev/research/detecting-litellm-command-injection.html
+author: UMBRASEC
+date: 2026/06/13
+tags:
+    - attack.initial_access
+    - attack.t1190
+    - attack.execution
+    - attack.t1059
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_parent:
+        ParentImage|endswith:
+            - '/python'
+            - '/python3'
+            - '/uvicorn'
+            - '/gunicorn'
+    selection_child:
+        Image|endswith:
+            - '/sh'
+            - '/bash'
+            - '/dash'
+            - '/curl'
+            - '/wget'
+            - '/nc'
+            - '/ncat'
+            - '/nohup'
+    condition: selection_parent and selection_child
+falsepositives:
+    - Init/entrypoint scripts that legitimately shell out at container start
+    - Health-check or sidecar tooling that wraps the proxy in a shell
+    - Scope to LiteLLM hosts/containers to cut generic python parent noise
+level: high

@@ -23,6 +23,8 @@ every change - that's what the badge above checks.
 | [`oauth-consent-sensitive-scopes.kql`](queries/kql/oauth-consent-sensitive-scopes.kql) | KQL | [T1528](https://attack.mitre.org/techniques/T1528/) Steal Application Access Token | Credential Access | query |
 | [`oauth2-permission-grant-post.kql`](queries/kql/oauth2-permission-grant-post.kql) | KQL | [T1528](https://attack.mitre.org/techniques/T1528/) Steal Application Access Token | Credential Access | query |
 | [`app-role-assignment.kql`](queries/kql/app-role-assignment.kql) | KQL | [T1528](https://attack.mitre.org/techniques/T1528/) Steal Application Access Token | Credential Access | query |
+| [`litellm-proxy-spawns-shell.yml`](rules/linux/litellm-proxy-spawns-shell.yml) | Sigma | [T1190](https://attack.mitre.org/techniques/T1190/) Exploit Public-Facing App; [T1059](https://attack.mitre.org/techniques/T1059/) Command &amp; Scripting | Initial Access / Execution | experimental |
+| [`litellm-mcp-test-endpoint.yml`](rules/web/litellm-mcp-test-endpoint.yml) | Sigma | [T1190](https://attack.mitre.org/techniques/T1190/) Exploit Public-Facing App | Initial Access | experimental |
 
 `experimental` is the [Sigma status](https://sigmahq.io/docs/basics/rules.html) the
 rules themselves declare - new rules, not yet battle-tested by many environments.
@@ -57,6 +59,22 @@ Writeup: [Detecting OAuth Consent Phishing in Microsoft 365](https://umbrasec.de
 Prerequisite: Entra ID `AuditLogs` and `MicrosoftGraphActivityLogs` flowing into
 your workspace. The shape of `modifiedProperties` shifts between schema versions -
 validate field names against your own tenant before you alert on anything.
+
+### LiteLLM command injection - CVE-2026-42271 (MITRE ATT&CK T1190 / T1059)
+
+Writeup: [Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway](https://umbrasec.dev/research/detecting-litellm-command-injection.html)
+
+| File | What it catches | Level |
+|---|---|---|
+| [`rules/linux/litellm-proxy-spawns-shell.yml`](rules/linux/litellm-proxy-spawns-shell.yml) | The LiteLLM proxy process spawning a shell or recon/download utility - the command-injection landing (high fidelity) | high |
+| [`rules/web/litellm-mcp-test-endpoint.yml`](rules/web/litellm-mcp-test-endpoint.yml) | POST requests to the vulnerable MCP preview endpoints (`/mcp-rest/test/connection`, `/mcp-rest/test/tools/list`) - the front-door signal | medium |
+
+Prerequisite: for the host rule, Linux process-creation telemetry (Auditd execve,
+Sysmon for Linux, or EDR) from the LiteLLM host/container; for the web rule, HTTP
+access logs from the reverse proxy / ingress in front of LiteLLM. Scope the host
+rule to your LiteLLM hosts to cut generic `python` parent noise. Patch status is
+the real control - these cover the window before you've patched and the assets you
+haven't found yet.
 
 ## How to use these
 

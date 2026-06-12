@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway - UMBRASEC</title>
+    <meta name="description" content="CVE-2026-42271 turns LiteLLM's MCP preview endpoints into authenticated command execution, and chains with the Starlette BadHost bug (CVE-2026-48710) for unauthenticated RCE. What to log, two runnable Sigma rules, and how to contain it.">
+    <link rel="canonical" href="https://umbrasec.dev/research/detecting-litellm-command-injection.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/research/detecting-litellm-command-injection.html">
+    <meta property="og:title" content="Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway">
+    <meta property="og:description" content="An authenticated command-injection in LiteLLM's MCP test endpoints, actively exploited and in CISA KEV, that chains to unauthenticated RCE. The log artifacts, two runnable Sigma rules, and containment.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+    <meta property="article:published_time" content="2026-06-13">
+    <meta property="article:author" content="UMBRASEC">
+    <meta property="article:section" content="Detection Engineering">
+    <meta property="article:tag" content="CVE-2026-42271">
+    <meta property="article:tag" content="LiteLLM">
+    <meta property="article:tag" content="MITRE ATT&amp;CK T1190">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Detecting the LiteLLM Command Injection (CVE-2026-42271)">
+    <meta name="twitter:description" content="Authenticated command injection in LiteLLM's MCP test endpoints, in CISA KEV and chaining to unauthenticated RCE. Log artifacts, two runnable Sigma rules, and containment.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway",
+      "description": "A defender-focused walkthrough of CVE-2026-42271, an authenticated command injection in LiteLLM's MCP preview endpoints that chains with CVE-2026-48710 for unauthenticated RCE: the log artifacts, two runnable Sigma detections, and containment.",
+      "datePublished": "2026-06-13",
+      "author": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "publisher": { "@type": "Organization", "name": "UMBRASEC", "logo": { "@type": "ImageObject", "url": "https://umbrasec.dev/assets/og.png" } },
+      "image": "https://umbrasec.dev/assets/og.png",
+      "mainEntityOfPage": "https://umbrasec.dev/research/detecting-litellm-command-injection.html",
+      "about": "CVE-2026-42271 LiteLLM command injection detection",
+      "keywords": "CVE-2026-42271, LiteLLM, command injection, MCP, AI gateway, CVE-2026-48710, Starlette, BadHost, CISA KEV, Sigma, detection engineering, MITRE ATT&CK T1190"
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/umbra-avatar.png">
+    <link rel="apple-touch-icon" href="../assets/umbra-avatar.png">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../" data-reading>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <div>
+                        <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                        <span class="font-mono text-xs text-[#a9b1d6] ml-1.5">2026</span>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="../guide/index.html" class="nav-link">Guide</a>
+                    <a href="index.html" class="nav-link">Research</a>
+                    <a href="../index.html#opensource" class="nav-link">Open Source</a>
+                    <a href="../services.html" class="nav-link">Services</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-[1280px] mx-auto px-8 py-16">
+        <!-- breadcrumb -->
+        <div class="font-mono text-xs text-[#565f89] mb-8">
+            <a href="../index.html" class="hover:text-[#7aa2f7]">home</a> /
+            <a href="index.html" class="hover:text-[#7aa2f7]">research</a> /
+            <span class="text-[#a9b1d6]">detecting-litellm-command-injection</span>
+        </div>
+
+        <header class="prose mx-auto">
+            <div class="flex items-center gap-x-3 mb-6 text-xs font-mono">
+                <span class="text-[#9ece6a]">DETECTION ENGINEERING</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">Jun 13, 2026</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">~11 min</span>
+            </div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] leading-[1.05] mb-6 text-[#c0caf5]">
+                Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway
+            </h1>
+            <p class="text-xl text-[#a9b1d6] leading-snug">
+                LiteLLM is the proxy a lot of organizations quietly put in front of their LLM APIs, and on June 8, 2026
+                CISA added <strong>CVE-2026-42271</strong> to the Known Exploited Vulnerabilities catalog. It turns two
+                MCP preview endpoints into command execution on the proxy host - and chained with a Starlette
+                authentication bypass, into <em>unauthenticated</em> remote code execution. Here's the mechanism a
+                defender needs, what it leaves in your logs, and two Sigma rules you can run today.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">CVE-2026-42271 (CVSS 8.8)</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">CISA KEV</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">ATT&amp;CK T1190 / T1059</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">LiteLLM &lt; 1.83.7</span>
+            </div>
+        </header>
+
+        <div class="prose mx-auto mt-10 article-body">
+            <aside class="toc-rail" data-toc aria-label="On this page"></aside>
+
+            <div class="callout">
+                <p class="text-sm"><strong>TL;DR for defenders.</strong> If you run LiteLLM, patch to
+                <strong>1.83.7 or later</strong> now - it's actively exploited and in CISA KEV with a remediation due
+                date of June 22, 2026. Can't patch immediately? Block <code>POST /mcp-rest/test/connection</code> and
+                <code>POST /mcp-rest/test/tools/list</code> at your reverse proxy. To detect, watch two things: requests
+                to those endpoints in your proxy logs, and - far higher fidelity - the <strong>LiteLLM process spawning
+                a shell or recon binary</strong>, which a Python web proxy has no legitimate reason to do. Both Sigma
+                rules are below and in <a href="https://github.com/atraxsrc/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener">sigma-pack</a>.
+                Also patch Starlette to 1.0.1+ to break the unauthenticated chain.</p>
+            </div>
+
+            <h2>Why this one matters</h2>
+            <p>
+                <a href="https://github.com/BerriAI/litellm" target="_blank" rel="noopener">LiteLLM</a> is an open-source
+                "AI gateway": a proxy that exposes 100+ LLM providers behind a single OpenAI-compatible API, with
+                centralized keys, budgets, and routing. That role makes it a high-value target by position - it
+                typically holds provider API keys, sits in the request path of everything AI in the org, and is
+                increasingly internet-facing so that distributed teams and apps can reach it. Compromising the gateway
+                means the credentials and the traffic in one move.
+            </p>
+            <p>
+                <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-42271" target="_blank" rel="noopener">CVE-2026-42271</a>
+                is a command injection (CWE-78) rated <strong>CVSS 3.1 8.8 / 4.0 8.7 (High)</strong>, affecting LiteLLM
+                from <strong>1.74.2 up to but not including 1.83.7</strong>. It was published on May 8, 2026, and CISA
+                added it to <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">KEV</a>
+                on June 8 with a federal remediation deadline of June 22 - the signal that it is being exploited in the
+                wild, not just theoretically exploitable.
+            </p>
+
+            <h2>The mechanism, at a defender's depth</h2>
+            <p>
+                LiteLLM can act as a client to <strong>MCP (Model Context Protocol)</strong> servers - the tool-providing
+                backends that agentic features call. One MCP transport is <code>stdio</code>: instead of talking to a
+                network service, LiteLLM launches a local command and speaks to it over standard input/output. An MCP
+                server defined for stdio therefore carries three telling fields: <code>command</code> (the binary to
+                run), <code>args</code>, and <code>env</code>.
+            </p>
+            <p>
+                To let an administrator preview an MCP server before saving it, LiteLLM exposed two endpoints that
+                accept a full server configuration in the request body and try connecting to it:
+            </p>
+            <pre><code>POST /mcp-rest/test/connection
+POST /mcp-rest/test/tools/list</code></pre>
+            <p>
+                Here is the whole bug: for a <code>stdio</code> server, "try connecting to it" means
+                <strong>spawn the supplied <code>command</code> as a subprocess on the proxy host</strong>, with the
+                privileges of the LiteLLM process. And unlike the endpoint that <em>saves</em> an MCP server, these two
+                preview endpoints carried <strong>no role check</strong> - any caller holding a valid LiteLLM API key,
+                including a low-privilege one minted for an app or a teammate, could reach them. A key meant for making
+                model calls became a key for running commands on the box.
+            </p>
+            <div class="callout">
+                <p class="text-sm"><strong>Scope note.</strong> This is a defensive writeup. The description above is the
+                level of detail in the vendor advisory and the CVE record - enough to log, detect, and contain the
+                issue. It deliberately contains no request body, payload, or working exploit. UMBRASEC publishes
+                defense, not offense.</p>
+            </div>
+
+            <h2>The chain: from authenticated to unauthenticated RCE</h2>
+            <p>
+                On its own, CVE-2026-42271 needs a valid API key. That requirement disappears when it is chained with
+                <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-48710" target="_blank" rel="noopener">CVE-2026-48710</a>,
+                an authentication-bypass bug in <strong>Starlette</strong> - the Python ASGI framework LiteLLM is built
+                on - nicknamed <strong>"BadHost"</strong>. In Starlette before 1.0.1, the HTTP <code>Host</code> header
+                was not validated before being used to reconstruct <code>request.url</code> (CWE-444, CVSS 6.5), letting
+                a malformed header create a mismatch between the real request path and the URL that authorization checks
+                were evaluating.
+            </p>
+            <p>
+                Researchers at Horizon3.ai demonstrated that abusing BadHost lets an attacker slip past LiteLLM's API-key
+                requirement and reach the vulnerable MCP preview endpoints unauthenticated - converting an
+                authenticated command injection into <strong>unauthenticated RCE</strong> against an exposed gateway.
+                Note the two clocks here: patching LiteLLM to 1.83.7 closes the command injection, but you should
+                <em>also</em> upgrade Starlette to 1.0.1+ to remove the bypass that makes the whole class worse - it
+                affects far more than LiteLLM.
+            </p>
+            <p>
+                Public reporting (Horizon3.ai, The Hacker News, Help Net Security) confirms active exploitation of
+                CVE-2026-42271 and documents the chain, but does not publish indicators from the in-the-wild attacks.
+                So rather than chase IOCs that aren't public, detect the <em>behavior</em> - which is durable anyway.
+            </p>
+
+            <h2>Are you affected? Find it first</h2>
+            <p>
+                You can't defend an asset you don't know you run, which is the whole point of
+                <a href="../guide/foundation.html">knowing what you own</a>. LiteLLM often arrives as a container or a
+                developer-stood-up service rather than something procurement signed off, so look in a few places:
+            </p>
+            <ul>
+                <li>Container inventories and registries for <code>litellm</code> / <code>ghcr.io/berriai/litellm</code>
+                    images; check the tag against 1.83.7.</li>
+                <li>Running services exposing the LiteLLM proxy (default port <strong>4000</strong>), and anything
+                    fronting it - reverse proxies, ingress, API gateways.</li>
+                <li>The version banner: a deployment reports its version, and the
+                    <code>/health</code> and OpenAPI routes confirm a LiteLLM instance.</li>
+                <li>Most important: <strong>is it reachable from untrusted networks?</strong> An internet-exposed
+                    gateway is the unauthenticated-RCE scenario; an internal-only one is still exploitable by any
+                    API-key holder, so it is in scope either way - just with a smaller blast radius.</li>
+            </ul>
+
+            <h2>What to log</h2>
+            <p>
+                Two data sources carry this, and they sit at different points of the kill chain. Collect both if you can
+                - the host-based one is the high-fidelity detection and the network one is the early, noisier signal.
+            </p>
+            <ul>
+                <li><strong>Process creation on the LiteLLM host</strong> - Linux <code>execve</code> telemetry from
+                    the Linux Auditd framework, Sysmon for Linux, or your EDR. This captures the actual impact: the
+                    proxy spawning a child process. If you run LiteLLM in a container, that's container runtime / EDR
+                    process visibility. This is the one that matters most.</li>
+                <li><strong>HTTP access logs</strong> from whatever sits in front of LiteLLM - reverse proxy (nginx,
+                    Caddy, Traefik), ingress controller, or API gateway - capturing method, URI path, source, and ideally
+                    the <code>Host</code> header. This catches the attempt at the front door.</li>
+                <li><strong>LiteLLM's own logs</strong>, for the authenticated context: which API key / user made the
+                    request. Useful for scoping once an alert fires.</li>
+            </ul>
+
+            <h2>Detection</h2>
+            <p>
+                Same philosophy as every UMBRASEC writeup: layer from highest precision to broadest. Both Sigma rules
+                below are in <a href="https://github.com/atraxsrc/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener">sigma-pack</a>
+                and validated in CI; convert them to your SIEM with
+                <a href="https://github.com/SigmaHQ/sigma-cli" target="_blank" rel="noopener">sigma-cli</a>.
+            </p>
+
+            <h3>1. The LiteLLM process spawns a shell or recon binary (high fidelity)</h3>
+            <p>
+                This is the detection that survives obfuscation, new payloads, and the unauthenticated chain alike,
+                because it watches the <em>effect</em> rather than the request. A LiteLLM proxy is a Python web service;
+                under normal operation it does not launch <code>/bin/sh</code>, <code>curl</code>, or <code>nc</code>.
+                A child process like that, parented to the proxy, is the command injection landing.
+            </p>
+            <pre><code>title: LiteLLM Proxy Spawning Shell or Recon Utility
+id: 7b3a1f02-9c5d-4e88-a1b6-2f4c7d9e0a13
+status: experimental
+description: >
+    The LiteLLM proxy process (Python/uvicorn/gunicorn) spawned a shell
+    or common recon/download utility. A web proxy has no legitimate
+    reason to do this; consistent with exploitation of CVE-2026-42271,
+    where MCP stdio preview endpoints spawn an attacker-supplied command.
+references:
+    - https://nvd.nist.gov/vuln/detail/CVE-2026-42271
+    - https://umbrasec.dev/research/detecting-litellm-command-injection.html
+author: UMBRASEC
+date: 2026/06/13
+tags:
+    - attack.initial_access
+    - attack.t1190
+    - attack.execution
+    - attack.t1059
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_parent:
+        ParentImage|endswith:
+            - '/python'
+            - '/python3'
+            - '/uvicorn'
+            - '/gunicorn'
+    selection_child:
+        Image|endswith:
+            - '/sh'
+            - '/bash'
+            - '/dash'
+            - '/curl'
+            - '/wget'
+            - '/nc'
+            - '/ncat'
+            - '/nohup'
+    condition: selection_parent and selection_child
+falsepositives:
+    - Init/entrypoint scripts that legitimately shell out at container start
+    - Health-check or sidecar tooling that wraps the proxy in a shell
+level: high</code></pre>
+            <div class="callout">
+                <p class="text-sm"><strong>Tuning note.</strong> Parenting on a generic <code>python</code> is broad, so
+                scope this rule to your LiteLLM hosts or containers (by host tag, image name, or a more specific
+                <code>ParentCommandLine|contains: 'litellm'</code> if your telemetry includes the command line). Baseline
+                in report-only mode first: container start-up frequently runs a shell entrypoint once, so allowlist that
+                known parent/child pair and the rest is quiet. The signal you care about is a shell or network utility
+                appearing under the proxy <em>at request time</em>, long after startup.</p>
+            </div>
+
+            <h3>2. Requests to the vulnerable MCP preview endpoints (front-door signal)</h3>
+            <p>
+                Earlier in the chain, and useful even if you can't get host telemetry off the box: the two endpoints are
+                an administrator-only preview feature, so in most environments <em>any</em> request to them is worth
+                surfacing - and a burst of them from an unexpected source is a strong exploitation signal.
+            </p>
+            <pre><code>title: LiteLLM MCP Test Endpoint Requested
+id: 2c8e5b41-6d77-4a90-bb1e-3f0a9c2d4e56
+status: experimental
+description: >
+    A request hit one of LiteLLM's MCP preview endpoints. These accept a
+    full MCP server config and, for stdio transport, spawn the supplied
+    command (CVE-2026-42271). They are an admin-only preview feature, so
+    requests - especially from untrusted sources - warrant review.
+references:
+    - https://nvd.nist.gov/vuln/detail/CVE-2026-42271
+    - https://github.com/BerriAI/litellm/security/advisories/GHSA-v4p8-mg3p-g94g
+    - https://umbrasec.dev/research/detecting-litellm-command-injection.html
+author: UMBRASEC
+date: 2026/06/13
+tags:
+    - attack.initial_access
+    - attack.t1190
+logsource:
+    category: webserver
+detection:
+    selection:
+        cs-method: 'POST'
+        cs-uri-stem|contains:
+            - '/mcp-rest/test/connection'
+            - '/mcp-rest/test/tools/list'
+    condition: selection
+falsepositives:
+    - An administrator legitimately previewing an MCP server in the UI
+    - Vulnerability scanners probing the path after public disclosure
+level: medium</code></pre>
+            <div class="callout">
+                <p class="text-sm"><strong>Tuning note.</strong> Adapt the field names to your proxy's log schema
+                (<code>cs-method</code> / <code>cs-uri-stem</code> are the Sigma webserver taxonomy; nginx and others
+                name them differently). If you know which admin source addresses legitimately use the preview feature,
+                exclude them and treat everything else as high. Pair this with rule&nbsp;#1: the front-door request
+                <em>plus</em> a shell spawning under the proxy is exploitation with very little doubt left.</p>
+            </div>
+
+            <h3>3. Host-header anomalies for the BadHost chain (supporting)</h3>
+            <p>
+                Because the unauthenticated path rides CVE-2026-48710, malformed or mismatched <code>Host</code> headers
+                reaching the gateway are a supporting signal. This is noisier - scanners and misconfigured clients
+                generate odd Host headers constantly - so treat it as triage context, not a pager rule: a request whose
+                <code>Host</code> header doesn't match your gateway's expected hostname(s), arriving alongside a hit on
+                rule&nbsp;#2, raises confidence that you're looking at the unauthenticated chain rather than an
+                authorized admin preview. Allowlist your real hostnames and alert on the remainder only in correlation.
+            </p>
+
+            <h2>If a rule fires: contain it</h2>
+            <p>
+                Treat a confirmed hit on rule&nbsp;#1 as host compromise of a system that holds your LLM provider keys.
+                Working from your <a href="../guide/detection-and-response.html">incident response plan</a>:
+            </p>
+            <ul>
+                <li><strong>Isolate</strong> the LiteLLM host/container via EDR rather than wiping it - preserve the
+                    process tree and logs for scoping.</li>
+                <li><strong>Rotate every secret the gateway held</strong>: all upstream LLM provider API keys, the
+                    LiteLLM master key, database credentials, and any cloud role the host could assume. Assume
+                    disclosure - that's what the gateway exists to store.</li>
+                <li><strong>Revoke and reissue LiteLLM API keys</strong>, and review who held low-privilege keys; the
+                    authenticated path needs only one.</li>
+                <li><strong>Patch then redeploy</strong> from a known-good image at 1.83.7+ (and Starlette 1.0.1+),
+                    rather than cleaning in place.</li>
+                <li><strong>Scope the reporting question early.</strong> If provider keys or customer data were within
+                    reach, your <a href="../guide/detection-and-response.html">notification clocks</a> may have started -
+                    decide that with the plan, not at 2am.</li>
+            </ul>
+
+            <h2>Mitigation, in priority order</h2>
+            <ul>
+                <li><strong>Patch LiteLLM to 1.83.7+.</strong> The fix adds the missing role check: both preview
+                    endpoints now require the <code>PROXY_ADMIN</code> role, matching the save endpoint. This is the fix.</li>
+                <li><strong>Patch Starlette to 1.0.1+</strong> to close BadHost (CVE-2026-48710) and break the
+                    unauthenticated chain - relevant well beyond LiteLLM.</li>
+                <li><strong>If you can't patch yet</strong>, block <code>POST /mcp-rest/test/connection</code> and
+                    <code>POST /mcp-rest/test/tools/list</code> at the reverse proxy or API gateway - the vendor's own
+                    interim workaround.</li>
+                <li><strong>Get the gateway off the public internet</strong> where the architecture allows. An
+                    internal-only LiteLLM removes the unauthenticated scenario entirely and shrinks the authenticated one
+                    to insiders and footholds.</li>
+                <li><strong>Least-privilege the process.</strong> Run LiteLLM as a non-root user in a constrained
+                    container so that command execution lands somewhere with little to reach - defense in depth for the
+                    next bug in this class, which agentic, tool-spawning software will keep producing.</li>
+            </ul>
+
+            <h2>Honest limitations</h2>
+            <ul>
+                <li><strong>Rule&nbsp;#1 needs host or container process telemetry</strong>, which many LiteLLM
+                    deployments - a container someone stood up fast - don't yet collect. If that's you, this CVE is the
+                    business case for fixing it; rule&nbsp;#2 is your stopgap until then.</li>
+                <li><strong>The endpoint rule can be evaded by the chain's framing.</strong> The path itself is stable,
+                    but rely on rule&nbsp;#2 alone and a clever request shape or a future variant can slip it - which is
+                    exactly why the host-based effect rule leads.</li>
+                <li><strong>No public IOCs from the in-the-wild attacks.</strong> These detections target the technique,
+                    not a campaign; that's a strength for durability and a caveat if you were hoping to retro-hunt
+                    specific infrastructure.</li>
+                <li><strong>This is timely, and timeliness ages.</strong> Patch status is the real control; detection is
+                    for the window before you've patched and the assets you haven't found yet. Re-run the inventory step
+                    after you think you're done.</li>
+            </ul>
+
+            <h2>References</h2>
+            <ul>
+                <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-42271" target="_blank" rel="noopener">NVD - CVE-2026-42271 (LiteLLM command injection)</a></li>
+                <li><a href="https://github.com/BerriAI/litellm/security/advisories/GHSA-v4p8-mg3p-g94g" target="_blank" rel="noopener">BerriAI - GitHub Security Advisory GHSA-v4p8-mg3p-g94g</a></li>
+                <li><a href="https://github.com/BerriAI/litellm/releases/tag/v1.83.7-stable" target="_blank" rel="noopener">LiteLLM - v1.83.7-stable release (the fix)</a></li>
+                <li><a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA - Known Exploited Vulnerabilities Catalog</a></li>
+                <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-48710" target="_blank" rel="noopener">NVD - CVE-2026-48710 (Starlette "BadHost" Host header bypass)</a></li>
+                <li><a href="https://github.com/Kludex/starlette/security/advisories/GHSA-86qp-5c8j-p5mr" target="_blank" rel="noopener">Starlette - GitHub Security Advisory GHSA-86qp-5c8j-p5mr</a></li>
+                <li><a href="https://thehackernews.com/2026/06/litellm-flaw-cve-2026-42271-exploited.html" target="_blank" rel="noopener">The Hacker News - LiteLLM flaw CVE-2026-42271 exploited in the wild, chains to unauthenticated RCE (Jun 2026)</a></li>
+                <li><a href="https://www.helpnetsecurity.com/2026/06/09/litellm-vulnerability-under-active-attack-cisa-warns-cve-2026-42271/" target="_blank" rel="noopener">Help Net Security - LiteLLM vulnerability under active attack, CISA warns (Jun 2026)</a></li>
+                <li><a href="https://attack.mitre.org/techniques/T1190/" target="_blank" rel="noopener">MITRE ATT&amp;CK - T1190 Exploit Public-Facing Application</a></li>
+            </ul>
+
+            <div class="callout mt-10">
+                <p class="text-sm"><strong>Found an error?</strong> If a detection misfires in your environment or a
+                detail here is wrong, that feedback is welcome -
+                <a href="https://github.com/atraxsrc/umbrasec/issues" class="text-[#7aa2f7] hover:text-[#7dcfff]" target="_blank" rel="noopener">open an issue</a>.
+                Corrections are credited.</p>
+            </div>
+
+        </div>
+
+        <!-- end-of-article: share + nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38]">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="owasp-llm-top-10-for-defenders.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">← Prompt Injection and the OWASP LLM Top 10</a>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-[#565f89] mr-1">Share</span>
+                    <a class="share-btn" href="https://twitter.com/intent/tweet?text=Detecting%20the%20LiteLLM%20Command%20Injection%20%28CVE-2026-42271%29&url=https%3A%2F%2Fumbrasec.dev%2Fresearch%2Fdetecting-litellm-command-injection.html" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fumbrasec.dev%2Fresearch%2Fdetecting-litellm-command-injection.html" target="_blank" rel="noopener" title="Share on LinkedIn" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <a href="index.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">All research →</a>
+            </div>
+        </div>
+    </article>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8 mt-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="font-mono text-xs text-[#a9b1d6]">
+                © 2026 UMBRASEC · Independent defensive research · Published openly
+            </div>
+            <div class="flex items-center gap-x-5">
+                <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Found this useful? Tip</span>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Tip with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Tip with Monero">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <circle cx="50" cy="50" r="50"/>
+                        <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                        <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>

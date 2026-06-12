@@ -6,7 +6,15 @@
     <atom:link href="https://umbrasec.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Independent defensive security research - detection engineering, threat analysis, and open-source tooling.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 11 Jun 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2026 12:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway</title>
+      <link>https://umbrasec.dev/research/detecting-litellm-command-injection.html</link>
+      <guid isPermaLink="true">https://umbrasec.dev/research/detecting-litellm-command-injection.html</guid>
+      <pubDate>Sat, 13 Jun 2026 12:00:00 +0000</pubDate>
+      <category>Detection Engineering</category>
+      <description>CVE-2026-42271 turns LiteLLM's MCP preview endpoints into authenticated command execution on the proxy host, and chains with the Starlette "BadHost" bug (CVE-2026-48710) into unauthenticated RCE. In CISA KEV and actively exploited - the mechanism at a defender's depth, what to log, and two runnable Sigma rules with tuning notes.</description>
+    </item>
     <item>
       <title>Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders</title>
       <link>https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html</link>
