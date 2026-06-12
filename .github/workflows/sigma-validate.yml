@@ -1,0 +1,31 @@
+name: Sigma validation
+
+on:
+  push:
+    paths:
+      - "tools/sigma-pack/rules/**"
+      - ".github/workflows/sigma-validate.yml"
+  pull_request:
+    paths:
+      - "tools/sigma-pack/rules/**"
+      - ".github/workflows/sigma-validate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install sigma-cli
+        run: python -m pip install --quiet sigma-cli
+
+      - name: Validate Sigma rules
+        run: sigma check tools/sigma-pack/rules

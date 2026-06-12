@@ -9,6 +9,7 @@ queries, a zero-dependency CISA KEV monitor, a daily-synced KEV feed, and a sing
 blue-team reference. Defensive in scope, every claim tied to a primary source.
 
 [![KEV sync](https://github.com/atraxsrc/umbrasec/actions/workflows/kev-sync.yml/badge.svg)](https://github.com/atraxsrc/umbrasec/actions/workflows/kev-sync.yml)
+[![Sigma validation](https://github.com/atraxsrc/umbrasec/actions/workflows/sigma-validate.yml/badge.svg)](https://github.com/atraxsrc/umbrasec/actions/workflows/sigma-validate.yml)
 [![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 [![Site](https://img.shields.io/badge/site-umbrasec.dev-8a2be2)](https://umbrasec.dev)
 
@@ -43,7 +44,7 @@ Public data only; it reads one JSON feed and never touches a target system.
 | | What it is |
 |---|---|
 | [`tools/kev-watch/`](tools/kev-watch/) | Zero-dependency Python monitor for the CISA KEV catalog. Tracks newly added, actively exploited CVEs, filters to your stack, flags ransomware-linked entries, warns on remediation deadlines. |
-| [`tools/sigma-pack/`](tools/sigma-pack/) | The detection rules from the research writeups as runnable files: three Kerberoasting Sigma rules (T1558.003) and three OAuth consent-phishing KQL queries (T1528) so far, each with tuning and false-positive notes. |
+| [`tools/sigma-pack/`](tools/sigma-pack/) | The detection rules from the research writeups as runnable files: three Kerberoasting Sigma rules (T1558.003) and three OAuth consent-phishing KQL queries (T1528) so far, each with tuning and false-positive notes. Sigma rules are syntax-validated with sigma-cli in CI, and a per-rule [ATT&CK coverage table](tools/sigma-pack/#attck-coverage) maps every artifact to its technique. |
 | [`tools/blue-team-mapper/`](tools/blue-team-mapper/) | A single-page defender reference covering the defensive lifecycle: SIEM/log-source priority, detection engineering, IR flow chains, threat hunting, identity and cloud hardening, SOAR playbooks - ATT&CK-aligned. [Use it live](https://umbrasec.dev/tools/blue-team-mapper/). |
 | [`research/`](https://umbrasec.dev/research/) | Detection writeups: [Kerberoasting](https://umbrasec.dev/research/detecting-kerberoasting.html), [OAuth consent phishing in M365](https://umbrasec.dev/research/detecting-oauth-consent-phishing.html), [OWASP LLM Top 10 for defenders](https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html). Every rule in `sigma-pack` comes from one of these. |
 | [`guide/`](https://umbrasec.dev/guide/) | A free, staged security guide for small and mid-sized businesses - from zero to a defensible baseline, with every recommendation mapped to the ASD Essential Eight, ISO 27001:2022, and NIST CSF 2.0, and each step explained as what it is, why it matters, and what it costs. |

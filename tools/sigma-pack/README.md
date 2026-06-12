@@ -1,5 +1,7 @@
 # sigma-pack
 
+[![Sigma validation](https://github.com/atraxsrc/umbrasec/actions/workflows/sigma-validate.yml/badge.svg)](https://github.com/atraxsrc/umbrasec/actions/workflows/sigma-validate.yml)
+
 The detection rules and queries published in [UMBRASEC research writeups](https://umbrasec.dev/research/),
 collected as runnable files. Honest status: **early** - this pack grows one writeup
 at a time, and right now it contains exactly what the two published writeups cover.
@@ -7,7 +9,25 @@ Nothing here claims to be more finished than it is.
 
 Every rule ships with the context that makes it usable: the writeup explains the
 technique, the log artifacts, the tuning knobs, and the false-positive profile.
-Read the writeup before deploying the rule.
+Read the writeup before deploying the rule. Every Sigma rule in `rules/` is
+syntax-validated with [sigma-cli](https://github.com/SigmaHQ/sigma-cli) in CI on
+every change - that's what the badge above checks.
+
+## ATT&CK coverage
+
+| Rule / query | Type | MITRE ATT&CK | Tactic | Status |
+|---|---|---|---|---|
+| [`kerberoasting-rc4-service-ticket.yml`](rules/windows/kerberoasting-rc4-service-ticket.yml) | Sigma | [T1558.003](https://attack.mitre.org/techniques/T1558/003/) Kerberoasting | Credential Access | experimental |
+| [`kerberoasting-spn-fanout.yml`](rules/windows/kerberoasting-spn-fanout.yml) | Sigma (correlation) | [T1558.003](https://attack.mitre.org/techniques/T1558/003/) Kerberoasting | Credential Access | experimental |
+| [`kerberoasting-honeypot-spn.yml`](rules/windows/kerberoasting-honeypot-spn.yml) | Sigma | [T1558.003](https://attack.mitre.org/techniques/T1558/003/) Kerberoasting | Credential Access | experimental |
+| [`oauth-consent-sensitive-scopes.kql`](queries/kql/oauth-consent-sensitive-scopes.kql) | KQL | [T1528](https://attack.mitre.org/techniques/T1528/) Steal Application Access Token | Credential Access | query |
+| [`oauth2-permission-grant-post.kql`](queries/kql/oauth2-permission-grant-post.kql) | KQL | [T1528](https://attack.mitre.org/techniques/T1528/) Steal Application Access Token | Credential Access | query |
+| [`app-role-assignment.kql`](queries/kql/app-role-assignment.kql) | KQL | [T1528](https://attack.mitre.org/techniques/T1528/) Steal Application Access Token | Credential Access | query |
+
+`experimental` is the [Sigma status](https://sigmahq.io/docs/basics/rules.html) the
+rules themselves declare - new rules, not yet battle-tested by many environments.
+KQL queries are plain queries with no Sigma status; the CI validation covers the
+Sigma rules only.
 
 ## Contents
 
