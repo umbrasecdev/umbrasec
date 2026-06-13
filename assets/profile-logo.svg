@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" viewBox="0 0 1200 240" font-family="'DejaVu Sans', sans-serif" role="img" aria-label="UMBRASEC 2026">
+  <defs>
+    <linearGradient id="badge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7aa2f7"/>
+      <stop offset="1" stop-color="#bb9af7"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="20%" r="62%">
+      <stop offset="0" stop-color="#7aa2f7" stop-opacity="0.20"/>
+      <stop offset="45%" stop-color="#bb9af7" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#1a1b26" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#7aa2f7" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="240" rx="24" fill="#1a1b26"/>
+  <rect width="1200" height="240" rx="24" fill="url(#grid)"/>
+  <rect width="1200" height="240" rx="24" fill="url(#glow)"/>
+
+  <!-- faint constellation, right -->
+  <g fill="#7aa2f7" fill-opacity="0.35">
+    <circle cx="1010" cy="60" r="3"/><circle cx="1100" cy="110" r="2.5"/>
+    <circle cx="1035" cy="170" r="2"/><circle cx="1130" cy="195" r="3"/><circle cx="965" cy="130" r="2"/>
+  </g>
+  <g stroke="#7aa2f7" stroke-opacity="0.18" stroke-width="1">
+    <line x1="1010" y1="60" x2="1100" y2="110"/><line x1="1100" y1="110" x2="1035" y2="170"/>
+    <line x1="1035" y1="170" x2="1130" y2="195"/><line x1="965" y1="130" x2="1035" y2="170"/>
+  </g>
+  <!-- faint constellation, left -->
+  <g fill="#bb9af7" fill-opacity="0.30">
+    <circle cx="120" cy="70" r="2.5"/><circle cx="80" cy="140" r="2"/><circle cx="170" cy="180" r="3"/>
+  </g>
+  <g stroke="#bb9af7" stroke-opacity="0.15" stroke-width="1">
+    <line x1="120" y1="70" x2="80" y2="140"/><line x1="80" y1="140" x2="170" y2="180"/>
+  </g>
+
+  <!-- brand lockup (centered) -->
+  <g transform="translate(371, 84)">
+    <rect width="72" height="72" rx="15" fill="url(#badge)"/>
+    <text x="36" y="51" font-size="44" font-weight="bold" fill="#1a1b26" text-anchor="middle">U</text>
+    <text x="96" y="52" font-size="52" font-weight="bold" fill="#c0caf5" letter-spacing="-1.5">UMBRASEC</text>
+    <text x="410" y="30" font-size="22" fill="#a9b1d6" font-family="monospace">2026</text>
+  </g>
+
+  <!-- accent rule under lockup -->
+  <rect x="566" y="184" width="68" height="3" rx="1.5" fill="#7aa2f7"/>
+</svg>
