@@ -64,7 +64,7 @@
         <h1 class="hero-headline font-semibold tracking-[-0.045em] mb-6" style="font-size:64px;">Research.</h1>
         <p class="max-w-[640px] text-xl text-[#a9b1d6]">
             Detection-engineering walkthroughs, threat analysis, and mitigation guides. Sourced, reproducible, and
-            defensive in scope. Four published so far - this index grows as writeups ship.
+            defensive in scope. Five published so far - this index grows as writeups ship.
         </p>
     </section>
 
@@ -81,6 +81,27 @@
 
         <!-- Card grid -->
         <div data-research-grid class="grid md:grid-cols-2 gap-5">
+
+            <a href="securing-ai-agents.html"
+               class="research-card u-card block p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]" data-cat="ai">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-mono text-xs text-[#9ece6a]">AI &amp; LLM SECURITY</span>
+                    <span class="font-mono text-[10px] text-[#565f89]">~14 min</span>
+                </div>
+                <div class="research-card-title font-semibold text-xl leading-tight mb-3">
+                    Securing AI Agents: A Defender's Guide to Tool-Calling LLMs
+                </div>
+                <p class="text-sm text-[#a9b1d6] mb-5">
+                    The moment you give a model tools, its output stops being text and becomes actions. The agent threat
+                    surface - excessive agency, indirect injection via tool output, the MCP supply chain, the
+                    confused-deputy identity problem - what to log, and the detections and containment architecture that
+                    keep one bad instruction from becoming an incident.
+                </p>
+                <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
+                    <span>Jun 14, 2026</span>
+                    <span class="research-card-arrow ml-auto">Read →</span>
+                </div>
+            </a>
 
             <a href="detecting-litellm-command-injection.html"
                class="research-card u-card block p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]" data-cat="detection">
@@ -170,10 +191,10 @@
         </div>
 
         <div class="mt-12 p-8 border border-[#2a2c38] border-dashed rounded-3xl bg-[#16161e] max-w-[680px]">
-            <div class="font-mono text-xs text-[#e0af68] mb-2">IN PROGRESS</div>
+            <div class="font-mono text-xs text-[#e0af68] mb-2">SUGGEST A TOPIC</div>
             <p class="text-[#a9b1d6] text-sm">
-                On the bench: a hands-on guide to securing tool-calling / agentic LLM apps. Want to suggest a topic or
-                flag an error in what's published? <a href="https://github.com/atraxsrc/umbrasec" class="text-[#7aa2f7] hover:text-[#7dcfff]" target="_blank" rel="noopener">Open an issue →</a>
+                New writeups ship as the threats worth covering surface. Want to suggest a topic, request a detection,
+                or flag an error in what's published? <a href="https://github.com/atraxsrc/umbrasec" class="text-[#7aa2f7] hover:text-[#7dcfff]" target="_blank" rel="noopener">Open an issue →</a>
             </p>
         </div>
     </section>

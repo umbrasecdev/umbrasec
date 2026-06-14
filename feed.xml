@@ -6,7 +6,15 @@
     <atom:link href="https://umbrasec.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Independent defensive security research - detection engineering, threat analysis, and open-source tooling.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 13 Jun 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2026 12:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Securing AI Agents: A Defender's Guide to Tool-Calling LLMs</title>
+      <link>https://umbrasec.dev/research/securing-ai-agents.html</link>
+      <guid isPermaLink="true">https://umbrasec.dev/research/securing-ai-agents.html</guid>
+      <pubDate>Sun, 14 Jun 2026 12:00:00 +0000</pubDate>
+      <category>AI &amp; LLM Security</category>
+      <description>A chatbot that gets prompt-injected says something wrong; an agent that gets prompt-injected does something wrong. The agent threat surface - excessive agency, indirect injection via tool output, the MCP supply chain, the confused-deputy identity problem - what to log, and the detections and containment architecture that keep one bad instruction from becoming an incident.</description>
+    </item>
     <item>
       <title>Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway</title>
       <link>https://umbrasec.dev/research/detecting-litellm-command-injection.html</link>
