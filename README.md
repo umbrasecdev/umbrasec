@@ -83,7 +83,9 @@ deliberately a recent-entries feed, not a mirror - for the full catalog, go to
 - **LLM / AI security** - defensive coverage of prompt injection and the OWASP LLM Top 10
   as a class of risk (first writeup live).
 - **SMB security guidance** - a free, framework-grounded [guide](https://umbrasec.dev/guide/)
-  taking a small business from zero to a defensible baseline, one stage at a time.
+  taking a small business from zero to a defensible baseline, one stage at a time (plus a
+  paid one-person [vCISO service](https://umbrasec.dev/services) for businesses that want
+  hands-on help getting there).
 
 ## Who's behind it
 
