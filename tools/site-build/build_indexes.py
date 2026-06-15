@@ -234,6 +234,68 @@ def render_palette(articles) -> str:
     return _wrap(lines, "\n", 4)
 
 
+def render_footer(prefix: str) -> str:
+    """The shared site footer. `prefix` is "" for root pages, "../" for pages one directory deep."""
+    p = prefix
+    return f'''<footer class="border-t border-[#2a2c38] mt-8">
+        <div class="max-w-[1280px] mx-auto px-8 py-14">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
+                <div class="col-span-2">
+                    <a href="{p}index.html" class="brand flex items-center gap-x-2.5 mb-4">
+                        <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                            <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                        </div>
+                        <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                    </a>
+                    <p class="text-sm text-[#a9b1d6] max-w-[300px] leading-relaxed">
+                        Attackers improve. Defenders should too. Independent defensive research - detection engineering, threat analysis, and open tooling, published openly.
+                    </p>
+                </div>
+                <div>
+                    <div class="font-mono text-[10px] tracking-[1.5px] text-[#565f89] uppercase mb-3">Guide</div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{p}guide/foundation.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Foundation</a></li>
+                        <li><a href="{p}guide/identity-and-access.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Identity &amp; Access</a></li>
+                        <li><a href="{p}guide/detection-and-response.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Detection &amp; Response</a></li>
+                        <li><a href="{p}guide/governance-and-maturity.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Governance &amp; Maturity</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="font-mono text-[10px] tracking-[1.5px] text-[#565f89] uppercase mb-3">Research</div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{p}research/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">All writeups</a></li>
+                        <li><a href="{p}feed.xml" class="text-[#a9b1d6] hover:text-[#7aa2f7]">RSS feed</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="font-mono text-[10px] tracking-[1.5px] text-[#565f89] uppercase mb-3">Open Source</div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{p}tools/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">All tools</a></li>
+                        <li><a href="{p}tools/blue-team-mapper/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Blue Team Mapper</a></li>
+                        <li><a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-[#7aa2f7]">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-[#2a2c38] pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="font-mono text-xs text-[#a9b1d6]">
+                    © 2026 UMBRASEC · <a href="{p}services.html" class="hover:text-[#7aa2f7]">Services</a> · <a href="{p}about.html" class="hover:text-[#7aa2f7]">About</a> · <a href="{p}index.html#contact" class="hover:text-[#7aa2f7]">Contact</a>
+                </div>
+                <div class="flex items-center gap-x-5">
+                    <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Donate</span>
+                    <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Donate with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                    <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Donate with Monero">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                            <circle cx="50" cy="50" r="50"/>
+                            <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                            <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>'''
+
+
 # ---- per-article footer nav ----------------------------------------------------
 
 NAV_RE = re.compile(
@@ -273,50 +335,76 @@ def rewrite_nav(text, prev_html, next_html, path):
     return NAV_RE.sub(repl, text, count=1)
 
 
+# ---- shared footer -------------------------------------------------------------
+
+FOOTER_RE = re.compile(r'<footer\b.*?</footer>', re.DOTALL)
+
+
+def rewrite_footer(text, footer_html, path):
+    n = len(FOOTER_RE.findall(text))
+    if n != 1:
+        sys.exit(f"error: expected exactly one <footer> in {path}, found {n}")
+    return FOOTER_RE.sub(lambda m: footer_html, text, count=1)
+
+
+def site_pages():
+    """Every standard site page that carries the shared chrome (nav + footer)."""
+    pages = ["index.html", "about.html", "services.html", "tools/index.html"]
+    for sub in ("guide", "research"):
+        pages += sorted(str(p.relative_to(ROOT)).replace("\\", "/") for p in (ROOT / sub).glob("*.html"))
+    seen, out = set(), []
+    for rel in pages:
+        if rel not in seen and (ROOT / rel).exists():
+            seen.add(rel)
+            out.append(rel)
+    return out
+
+
 # ---- driver --------------------------------------------------------------------
 
 def build(check: bool) -> int:
     articles = load_articles()
-    changes = []  # (path, new_text)
+    transforms = {}  # rel path -> list of text->text callables, applied in order
 
-    def stage(rel, transform):
-        path = ROOT / rel
-        old = path.read_text(encoding="utf-8")
-        new = transform(old)
-        if new != old:
-            changes.append((path, new))
+    def add(rel, fn):
+        transforms.setdefault(rel, []).append(fn)
 
-    def index_home(t):
-        t = replace_region(t, "hero", render_hero(articles), ROOT / "index.html")
-        t = replace_region(t, "featured", render_home_rows(articles), ROOT / "index.html")
-        return t
-    stage("index.html", index_home)
+    # homepage: hero CTA + featured trio
+    add("index.html", lambda t: replace_region(t, "hero", render_hero(articles), ROOT / "index.html"))
+    add("index.html", lambda t: replace_region(t, "featured", render_home_rows(articles), ROOT / "index.html"))
 
-    def research_index(t):
-        t = replace_region(t, "filters", render_filters(articles), ROOT / "research/index.html")
-        t = replace_region(t, "cards", render_cards(articles), ROOT / "research/index.html")
-        t = replace_region(t, "count", render_count(articles), ROOT / "research/index.html")
-        return t
-    stage("research/index.html", research_index)
+    # research index: filter chips + card grid + count
+    add("research/index.html", lambda t: replace_region(t, "filters", render_filters(articles), ROOT / "research/index.html"))
+    add("research/index.html", lambda t: replace_region(t, "cards", render_cards(articles), ROOT / "research/index.html"))
+    add("research/index.html", lambda t: replace_region(t, "count", render_count(articles), ROOT / "research/index.html"))
 
-    def feed(t):
-        t = replace_region(t, "builddate", render_builddate(articles), ROOT / "feed.xml")
-        t = replace_region(t, "items", render_feed_items(articles), ROOT / "feed.xml")
-        return t
-    stage("feed.xml", feed)
+    # feed + sitemap + command palette
+    add("feed.xml", lambda t: replace_region(t, "builddate", render_builddate(articles), ROOT / "feed.xml"))
+    add("feed.xml", lambda t: replace_region(t, "items", render_feed_items(articles), ROOT / "feed.xml"))
+    add("sitemap.xml", lambda t: replace_region(t, "research", render_sitemap(articles), ROOT / "sitemap.xml"))
+    add("assets/umbra.js", lambda t: replace_region(t, "articles", render_palette(articles), ROOT / "assets/umbra.js"))
 
-    stage("sitemap.xml",
-          lambda t: replace_region(t, "research", render_sitemap(articles), ROOT / "sitemap.xml"))
-
-    stage("assets/umbra.js",
-          lambda t: replace_region(t, "articles", render_palette(articles), ROOT / "assets/umbra.js"))
-
+    # per-article prev/next nav
     for i, a in enumerate(articles):
         rel = f"research/{a['slug']}.html"
-        path = ROOT / rel
-        if not path.exists():
+        if not (ROOT / rel).exists():
             sys.exit(f"error: manifest references {rel} but the file does not exist")
-        stage(rel, lambda t, i=i: rewrite_nav(t, nav_prev(articles, i), nav_next(articles, i), ROOT / rel))
+        add(rel, lambda t, i=i, rel=rel: rewrite_nav(t, nav_prev(articles, i), nav_next(articles, i), ROOT / rel))
+
+    # shared footer on every site page (depth-aware relative links)
+    for rel in site_pages():
+        prefix = "../" if "/" in rel else ""
+        add(rel, lambda t, pre=prefix, rel=rel: rewrite_footer(t, render_footer(pre), ROOT / rel))
+
+    changes = []
+    for rel, fns in transforms.items():
+        path = ROOT / rel
+        old = path.read_text(encoding="utf-8")
+        new = old
+        for fn in fns:
+            new = fn(new)
+        if new != old:
+            changes.append((path, new))
 
     if check:
         if changes:

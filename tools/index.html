@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Source - UMBRASEC</title>
+    <meta name="description" content="Small, useful, open-source tools for defenders from UMBRASEC - built in the open on GitHub, with honest status labels. kev-watch, sigma-pack, and the Blue Team Mapper.">
+    <link rel="canonical" href="https://umbrasec.dev/tools/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/tools/">
+    <meta property="og:title" content="Open Source - UMBRASEC">
+    <meta property="og:description" content="Small, useful, open-source tools for defenders - built in the open, with honest status labels. Nothing here claims to be more finished than it is.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Open Source - UMBRASEC">
+    <meta name="twitter:description" content="Small, useful, open-source tools for defenders - built in the open, with honest status labels.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/umbra-avatar.png">
+    <link rel="apple-touch-icon" href="../assets/umbra-avatar.png">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../">
+
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <div>
+                        <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                        <span class="font-mono text-xs text-[#a9b1d6] ml-1.5">2026</span>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="../guide/index.html" class="nav-link">Guide</a>
+                    <a href="../research/index.html" class="nav-link">Research</a>
+                    <a href="index.html" class="nav-link text-[#c0caf5]">Open Source</a>
+                    <a href="../services.html" class="nav-link">Services</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="max-w-[1280px] mx-auto px-8 pt-16 pb-10 tokyo-grid">
+        <div class="section-label mb-4">OPEN SOURCE</div>
+        <h1 class="hero-headline font-semibold tracking-[-0.045em] mb-6" style="font-size:64px;">Open source.</h1>
+        <p class="max-w-[640px] text-xl text-[#a9b1d6]">
+            Small, useful, open-source tools for defenders - built in the open on GitHub. Honest status labels;
+            nothing here claims to be more finished than it is.
+        </p>
+    </section>
+
+    <section class="max-w-[1280px] mx-auto px-8 pb-24">
+        <div class="grid md:grid-cols-2 gap-5">
+            <div class="u-card p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                <div class="flex items-center gap-x-2 mb-2">
+                    <div class="font-semibold text-xl">kev-watch</div>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1a2e1a] text-[#9ece6a] border border-[#2a3a2a]">WORKING</span>
+                </div>
+                <p class="text-sm text-[#a9b1d6]">A zero-dependency Python monitor for the CISA Known Exploited Vulnerabilities (KEV) catalog. Tracks newly added, actively-exploited CVEs and flags ones that match products you care about. Public data only.</p>
+                <a href="https://github.com/atraxsrc/umbrasec/tree/master/tools/kev-watch" target="_blank" rel="noopener" class="mt-6 inline-block text-sm text-[#7aa2f7] hover:text-[#7dcfff]">View on GitHub →</a>
+            </div>
+
+            <div class="u-card p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]">
+                <div class="flex items-center gap-x-2 mb-2">
+                    <div class="font-semibold text-xl">sigma-pack</div>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#2a2410] text-[#e0af68] border border-[#3a341a]">EARLY</span>
+                </div>
+                <p class="text-sm text-[#a9b1d6]">The Sigma rules and KQL queries from the research writeups, shipped as runnable files - three Kerberoasting detections and three OAuth consent-phishing queries so far. Grows one writeup at a time.</p>
+                <a href="https://github.com/atraxsrc/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener" class="mt-6 inline-block text-sm text-[#7aa2f7] hover:text-[#7dcfff]">View on GitHub →</a>
+            </div>
+
+            <div class="u-card p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e] md:col-span-2">
+                <div class="flex items-center gap-x-2 mb-2">
+                    <div class="font-semibold text-xl">Blue Team Mapper</div>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1a2e1a] text-[#9ece6a] border border-[#2a3a2a]">LIVE</span>
+                </div>
+                <p class="text-sm text-[#a9b1d6]">A comprehensive, single-page defender reference - the full defensive lifecycle mapped end to end: SIEM and log-source priority, detection engineering, incident-response flow chains, threat hunting, identity and cloud hardening, SOAR playbooks, and LLM-app defense. ATT&amp;CK-aligned, built for analysts who need actionable depth.</p>
+                <a href="blue-team-mapper/index.html" class="mt-6 inline-block text-sm text-[#7aa2f7] hover:text-[#7dcfff]">Open the mapper →</a>
+            </div>
+        </div>
+
+        <div class="mt-12 p-8 border border-[#2a2c38] border-dashed rounded-3xl bg-[#16161e] max-w-[680px]">
+            <div class="font-mono text-xs text-[#e0af68] mb-2">BUILT IN THE OPEN</div>
+            <p class="text-[#a9b1d6] text-sm">
+                Everything here lives in the public repository, issues and all. Found a bug, or want to suggest a tool?
+                <a href="https://github.com/atraxsrc/umbrasec" class="text-[#7aa2f7] hover:text-[#7dcfff]" target="_blank" rel="noopener">Open an issue →</a>
+            </p>
+        </div>
+    </section>
+
+    <footer class="border-t border-[#2a2c38] mt-8">
+        <div class="max-w-[1280px] mx-auto px-8 py-14">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
+                <div class="col-span-2">
+                    <a href="../index.html" class="brand flex items-center gap-x-2.5 mb-4">
+                        <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                            <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                        </div>
+                        <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                    </a>
+                    <p class="text-sm text-[#a9b1d6] max-w-[300px] leading-relaxed">
+                        Attackers improve. Defenders should too. Independent defensive research - detection engineering, threat analysis, and open tooling, published openly.
+                    </p>
+                </div>
+                <div>
+                    <div class="font-mono text-[10px] tracking-[1.5px] text-[#565f89] uppercase mb-3">Guide</div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../guide/foundation.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Foundation</a></li>
+                        <li><a href="../guide/identity-and-access.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Identity &amp; Access</a></li>
+                        <li><a href="../guide/detection-and-response.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Detection &amp; Response</a></li>
+                        <li><a href="../guide/governance-and-maturity.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Governance &amp; Maturity</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="font-mono text-[10px] tracking-[1.5px] text-[#565f89] uppercase mb-3">Research</div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../research/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">All writeups</a></li>
+                        <li><a href="../feed.xml" class="text-[#a9b1d6] hover:text-[#7aa2f7]">RSS feed</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="font-mono text-[10px] tracking-[1.5px] text-[#565f89] uppercase mb-3">Open Source</div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../tools/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">All tools</a></li>
+                        <li><a href="../tools/blue-team-mapper/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Blue Team Mapper</a></li>
+                        <li><a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-[#7aa2f7]">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-[#2a2c38] pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="font-mono text-xs text-[#a9b1d6]">
+                    © 2026 UMBRASEC · <a href="../services.html" class="hover:text-[#7aa2f7]">Services</a> · <a href="../about.html" class="hover:text-[#7aa2f7]">About</a> · <a href="../index.html#contact" class="hover:text-[#7aa2f7]">Contact</a>
+                </div>
+                <div class="flex items-center gap-x-5">
+                    <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Donate</span>
+                    <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Donate with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                    <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Donate with Monero">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                            <circle cx="50" cy="50" r="50"/>
+                            <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                            <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>

@@ -39,9 +39,16 @@ is never touched.
 | `sitemap.xml` | per-article research `<url>` entries | `<!-- AUTO:research ... -->` |
 | `assets/umbra.js` | command-palette "Articles" entries | `/* AUTO:articles ... */` |
 | `research/<slug>.html` | prev/next footer nav | located structurally (no marker) |
+| every site page | shared site footer (depth-aware links) | the whole `<footer>` element is replaced (no marker) |
 
 The count is computed, so "Three/Six published so far" can never go stale again.
 Articles are sorted by date (newest first); equal dates keep manifest order.
+
+The shared footer is defined once in `render_footer()` and written into every
+standard site page (root pages plus `guide/*.html`, `research/*.html`, and
+`tools/index.html`), with relative links adjusted for page depth. New pages just
+need any `<footer>...</footer>` placeholder - the generator replaces it wholesale -
+which you get for free by copying an existing page.
 
 ## Manifest fields (`research/articles.json`)
 
