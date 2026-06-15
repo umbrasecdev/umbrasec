@@ -47,8 +47,8 @@ jobs:
 
       - name: Commit if changed
         run: |
-          git config user.name "atraxsrc"
-          git config user.email "0xdev1@umbrasec.dev"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if git diff --quiet assets/kev-latest.json; then
             echo "No KEV changes."
           else
