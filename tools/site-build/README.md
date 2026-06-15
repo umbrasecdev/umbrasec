@@ -32,6 +32,7 @@ is never touched.
 | --- | --- | --- |
 | `index.html` | hero "Read the latest research" button (latest 1) | `<!-- AUTO:hero ... -->` |
 | `index.html` | homepage featured trio (latest 3) | `<!-- AUTO:featured ... -->` |
+| `research/index.html` | category filter chips (only categories with articles) | `<!-- AUTO:filters ... -->` |
 | `research/index.html` | article card grid | `<!-- AUTO:cards ... -->` |
 | `research/index.html` | "N published so far" count | `<!-- AUTO:count ... -->` |
 | `feed.xml` | `<lastBuildDate>` + every `<item>` | `<!-- AUTO:builddate ... -->`, `<!-- AUTO:items ... -->` |

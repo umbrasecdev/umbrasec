@@ -34,13 +34,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "research" / "articles.json"
 
-# category key -> (uppercase eyebrow label, title-case feed category, data-cat value)
+# category key -> (uppercase eyebrow label, title-case feed/filter label, data-cat value)
 CATEGORIES = {
     "threat":    ("THREAT ANALYSIS",      "Threat Analysis",      "threat"),
     "detection": ("DETECTION ENGINEERING", "Detection Engineering", "detection"),
     "ai":        ("AI & LLM SECURITY",    "AI & LLM Security",    "ai"),
     "tooling":   ("TOOLING",              "Tooling",              "tooling"),
 }
+
+# canonical display order for the research index filter chips
+CATEGORY_ORDER = ["detection", "threat", "ai", "tooling"]
 
 _ONES = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
          "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
@@ -178,6 +181,16 @@ def render_count(articles) -> str:
     return f"{number_word(len(articles))} published so far"
 
 
+def render_filters(articles) -> str:
+    # "All" plus one chip per category that actually has at least one article
+    present = [k for k in CATEGORY_ORDER if any(a["category"] == k for a in articles)]
+    chips = ['            <button type="button" class="filter-chip active" data-filter="all">All</button>']
+    for k in present:
+        label = he(CATEGORIES[k][1])
+        chips.append(f'            <button type="button" class="filter-chip" data-filter="{k}">{label}</button>')
+    return _wrap(chips, "\n", 12)
+
+
 def render_feed_items(articles) -> str:
     items = []
     for a in articles:
@@ -280,6 +293,7 @@ def build(check: bool) -> int:
     stage("index.html", index_home)
 
     def research_index(t):
+        t = replace_region(t, "filters", render_filters(articles), ROOT / "research/index.html")
         t = replace_region(t, "cards", render_cards(articles), ROOT / "research/index.html")
         t = replace_region(t, "count", render_count(articles), ROOT / "research/index.html")
         return t
