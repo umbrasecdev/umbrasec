@@ -144,7 +144,7 @@ def render_hero(articles) -> str:
     a = articles[0]
     anchor = (
 f'''                        <a href="research/{a['slug']}.html"
-                           class="btn-primary inline-flex items-center justify-center px-8 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
+                           class="btn-primary w-full inline-flex items-center justify-center px-8 py-3.5 rounded-2xl bg-[#7aa2f7] text-[#1a1b26] font-semibold hover:bg-[#8fb3ff] transition-all">
                             Read the latest research <span class="arrow ml-1.5">→</span>
                         </a>''')
     return _wrap([anchor], "\n", 24)
