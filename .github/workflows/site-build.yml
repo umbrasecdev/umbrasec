@@ -1,0 +1,42 @@
+name: Site build check
+
+on:
+  push:
+    paths:
+      - "research/articles.json"
+      - "index.html"
+      - "research/index.html"
+      - "feed.xml"
+      - "sitemap.xml"
+      - "assets/umbra.js"
+      - "research/*.html"
+      - "tools/site-build/**"
+      - ".github/workflows/site-build.yml"
+  pull_request:
+    paths:
+      - "research/articles.json"
+      - "index.html"
+      - "research/index.html"
+      - "feed.xml"
+      - "sitemap.xml"
+      - "assets/umbra.js"
+      - "research/*.html"
+      - "tools/site-build/**"
+      - ".github/workflows/site-build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Check derived lists are in sync with the manifest
+        run: python3 tools/site-build/build_indexes.py --check

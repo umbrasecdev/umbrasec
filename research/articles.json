@@ -1,0 +1,107 @@
+{
+  "_comment": "Single source of truth for all research articles. Add one entry per article (newest first), then run: python3 tools/site-build/build_indexes.py. The generator rewrites the homepage featured trio, the research index cards + count, feed.xml, the sitemap research entries, the command palette, and every article's prev/next nav. Raw text only: use literal & and \" - the generator escapes per output format. Categories: threat | detection | ai | tooling.",
+  "articles": [
+    {
+      "slug": "inc-ransom-australian-smb",
+      "title": "How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It",
+      "nav_title": "How INC Ransom Hits Australian SMBs",
+      "category": "threat",
+      "date": "2026-06-15",
+      "read_min": 13,
+      "home_blurb": "An active RaaS crew claiming Australian victims, profiled from public reporting. The affiliate playbook stage by stage - phishing, unpatched edge devices, bought credentials, commodity exfiltration - mapped to the Essential Eight controls that break each link in the chain.",
+      "card_blurb": "INC Ransom is a RaaS crew actively claiming Australian victims, and the firms it lands on look a lot like yours. The affiliate playbook stage by stage - phishing, unpatched edge devices, bought credentials, living-off-the-land movement, commodity exfiltration - mapped to the Essential Eight controls that break each link in the chain.",
+      "feed_desc": "INC Ransom is a ransomware-as-a-service crew actively claiming Australian victims, and the firms it lands on look a lot like a typical SMB. The affiliate playbook stage by stage - phishing, unpatched edge devices, bought credentials, living-off-the-land movement, commodity exfiltration with rclone and MEGAsync - mapped to the Essential Eight controls that break each link in the chain. Built entirely from public reporting, including the ACSC/CERT NZ advisory.",
+      "palette": {
+        "label": "How INC Ransom Hits Australian SMBs",
+        "hint": "RaaS + Essential Eight",
+        "icon": "fa-skull-crossbones",
+        "keywords": "inc ransom ransomware raas affiliate australian smb essential eight acsc asd cert nz double extortion rclone megasync screenconnect rdp citrix netscaler fortinet phishing initial access broker living off the land net.exe defender lolbin threat profile mitigation"
+      }
+    },
+    {
+      "slug": "securing-ai-agents",
+      "title": "Securing AI Agents: A Defender's Guide to Tool-Calling LLMs",
+      "nav_title": "Securing AI Agents",
+      "category": "ai",
+      "date": "2026-06-14",
+      "read_min": 14,
+      "home_blurb": "The moment you give a model tools, its output stops being text and becomes actions. The agent threat surface - excessive agency, indirect injection, the MCP supply chain, the confused deputy - what to log, and the containment architecture that limits the blast radius.",
+      "card_blurb": "The moment you give a model tools, its output stops being text and becomes actions. The agent threat surface - excessive agency, indirect injection via tool output, the MCP supply chain, the confused-deputy identity problem - what to log, and the detections and containment architecture that keep one bad instruction from becoming an incident.",
+      "feed_desc": "A chatbot that gets prompt-injected says something wrong; an agent that gets prompt-injected does something wrong. The agent threat surface - excessive agency, indirect injection via tool output, the MCP supply chain, the confused-deputy identity problem - what to log, and the detections and containment architecture that keep one bad instruction from becoming an incident.",
+      "palette": {
+        "label": "Securing AI Agents",
+        "hint": "tool-calling LLMs",
+        "icon": "fa-robot",
+        "keywords": "ai agents agentic tool calling function calling excessive agency llm06 mcp model context protocol confused deputy indirect prompt injection lethal trifecta atlas autonomy human in the loop guardrails camel dual llm"
+      }
+    },
+    {
+      "slug": "detecting-litellm-command-injection",
+      "title": "Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway",
+      "nav_title": "Detecting the LiteLLM Command Injection",
+      "category": "detection",
+      "date": "2026-06-13",
+      "read_min": 11,
+      "home_blurb": "An authenticated command injection in LiteLLM's MCP preview endpoints - in CISA KEV and actively exploited - that chains with the Starlette \"BadHost\" bug (CVE-2026-48710) into unauthenticated RCE. The mechanism, what to log, and two runnable Sigma rules with tuning notes.",
+      "card_blurb": "An authenticated command injection in LiteLLM's MCP preview endpoints - in CISA KEV and actively exploited - that chains with the Starlette \"BadHost\" bug (CVE-2026-48710) into unauthenticated RCE. The mechanism, what to log, and two runnable Sigma rules with tuning notes.",
+      "feed_desc": "CVE-2026-42271 turns LiteLLM's MCP preview endpoints into authenticated command execution on the proxy host, and chains with the Starlette \"BadHost\" bug (CVE-2026-48710) into unauthenticated RCE. In CISA KEV and actively exploited - the mechanism at a defender's depth, what to log, and two runnable Sigma rules with tuning notes.",
+      "palette": {
+        "label": "Detecting the LiteLLM Command Injection",
+        "hint": "CVE-2026-42271",
+        "icon": "fa-bug",
+        "keywords": "litellm cve-2026-42271 command injection rce mcp ai gateway proxy cisa kev starlette badhost cve-2026-48710 sigma t1190 berriai"
+      }
+    },
+    {
+      "slug": "owasp-llm-top-10-for-defenders",
+      "title": "Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders",
+      "nav_title": "OWASP LLM Top 10 for Defenders",
+      "category": "ai",
+      "date": "2026-06-11",
+      "read_min": 13,
+      "home_blurb": "The OWASP LLM Top 10 read as a defender's checklist: why prompt injection has no patch, the \"lethal trifecta\" behind incidents like EchoLeak (CVE-2025-32711), and the canary, egress, and behavioral detections that work against LLM-integrated apps today.",
+      "card_blurb": "The OWASP LLM Top 10 read as a defender's checklist: why prompt injection has no patch, the \"lethal trifecta\" behind incidents like EchoLeak (CVE-2025-32711), what to log in LLM-integrated apps, and canary, egress, and behavioral detections you can deploy today.",
+      "feed_desc": "The OWASP LLM Top 10 read as a defender's checklist: why prompt injection has no patch, the \"lethal trifecta\" behind incidents like EchoLeak (CVE-2025-32711), what to log in LLM-integrated apps, and canary, egress, and behavioral detections you can deploy today.",
+      "palette": {
+        "label": "OWASP LLM Top 10 for Defenders",
+        "hint": "prompt injection",
+        "icon": "fa-robot",
+        "keywords": "ai llm owasp prompt injection indirect atlas copilot echoleak agent rag canary"
+      }
+    },
+    {
+      "slug": "detecting-oauth-consent-phishing",
+      "title": "Detecting OAuth Consent Phishing in Microsoft 365",
+      "nav_title": "Detecting OAuth Consent Phishing",
+      "category": "detection",
+      "date": "2026-06-11",
+      "read_min": 12,
+      "home_blurb": "The phishing class that never asks for a password and sails through MFA - illicit OAuth consent grants (MITRE ATT&CK T1528) in Entra ID, the audit-log artifacts they leave, and KQL detections with tuning notes.",
+      "card_blurb": "The phishing class that never asks for a password and sails through MFA - illicit OAuth consent grants (MITRE ATT&CK T1528) in Entra ID, the audit-log artifacts they leave, and KQL detections with tuning notes.",
+      "feed_desc": "The phishing class that never asks for a password and sails through MFA - illicit OAuth consent grants (MITRE ATT&CK T1528) in Microsoft Entra ID, the audit-log artifacts they leave, and KQL detections with tuning notes.",
+      "palette": {
+        "label": "Detecting OAuth Consent Phishing",
+        "hint": "T1528",
+        "icon": "fa-user-shield",
+        "keywords": "oauth consent phishing entra azure ad graph illicit grant token mfa m365 office 365"
+      }
+    },
+    {
+      "slug": "detecting-kerberoasting",
+      "title": "Detecting Kerberoasting: A Practical Walkthrough with Sigma",
+      "nav_title": "Detecting Kerberoasting",
+      "category": "detection",
+      "date": "2026-06-10",
+      "read_min": 14,
+      "home_blurb": "A defender-focused breakdown of Kerberoasting (MITRE ATT&CK T1558.003): how the technique works, why RC4 service tickets give it away, and a set of Sigma rules - with tuning notes - you can drop into your SIEM today.",
+      "card_blurb": "How Kerberoasting (MITRE ATT&CK T1558.003) works, why RC4 service tickets give it away, and three layered Sigma detections - RC4 downgrade, request fan-out, and a honeypot SPN - with tuning and false-positive notes you can run against your own logs.",
+      "feed_desc": "How Kerberoasting (MITRE ATT&CK T1558.003) works, why RC4 service tickets give it away, and three layered Sigma detections - RC4 downgrade, request fan-out, and a honeypot SPN - with tuning and false-positive notes you can run against your own logs.",
+      "palette": {
+        "label": "Detecting Kerberoasting with Sigma",
+        "hint": "T1558.003",
+        "icon": "fa-shield-halved",
+        "keywords": "kerberos rc4 detection sigma active directory 4769"
+      }
+    }
+  ]
+}

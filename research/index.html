@@ -64,7 +64,7 @@
         <h1 class="hero-headline font-semibold tracking-[-0.045em] mb-6" style="font-size:64px;">Research.</h1>
         <p class="max-w-[640px] text-xl text-[#a9b1d6]">
             Detection-engineering walkthroughs, threat analysis, and mitigation guides. Sourced, reproducible, and
-            defensive in scope. Six published so far - this index grows as writeups ship.
+            defensive in scope. <!-- AUTO:count START -->Six published so far<!-- AUTO:count END --> - this index grows as writeups ship.
         </p>
     </section>
 
@@ -81,7 +81,7 @@
 
         <!-- Card grid -->
         <div data-research-grid class="grid md:grid-cols-2 gap-5">
-
+            <!-- AUTO:cards START -->
             <a href="inc-ransom-australian-smb.html"
                class="research-card u-card block p-6 border border-[#2a2c38] rounded-3xl bg-[#16161e]" data-cat="threat">
                 <div class="flex items-center justify-between mb-3">
@@ -92,10 +92,7 @@
                     How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It
                 </div>
                 <p class="text-sm text-[#a9b1d6] mb-5">
-                    INC Ransom is a RaaS crew actively claiming Australian victims, and the firms it lands on look a lot
-                    like yours. The affiliate playbook stage by stage - phishing, unpatched edge devices, bought
-                    credentials, living-off-the-land movement, commodity exfiltration - mapped to the Essential Eight
-                    controls that break each link in the chain.
+                    INC Ransom is a RaaS crew actively claiming Australian victims, and the firms it lands on look a lot like yours. The affiliate playbook stage by stage - phishing, unpatched edge devices, bought credentials, living-off-the-land movement, commodity exfiltration - mapped to the Essential Eight controls that break each link in the chain.
                 </p>
                 <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
                     <span>Jun 15, 2026</span>
@@ -113,10 +110,7 @@
                     Securing AI Agents: A Defender's Guide to Tool-Calling LLMs
                 </div>
                 <p class="text-sm text-[#a9b1d6] mb-5">
-                    The moment you give a model tools, its output stops being text and becomes actions. The agent threat
-                    surface - excessive agency, indirect injection via tool output, the MCP supply chain, the
-                    confused-deputy identity problem - what to log, and the detections and containment architecture that
-                    keep one bad instruction from becoming an incident.
+                    The moment you give a model tools, its output stops being text and becomes actions. The agent threat surface - excessive agency, indirect injection via tool output, the MCP supply chain, the confused-deputy identity problem - what to log, and the detections and containment architecture that keep one bad instruction from becoming an incident.
                 </p>
                 <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
                     <span>Jun 14, 2026</span>
@@ -134,9 +128,7 @@
                     Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway
                 </div>
                 <p class="text-sm text-[#a9b1d6] mb-5">
-                    An authenticated command injection in LiteLLM's MCP preview endpoints - in CISA KEV and actively
-                    exploited - that chains with the Starlette "BadHost" bug (CVE-2026-48710) into unauthenticated RCE.
-                    The mechanism, what to log, and two runnable Sigma rules with tuning notes.
+                    An authenticated command injection in LiteLLM's MCP preview endpoints - in CISA KEV and actively exploited - that chains with the Starlette "BadHost" bug (CVE-2026-48710) into unauthenticated RCE. The mechanism, what to log, and two runnable Sigma rules with tuning notes.
                 </p>
                 <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
                     <span>Jun 13, 2026</span>
@@ -154,9 +146,7 @@
                     Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders
                 </div>
                 <p class="text-sm text-[#a9b1d6] mb-5">
-                    The OWASP LLM Top 10 read as a defender's checklist: why prompt injection has no patch, the
-                    "lethal trifecta" behind incidents like EchoLeak (CVE-2025-32711), what to log in LLM-integrated
-                    apps, and canary, egress, and behavioral detections you can deploy today.
+                    The OWASP LLM Top 10 read as a defender's checklist: why prompt injection has no patch, the "lethal trifecta" behind incidents like EchoLeak (CVE-2025-32711), what to log in LLM-integrated apps, and canary, egress, and behavioral detections you can deploy today.
                 </p>
                 <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
                     <span>Jun 11, 2026</span>
@@ -174,9 +164,7 @@
                     Detecting OAuth Consent Phishing in Microsoft 365
                 </div>
                 <p class="text-sm text-[#a9b1d6] mb-5">
-                    The phishing class that never asks for a password and sails through MFA - illicit OAuth consent
-                    grants (MITRE ATT&amp;CK T1528) in Entra ID, the audit-log artifacts they leave, and KQL detections
-                    with tuning notes.
+                    The phishing class that never asks for a password and sails through MFA - illicit OAuth consent grants (MITRE ATT&amp;CK T1528) in Entra ID, the audit-log artifacts they leave, and KQL detections with tuning notes.
                 </p>
                 <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
                     <span>Jun 11, 2026</span>
@@ -194,16 +182,14 @@
                     Detecting Kerberoasting: A Practical Walkthrough with Sigma
                 </div>
                 <p class="text-sm text-[#a9b1d6] mb-5">
-                    How Kerberoasting (MITRE ATT&amp;CK T1558.003) works, why RC4 service tickets give it away, and three
-                    layered Sigma detections - RC4 downgrade, request fan-out, and a honeypot SPN - with tuning and
-                    false-positive notes you can run against your own logs.
+                    How Kerberoasting (MITRE ATT&amp;CK T1558.003) works, why RC4 service tickets give it away, and three layered Sigma detections - RC4 downgrade, request fan-out, and a honeypot SPN - with tuning and false-positive notes you can run against your own logs.
                 </p>
                 <div class="flex items-center text-xs font-mono text-[#7aa2f7]">
                     <span>Jun 10, 2026</span>
                     <span class="research-card-arrow ml-auto">Read →</span>
                 </div>
             </a>
-
+            <!-- AUTO:cards END -->
         </div>
 
         <!-- Empty state (shown when a filter has no matches) -->
