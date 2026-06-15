@@ -188,18 +188,18 @@
                 </p>
 
                 <!-- Latest article -->
-                <a href="research/owasp-llm-top-10-for-defenders.html" class="block">
+                <a href="research/inc-ransom-australian-smb.html" class="block">
                     <div class="research-row grid grid-cols-1 md:grid-cols-12 gap-x-8 py-8 group">
                         <div class="md:col-span-5">
-                            <div class="font-mono text-xs text-[#9ece6a] mb-2">AI &amp; LLM SECURITY</div>
+                            <div class="font-mono text-xs text-[#9ece6a] mb-2">THREAT ANALYSIS</div>
                             <div class="font-semibold text-xl group-hover:text-[#7aa2f7] transition-colors">
-                                Prompt Injection and the OWASP LLM Top 10: A Field Guide for Defenders
+                                How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It
                             </div>
                         </div>
                         <div class="md:col-span-7 text-[#a9b1d6] mt-2 md:mt-0">
-                            The OWASP LLM Top 10 read as a defender's checklist: why prompt injection has no patch, the
-                            "lethal trifecta" behind incidents like EchoLeak (CVE-2025-32711), and the canary, egress,
-                            and behavioral detections that work against LLM-integrated apps today.
+                            An active RaaS crew claiming Australian victims, profiled from public reporting. The affiliate
+                            playbook stage by stage - phishing, unpatched edge devices, bought credentials, commodity
+                            exfiltration - mapped to the Essential Eight controls that break each link in the chain.
                             <div class="mt-3 flex items-center gap-x-3 text-xs font-mono">
                                 <span class="text-[#7aa2f7]">Jun 2026</span>
                                 <span class="text-[#565f89]">·</span>
@@ -210,45 +210,44 @@
                     </div>
                 </a>
 
-                <a href="research/detecting-oauth-consent-phishing.html" class="block">
+                <a href="research/securing-ai-agents.html" class="block">
                     <div class="research-row grid grid-cols-1 md:grid-cols-12 gap-x-8 py-8 group">
                         <div class="md:col-span-5">
-                            <div class="font-mono text-xs text-[#9ece6a] mb-2">DETECTION ENGINEERING</div>
+                            <div class="font-mono text-xs text-[#9ece6a] mb-2">AI &amp; LLM SECURITY</div>
                             <div class="font-semibold text-xl group-hover:text-[#7aa2f7] transition-colors">
-                                Detecting OAuth Consent Phishing in Microsoft 365
+                                Securing AI Agents: A Defender's Guide to Tool-Calling LLMs
                             </div>
                         </div>
                         <div class="md:col-span-7 text-[#a9b1d6] mt-2 md:mt-0">
-                            The phishing class that never asks for a password and sails through MFA - illicit OAuth
-                            consent grants (MITRE ATT&amp;CK T1528) in Entra ID, the audit-log artifacts they leave, and
-                            KQL detections with tuning notes.
+                            The moment you give a model tools, its output stops being text and becomes actions. The agent
+                            threat surface - excessive agency, indirect injection, the MCP supply chain, the confused
+                            deputy - what to log, and the containment architecture that limits the blast radius.
                             <div class="mt-3 flex items-center gap-x-3 text-xs font-mono">
                                 <span class="text-[#7aa2f7]">Jun 2026</span>
                                 <span class="text-[#565f89]">·</span>
-                                <span class="text-[#565f89]">~12 min read</span>
+                                <span class="text-[#565f89]">~14 min read</span>
                                 <span class="row-chev ml-auto">Read →</span>
                             </div>
                         </div>
                     </div>
                 </a>
 
-                <!-- Featured / first article -->
-                <a href="research/detecting-kerberoasting.html" class="block">
+                <a href="research/detecting-litellm-command-injection.html" class="block">
                     <div class="research-row grid grid-cols-1 md:grid-cols-12 gap-x-8 py-8 group">
                         <div class="md:col-span-5">
                             <div class="font-mono text-xs text-[#9ece6a] mb-2">DETECTION ENGINEERING</div>
                             <div class="font-semibold text-xl group-hover:text-[#7aa2f7] transition-colors">
-                                Detecting Kerberoasting: A Practical Walkthrough with Sigma
+                                Detecting the LiteLLM Command Injection (CVE-2026-42271) in Your AI Gateway
                             </div>
                         </div>
                         <div class="md:col-span-7 text-[#a9b1d6] mt-2 md:mt-0">
-                            A defender-focused breakdown of Kerberoasting (MITRE ATT&amp;CK T1558.003): how the technique
-                            works, why RC4 service tickets give it away, and a set of Sigma rules - with tuning notes - you
-                            can drop into your SIEM today.
+                            An authenticated command injection in LiteLLM's MCP preview endpoints - in CISA KEV and
+                            actively exploited - that chains with the Starlette "BadHost" bug (CVE-2026-48710) into
+                            unauthenticated RCE. The mechanism, what to log, and two runnable Sigma rules with tuning notes.
                             <div class="mt-3 flex items-center gap-x-3 text-xs font-mono">
                                 <span class="text-[#7aa2f7]">Jun 2026</span>
                                 <span class="text-[#565f89]">·</span>
-                                <span class="text-[#565f89]">~14 min read</span>
+                                <span class="text-[#565f89]">~11 min read</span>
                                 <span class="row-chev ml-auto">Read →</span>
                             </div>
                         </div>
