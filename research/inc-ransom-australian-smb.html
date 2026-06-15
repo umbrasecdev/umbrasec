@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It - UMBRASEC</title>
+    <meta name="description" content="A defender-focused profile of INC Ransom, the RaaS crew actively claiming Australian victims: how affiliates get in, the living-off-the-land playbook they run, and the Essential Eight controls that break each stage of the chain.">
+    <link rel="canonical" href="https://umbrasec.dev/research/inc-ransom-australian-smb.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="UMBRASEC">
+    <meta property="og:url" content="https://umbrasec.dev/research/inc-ransom-australian-smb.html">
+    <meta property="og:title" content="How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It">
+    <meta property="og:description" content="INC Ransom is an active RaaS crew claiming Australian victims. The affiliate playbook stage by stage - and the Essential Eight controls that break each link in the chain.">
+    <meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+    <meta property="article:published_time" content="2026-06-15">
+    <meta property="article:author" content="UMBRASEC">
+    <meta property="article:section" content="Threat Analysis">
+    <meta property="article:tag" content="INC Ransom">
+    <meta property="article:tag" content="Ransomware">
+    <meta property="article:tag" content="Essential Eight">
+    <meta property="article:tag" content="Australian SMB">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It">
+    <meta name="twitter:description" content="The INC Ransom affiliate playbook stage by stage, mapped to the Essential Eight controls that break each link in the chain.">
+    <meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+    <link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It",
+      "description": "A defender-focused profile of INC Ransom, the RaaS crew actively claiming Australian victims: how affiliates get in, the living-off-the-land playbook they run, and the Essential Eight controls that break each stage of the chain.",
+      "datePublished": "2026-06-15",
+      "author": { "@type": "Organization", "name": "UMBRASEC", "url": "https://umbrasec.dev/" },
+      "publisher": { "@type": "Organization", "name": "UMBRASEC", "logo": { "@type": "ImageObject", "url": "https://umbrasec.dev/assets/og.png" } },
+      "image": "https://umbrasec.dev/assets/og.png",
+      "mainEntityOfPage": "https://umbrasec.dev/research/inc-ransom-australian-smb.html",
+      "about": "INC Ransom ransomware-as-a-service threat profile and Essential Eight mitigations",
+      "keywords": "INC Ransom, ransomware, RaaS, Essential Eight, Australian SMB, ACSC, rclone, ScreenConnect, RDP, double extortion"
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');</style>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/umbra-avatar.png">
+    <link rel="apple-touch-icon" href="../assets/umbra-avatar.png">
+    <meta name="theme-color" content="#1a1b26">
+    <link rel="stylesheet" href="../assets/umbra.css">
+</head>
+<body class="bg-[#1a1b26] text-[#c0caf5]" data-base="../" data-reading>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-[#2a2c38] bg-[#1a1b26]/95 backdrop-blur-lg">
+        <div class="max-w-[1280px] mx-auto px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.html" class="brand flex items-center gap-x-2.5">
+                    <div class="logo-badge w-7 h-7 rounded bg-gradient-to-br from-[#7aa2f7] to-[#bb9af7] flex items-center justify-center">
+                        <span class="font-bold text-[#1a1b26] text-lg leading-none mt-px">U</span>
+                    </div>
+                    <div>
+                        <span class="glitch font-semibold text-2xl tracking-[-0.03em]" data-text="UMBRASEC">UMBRASEC</span>
+                        <span class="font-mono text-xs text-[#a9b1d6] ml-1.5">2026</span>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="../guide/index.html" class="nav-link">Guide</a>
+                    <a href="index.html" class="nav-link">Research</a>
+                    <a href="../index.html#opensource" class="nav-link">Open Source</a>
+                    <a href="../services.html" class="nav-link">Services</a>
+                    <a href="../about.html" class="nav-link">About</a>
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </div>
+                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                   class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="max-w-[1280px] mx-auto px-8 py-16">
+        <!-- breadcrumb -->
+        <div class="font-mono text-xs text-[#565f89] mb-8">
+            <a href="../index.html" class="hover:text-[#7aa2f7]">home</a> /
+            <a href="index.html" class="hover:text-[#7aa2f7]">research</a> /
+            <span class="text-[#a9b1d6]">inc-ransom-australian-smb</span>
+        </div>
+
+        <header class="prose mx-auto">
+            <div class="flex items-center gap-x-3 mb-6 text-xs font-mono">
+                <span class="text-[#9ece6a]">THREAT ANALYSIS</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">Jun 15, 2026</span>
+                <span class="text-[#565f89]">·</span>
+                <span class="text-[#a9b1d6]">~13 min</span>
+            </div>
+            <h1 class="text-5xl font-semibold tracking-[-0.04em] leading-[1.05] mb-6 text-[#c0caf5]">
+                How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It
+            </h1>
+            <p class="text-xl text-[#a9b1d6] leading-snug">
+                INC Ransom is a ransomware-as-a-service crew that has been steadily claiming Australian victims, and the
+                firms it lands on look a lot like yours: mid-market manufacturers, logistics and industrial-supply
+                businesses, health and education providers. The good news for defenders is that its playbook is
+                unglamorous and repetitive - which means the cheap, boring Essential Eight controls break it at almost
+                every stage. Here's the chain, and where it snaps.
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">RaaS / Double Extortion</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Living off the Land</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Essential Eight</span>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-[#16161e] border border-[#2a2c38] text-[#a9b1d6]">Australian SMB</span>
+            </div>
+        </header>
+
+        <div class="prose mx-auto mt-10 article-body">
+            <aside class="toc-rail" data-toc aria-label="On this page"></aside>
+
+            <div class="callout">
+                <p class="text-sm"><strong>TL;DR for defenders.</strong> INC Ransom affiliates get in through three doors:
+                phishing, an unpatched internet-facing device, or valid credentials bought from a broker and reused over
+                RDP. Once inside they live off the land - disabling the built-in AV, moving with <code>net.exe</code> and a
+                rogue remote-access tool, and exfiltrating with commodity utilities like rclone and MEGAsync before they
+                encrypt. Four Essential Eight controls do most of the work against this: <strong>MFA</strong> on every
+                external login, <strong>prompt patching of internet-facing services</strong>, <strong>application
+                control</strong> plus EDR to catch the tooling, and <strong>tested backups</strong> so encryption is a bad
+                day rather than a closed business. None of it is expensive. All of it is in the
+                <a href="../guide/index.html">guide</a>.</p>
+            </div>
+
+            <h2>Why this one is worth your attention in Australia</h2>
+            <p>
+                This is not a hypothetical. The Australian Signals Directorate's ACSC, together with CERT NZ and partners
+                across the Pacific, has published a joint advisory on INC Ransom's affiliate network specifically because
+                it is operating against organisations in Australia, New Zealand and the Pacific island states. That
+                advisory draws on INC Ransom incidents reported to the ACSC, so the behaviour described here is not
+                imported threat-intel from another hemisphere - it is what is landing locally.
+            </p>
+            <p>
+                The pattern that matters for small and mid-sized businesses is the <em>victimology</em>. INC Ransom is
+                indiscriminate by sector: healthcare, government, education and manufacturing all feature heavily in its
+                public claims. What ties Australian victims together is rarely an industry - it is size and posture. These
+                are organisations with a real internet footprint (a remote-access portal, a VPN appliance, an edge
+                firewall) but without a 24/7 security team watching it. That is the gap the affiliate model is built to
+                exploit, and it is precisely the gap the Essential Eight was written to close.
+            </p>
+
+            <div class="callout">
+                <p class="text-sm"><strong>A note on sourcing and scope.</strong> Everything below is drawn from public
+                reporting - the ACSC/CERT NZ advisory, and incident write-ups from GuidePoint, Huntress, Secureworks and
+                others. We do <em>not</em> reference or reconstruct any individual Australian victim's breach, and we draw
+                nothing from ransomware leak sites. The trackers tell us a crew is active here; the defensive detail comes
+                from vendors who responded to these intrusions. This is a defensive profile: it explains the playbook only
+                to the depth a defender needs to break it.</p>
+            </div>
+
+            <h2>Who INC Ransom is</h2>
+            <p>
+                INC Ransom (also written "INC Ransomware") surfaced in mid-2023 and runs as a
+                <strong>ransomware-as-a-service</strong> operation: a core team builds and maintains the encryptor and the
+                leak infrastructure, and <em>affiliates</em> do the actual breaking-in, in exchange for a cut. That
+                structure matters for defenders, because it means there is no single "INC playbook" - there is a menu of
+                techniques that different affiliates mix and match. Two intrusions claimed by the same brand can look
+                quite different on the way in.
+            </p>
+            <p>
+                Like most modern crews, INC runs <strong>double extortion</strong>: they steal data first, then encrypt,
+                then threaten to publish on a leak site if the ransom goes unpaid. The exfiltration is not an afterthought
+                - for many victims it is the more damaging half, because backups solve encryption but do nothing about
+                stolen records already in someone else's hands. Keep that in mind when we get to the controls: stopping
+                the intrusion early matters more than being able to restore.
+            </p>
+
+            <h2>The playbook, stage by stage</h2>
+            <p>
+                The sequence below is the common shape across publicly documented INC intrusions. For each stage, the
+                control that breaks it is named inline and linked into the relevant part of the guide.
+            </p>
+
+            <h3>1. Initial access - phishing, an unpatched edge device, or bought credentials</h3>
+            <p>
+                Affiliates favour three entry routes, and they are boringly consistent across reporting. The first is
+                <strong>spear-phishing</strong>. The second is <strong>exploiting a known vulnerability in an
+                internet-facing device</strong> - INC affiliates have been documented abusing flaws in edge appliances
+                such as Citrix NetScaler (CVE-2023-3519) and Fortinet's endpoint management server (CVE-2023-48788). The
+                third, and increasingly the default, is simply <strong>logging in</strong>: buying valid credentials from
+                an initial-access broker and reusing them against an exposed service like RDP or a VPN.
+            </p>
+            <p>
+                Two Essential Eight controls dominate this stage.
+                <a href="../guide/foundation.html">Multi-factor authentication on every external login</a> turns a stolen
+                or guessed password from a front-door key into a dead end - it is the single highest-leverage control
+                against the "just log in" route, which is the one growing fastest.
+                <a href="../guide/foundation.html">Patching internet-facing applications promptly</a> closes the
+                edge-device route; the CVEs above are old, which is exactly the point - affiliates exploit them because
+                unpatched appliances are still out there. If you only fix two things after reading this, fix these two.
+            </p>
+
+            <h3>2. Defence evasion - turning off the alarm</h3>
+            <p>
+                Once inside, affiliates move quickly to blind the host. Public incident reports describe them using a
+                native Windows utility (<code>SystemSettingsAdminFlows.exe</code>) and registry changes to
+                <strong>disable Microsoft Defender</strong>, and deploying small purpose-built tools to kill third-party
+                endpoint protection - in one documented case, a binary written specifically to terminate a CylancePROTECT
+                service. The theme is "use what's already there, and switch off what's watching."
+            </p>
+            <p>
+                This is where <a href="../guide/foundation.html">application control</a> earns its keep: if unapproved
+                executables cannot run, the AV-killer never launches. It is also where
+                <a href="../guide/detection-and-response.html">EDR and the right alerts</a> matter - a Defender service
+                being disabled (Event ID 5007) or tamper-protection events should be a high-signal alarm, not a line item
+                nobody reads. Tamper protection on your endpoint product, switched on and enforced, raises the cost of this
+                whole stage.
+            </p>
+
+            <h3>3. Discovery and lateral movement - living off the land</h3>
+            <p>
+                INC affiliates lean heavily on tools that are already trusted on the network: <code>net.exe</code> for
+                account and share enumeration and for changing passwords, built-in command shells for execution, and
+                everyday binaries like Notepad and WordPad for reading files during reconnaissance. To move and persist,
+                they frequently install a <strong>legitimate remote-access tool they control</strong> - ScreenConnect
+                instances have been observed - so their traffic blends in with normal IT remote support.
+            </p>
+            <p>
+                The defensive answer is layered.
+                <a href="../guide/identity-and-access.html">Tiering administrative access</a> so that a compromised
+                workstation account cannot pivot to domain-wide control limits how far this stage travels.
+                <a href="../guide/foundation.html">Application control</a> again blocks unsanctioned remote-access
+                software from installing. And <a href="../guide/detection-and-response.html">baseline visibility</a> turns
+                "a new ScreenConnect appeared on a finance PC at 2am" into something you actually see.
+            </p>
+
+            <h3>4. Exfiltration - commodity tools, cloud destinations</h3>
+            <p>
+                Before encrypting, affiliates stage and steal data using off-the-shelf utilities: <strong>rclone</strong>
+                with an include-list of interesting file types, <strong>MEGAsync</strong> and other cloud-sync clients,
+                7-Zip to compress, and in some incidents the open-source backup tool <strong>Restic</strong> repurposed
+                for exfiltration. None of these are malware in the signature sense, which is the point - they are normal
+                admin tools used for an abnormal purpose.
+            </p>
+            <p>
+                This stage is hard to stop with prevention alone, which is why it is a
+                <a href="../guide/detection-and-response.html">detection-and-response</a> problem. Large outbound
+                transfers to consumer cloud-storage domains, rclone or MEGAsync executing on a server that has no business
+                running them, and 7-Zip spawning across dozens of hosts are all detectable patterns if you are collecting
+                endpoint and network telemetry. <a href="../guide/foundation.html">Application control</a> helps here too:
+                if rclone is not on the approved list, it does not run.
+            </p>
+
+            <h3>5. Impact - encryption and the leak threat</h3>
+            <p>
+                The finale drops an encryptor and an <code>INC-README.txt</code> ransom note, with the leak-site threat as
+                leverage. By this point the data is already gone, so encryption is the part you can most directly survive -
+                <em>if</em> you prepared. <a href="../guide/foundation.html">Regular backups that you have actually tested
+                restoring</a>, kept offline or otherwise out of reach of the account that gets compromised, are what turn a
+                ransom demand into a restore job. Backups you have never test-restored are a guess, not a control.
+            </p>
+
+            <h2>The chain, mapped to the Essential Eight</h2>
+            <p>
+                Read top to bottom, the intrusion is a series of links, and the Essential Eight breaks most of them more
+                than once. That redundancy is the strategy: you are not betting everything on one control catching one
+                step.
+            </p>
+            <div class="table-wrap">
+                <table class="data">
+                    <thead><tr><th>Stage</th><th>What the affiliate does</th><th>Essential Eight control that breaks it</th></tr></thead>
+                    <tbody>
+                        <tr><td>Initial access</td><td>Phishing, exploit an unpatched edge device, or reuse bought credentials over RDP/VPN</td><td>MFA; patch applications; patch operating systems; user application hardening</td></tr>
+                        <tr><td>Defence evasion</td><td>Disable Defender / kill third-party AV with small tools</td><td>Application control; restrict admin privileges (+ EDR &amp; tamper protection)</td></tr>
+                        <tr><td>Discovery &amp; lateral movement</td><td><code>net.exe</code>, LOLBins, rogue ScreenConnect</td><td>Restrict admin privileges; application control; MFA on internal admin</td></tr>
+                        <tr><td>Exfiltration</td><td>rclone, MEGAsync, Restic, 7-Zip to consumer cloud</td><td>Application control (+ egress monitoring &amp; detection)</td></tr>
+                        <tr><td>Impact</td><td>Encrypt and threaten to leak</td><td>Regular, tested, offline backups</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                Notice that <strong>application control</strong> and <strong>restrict administrative privileges</strong>
+                each show up at multiple stages. Those two are the harder Essential Eight controls to roll out, but the
+                table is the argument for why they are worth the effort: they are not single-purpose, they tax the whole
+                middle of the intrusion. The full method - what to do first, and how to mature each control - is laid out
+                across the <a href="../guide/index.html">four stages of the guide</a>.
+            </p>
+
+            <h2>If you only do three things</h2>
+            <p>
+                For an Australian SMB that wants the most risk reduction per dollar against this specific crew, in order:
+            </p>
+            <ul>
+                <li><strong>MFA on every internet-facing login</strong> - email, VPN, RDP gateway, remote-access portals.
+                    This kills the fastest-growing initial-access route outright and is the cheapest control on the list.
+                    Start at <a href="../guide/foundation.html">Stage 1, step 2</a> and harden it in
+                    <a href="../guide/identity-and-access.html">Stage 2</a>.</li>
+                <li><strong>Patch your internet-facing devices on a real clock.</strong> The edge appliance with a known
+                    CVE is how affiliates walk in without a password at all. Inventory what you expose, then keep it
+                    current - <a href="../guide/foundation.html">Stage 1, steps 1 and 3</a>.</li>
+                <li><strong>Test a backup restore this quarter.</strong> Not "do we have backups" - actually restore one
+                    and time it. This is the control that decides whether the encryption stage ends your week or your
+                    business - <a href="../guide/foundation.html">Stage 1, step 4</a>.</li>
+            </ul>
+
+            <h2>Honest limitations</h2>
+            <p>
+                The Essential Eight is a strong baseline, not a force field. It does little to recover data already
+                exfiltrated, so against a double-extortion crew the controls that prevent the intrusion matter more than
+                the one that recovers from encryption - getting hit but restoring cleanly still means your data may be
+                published. An affiliate who phishes an MFA-fatigued user into approving a push, or who walks in on
+                credentials and stays "low and slow," can still get a foothold; that is why
+                <a href="../guide/detection-and-response.html">detection and a written incident-response plan</a> sit
+                alongside the preventive controls rather than after them. And because the affiliate model means tradecraft
+                varies, treat the stages here as the common shape, not a guarantee of what any one intrusion will look
+                like. The point of mapping to the Essential Eight is not that any single control is sufficient - it is that
+                the layers overlap, so a step that slips past one is caught by the next.
+            </p>
+            <p>
+                If you want help working out which of these controls you actually have versus which you only think you
+                have, that gap assessment is exactly what the <a href="../services.html#vciso">vCISO engagement</a> is for -
+                but the guide is free and stands on its own, so start there.
+            </p>
+
+            <h2>References</h2>
+            <ul>
+                <li><a href="https://www.cyber.gov.au/about-us/view-all-content/alerts-and-advisories/inc-ransom-affiliate-model-enabling-targeting-of-critical-networks" target="_blank" rel="noopener">ASD's ACSC / CERT NZ - INC Ransom Affiliate Model Enabling Targeting of Critical Networks</a></li>
+                <li><a href="https://www.cyber.gov.au/about-us/view-all-content/news/inc-ransom-and-affiliate-network-operating-in-australia-new-zealand-and-the-pacific-island-states" target="_blank" rel="noopener">ASD's ACSC - INC Ransom and Affiliate Network operating in Australia, New Zealand and the Pacific island states</a></li>
+                <li><a href="https://www.huntress.com/blog/lolbin-to-inc-ransomware" target="_blank" rel="noopener">Huntress - From LOLBin to INC Ransomware</a></li>
+                <li><a href="https://www.guidepointsecurity.com/blog/update-from-the-ransomware-trenches/" target="_blank" rel="noopener">GuidePoint Security - Update from the Ransomware Trenches</a></li>
+                <li><a href="https://www.secureworks.com/blog/gold-ionic-deploys-inc-ransomware" target="_blank" rel="noopener">Secureworks - GOLD IONIC Deploys INC Ransomware</a></li>
+                <li><a href="https://www.sentinelone.com/anthology/inc-ransom/" target="_blank" rel="noopener">SentinelOne - INC Ransom: Analysis, Detection, and Mitigation</a></li>
+                <li><a href="https://attack.mitre.org/techniques/T1486/" target="_blank" rel="noopener">MITRE ATT&amp;CK - T1486: Data Encrypted for Impact</a></li>
+            </ul>
+
+            <div class="callout mt-10">
+                <p class="text-sm"><strong>Scope note.</strong> This is a defensive writeup built entirely from public
+                reporting. It profiles a threat actor only to the depth a defender needs to detect and break the
+                intrusion, names no individual victim, and uses no data sourced from extortion or leak sites. It contains
+                no malware, exploit code, or operational tradecraft. UMBRASEC publishes defense, not offense.</p>
+            </div>
+
+        </div>
+
+        <!-- end-of-article: share + nav -->
+        <div class="prose mx-auto mt-16 pt-8 border-t border-[#2a2c38]">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <a href="securing-ai-agents.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">← Securing AI Agents</a>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-[#565f89] mr-1">Share</span>
+                    <a class="share-btn" href="https://twitter.com/intent/tweet?text=How%20INC%20Ransom%20Hits%20Australian%20SMBs%20-%20and%20the%20Essential%20Eight%20That%20Stops%20It&url=https%3A%2F%2Fumbrasec.dev%2Fresearch%2Finc-ransom-australian-smb.html" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fumbrasec.dev%2Fresearch%2Finc-ransom-australian-smb.html" target="_blank" rel="noopener" title="Share on LinkedIn" aria-label="Share on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <a href="index.html" class="text-sm text-[#7aa2f7] hover:text-[#7dcfff]">All research →</a>
+            </div>
+        </div>
+    </article>
+
+    <footer class="border-t border-[#2a2c38] max-w-[1280px] mx-auto px-8 py-8 mt-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="font-mono text-xs text-[#a9b1d6]">
+                © 2026 UMBRASEC · Independent defensive research · Published openly
+            </div>
+            <div class="flex items-center gap-x-5">
+                <span class="font-mono text-[10px] tracking-[1.5px] text-[#9ece6a] uppercase mr-1"><i class="fa-solid fa-heart text-[9px] mr-1"></i>Found this useful? Tip</span>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#f7931a] transition-colors" data-qr="btc" title="Tip with Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                <button type="button" class="footer-coin text-[#a9b1d6] hover:text-[#ff6600] transition-colors" data-qr="xmr" title="Tip with Monero">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" fill="currentColor" aria-hidden="true">
+                        <circle cx="50" cy="50" r="50"/>
+                        <path fill="#1a1b26" d="M50 14.3C30.3 14.3 14.3 30.3 14.3 50c0 3.9.6 7.7 1.8 11.2h10.1V36.5L50 60.2l23.8-23.7v24.7h10.1c1.2-3.5 1.8-7.3 1.8-11.2C85.7 30.3 69.7 14.3 50 14.3z"/>
+                        <path fill="#1a1b26" d="M39.4 62.9l-10.6-10.7v15.5H20l-.2.3C25.4 78.9 37 85.7 50 85.7s24.6-6.8 30.2-17.7l-.2-.3H71.2V52.2L60.6 62.9 50 52.2 39.4 62.9z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/umbra.js" defer></script>
+</body>
+</html>

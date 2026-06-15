@@ -6,7 +6,15 @@
     <atom:link href="https://umbrasec.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Independent defensive security research - detection engineering, threat analysis, and open-source tooling.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 14 Jun 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 12:00:00 +0000</lastBuildDate>
+    <item>
+      <title>How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It</title>
+      <link>https://umbrasec.dev/research/inc-ransom-australian-smb.html</link>
+      <guid isPermaLink="true">https://umbrasec.dev/research/inc-ransom-australian-smb.html</guid>
+      <pubDate>Mon, 15 Jun 2026 12:00:00 +0000</pubDate>
+      <category>Threat Analysis</category>
+      <description>INC Ransom is a ransomware-as-a-service crew actively claiming Australian victims, and the firms it lands on look a lot like a typical SMB. The affiliate playbook stage by stage - phishing, unpatched edge devices, bought credentials, living-off-the-land movement, commodity exfiltration with rclone and MEGAsync - mapped to the Essential Eight controls that break each link in the chain. Built entirely from public reporting, including the ACSC/CERT NZ advisory.</description>
+    </item>
     <item>
       <title>Securing AI Agents: A Defender's Guide to Tool-Calling LLMs</title>
       <link>https://umbrasec.dev/research/securing-ai-agents.html</link>
