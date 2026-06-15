@@ -30,6 +30,7 @@ is never touched.
 
 | File | Region | Marker |
 | --- | --- | --- |
+| `index.html` | hero "Read the latest research" button (latest 1) | `<!-- AUTO:hero ... -->` |
 | `index.html` | homepage featured trio (latest 3) | `<!-- AUTO:featured ... -->` |
 | `research/index.html` | article card grid | `<!-- AUTO:cards ... -->` |
 | `research/index.html` | "N published so far" count | `<!-- AUTO:count ... -->` |

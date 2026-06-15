@@ -137,6 +137,16 @@ f'''                <a href="research/{a['slug']}.html" class="block">
     return _wrap(rows, "\n\n", 16)
 
 
+def render_hero(articles) -> str:
+    a = articles[0]
+    anchor = (
+f'''                        <a href="research/{a['slug']}.html"
+                           class="btn-primary inline-flex items-center px-8 py-3.5 rounded-2xl bg-white text-[#1a1b26] font-semibold hover:bg-[#e2e8f0] transition-all">
+                            Read the latest research <span class="arrow ml-1.5">→</span>
+                        </a>''')
+    return _wrap([anchor], "\n", 24)
+
+
 def render_cards(articles) -> str:
     cards = []
     for a in articles:
@@ -263,8 +273,11 @@ def build(check: bool) -> int:
         if new != old:
             changes.append((path, new))
 
-    stage("index.html",
-          lambda t: replace_region(t, "featured", render_home_rows(articles), ROOT / "index.html"))
+    def index_home(t):
+        t = replace_region(t, "hero", render_hero(articles), ROOT / "index.html")
+        t = replace_region(t, "featured", render_home_rows(articles), ROOT / "index.html")
+        return t
+    stage("index.html", index_home)
 
     def research_index(t):
         t = replace_region(t, "cards", render_cards(articles), ROOT / "research/index.html")
