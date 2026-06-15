@@ -272,7 +272,7 @@ def render_footer(prefix: str) -> str:
                     <ul class="space-y-2 text-sm">
                         <li><a href="{p}tools/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">All tools</a></li>
                         <li><a href="{p}tools/blue-team-mapper/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Blue Team Mapper</a></li>
-                        <li><a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-[#7aa2f7]">GitHub</a></li>
+                        <li><a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-[#7aa2f7]">GitHub</a></li>
                     </ul>
                 </div>
             </div>

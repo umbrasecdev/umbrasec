@@ -8,8 +8,8 @@
 queries, a zero-dependency CISA KEV monitor, a daily-synced KEV feed, and a single-page
 blue-team reference. Defensive in scope, every claim tied to a primary source.
 
-[![KEV sync](https://github.com/atraxsrc/umbrasec/actions/workflows/kev-sync.yml/badge.svg)](https://github.com/atraxsrc/umbrasec/actions/workflows/kev-sync.yml)
-[![Sigma validation](https://github.com/atraxsrc/umbrasec/actions/workflows/sigma-validate.yml/badge.svg)](https://github.com/atraxsrc/umbrasec/actions/workflows/sigma-validate.yml)
+[![KEV sync](https://github.com/umbrasecdev/umbrasec/actions/workflows/kev-sync.yml/badge.svg)](https://github.com/umbrasecdev/umbrasec/actions/workflows/kev-sync.yml)
+[![Sigma validation](https://github.com/umbrasecdev/umbrasec/actions/workflows/sigma-validate.yml/badge.svg)](https://github.com/umbrasecdev/umbrasec/actions/workflows/sigma-validate.yml)
 [![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 [![Site](https://img.shields.io/badge/site-umbrasec.dev-8a2be2)](https://umbrasec.dev)
 
@@ -18,7 +18,7 @@ blue-team reference. Defensive in scope, every claim tied to a primary source.
 `kev-watch` needs Python 3.9+ and nothing else - no packages, no install step:
 
 ```bash
-git clone https://github.com/atraxsrc/umbrasec
+git clone https://github.com/umbrasecdev/umbrasec
 python3 umbrasec/tools/kev-watch/kev_watch.py --watch fortinet ivanti citrix
 ```
 
@@ -118,14 +118,14 @@ for your own project, swap these for your own details:
   `<!-- SCHEDULING: ... -->` comment).
 - **Contact email** - `0xdev1@umbrasec.dev`, used in `index.html`, `services.html`,
   `about.html`, and the palette in `assets/umbra.js`.
-- **GitHub** - `github.com/atraxsrc/umbrasec` throughout.
+- **GitHub** - `github.com/umbrasecdev/umbrasec` throughout.
 - **Crypto tip addresses** - the BTC/XMR addresses and QR SVGs live in `assets/umbra.js`
   (`COINS`) and `assets/btc-qr.svg` / `assets/xmr-qr.svg`.
 
 ## Corrections
 
 Found a detection that misbehaves, a wrong citation, or an analysis that's off? That
-feedback is welcome - [open an issue](https://github.com/atraxsrc/umbrasec/issues).
+feedback is welcome - [open an issue](https://github.com/umbrasecdev/umbrasec/issues).
 Corrections are credited.
 
 ## License

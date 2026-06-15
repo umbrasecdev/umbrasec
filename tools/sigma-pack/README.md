@@ -1,6 +1,6 @@
 # sigma-pack
 
-[![Sigma validation](https://github.com/atraxsrc/umbrasec/actions/workflows/sigma-validate.yml/badge.svg)](https://github.com/atraxsrc/umbrasec/actions/workflows/sigma-validate.yml)
+[![Sigma validation](https://github.com/umbrasecdev/umbrasec/actions/workflows/sigma-validate.yml/badge.svg)](https://github.com/umbrasecdev/umbrasec/actions/workflows/sigma-validate.yml)
 
 The detection rules and queries published in [UMBRASEC research writeups](https://umbrasec.dev/research/),
 collected as runnable files. Honest status: **early** - this pack grows one writeup
@@ -89,6 +89,6 @@ Sigma rules convert to your SIEM's query language with
 ## A rule misbehaved?
 
 That's exactly the feedback this project wants -
-[open an issue](https://github.com/atraxsrc/umbrasec/issues). Corrections are credited.
+[open an issue](https://github.com/umbrasecdev/umbrasec/issues). Corrections are credited.
 
 License: MIT, same as the rest of the repo's code.

@@ -73,7 +73,7 @@
                     <a href="../about.html" class="nav-link">About</a>
                     <a href="../index.html#contact" class="nav-link">Contact</a>
                 </div>
-                <a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener"
+                <a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener"
                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e] transition-colors" title="GitHub">
                     <i class="fa-brands fa-github text-xl"></i>
                 </a>
@@ -127,7 +127,7 @@
                 <code>POST /mcp-rest/test/tools/list</code> at your reverse proxy. To detect, watch two things: requests
                 to those endpoints in your proxy logs, and - far higher fidelity - the <strong>LiteLLM process spawning
                 a shell or recon binary</strong>, which a Python web proxy has no legitimate reason to do. Both Sigma
-                rules are below and in <a href="https://github.com/atraxsrc/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener">sigma-pack</a>.
+                rules are below and in <a href="https://github.com/umbrasecdev/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener">sigma-pack</a>.
                 Also patch Starlette to 1.0.1+ to break the unauthenticated chain.</p>
             </div>
 
@@ -240,7 +240,7 @@ POST /mcp-rest/test/tools/list</code></pre>
             <h2>Detection</h2>
             <p>
                 Same philosophy as every UMBRASEC writeup: layer from highest precision to broadest. Both Sigma rules
-                below are in <a href="https://github.com/atraxsrc/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener">sigma-pack</a>
+                below are in <a href="https://github.com/umbrasecdev/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener">sigma-pack</a>
                 and validated in CI; convert them to your SIEM with
                 <a href="https://github.com/SigmaHQ/sigma-cli" target="_blank" rel="noopener">sigma-cli</a>.
             </p>
@@ -427,7 +427,7 @@ level: medium</code></pre>
             <div class="callout mt-10">
                 <p class="text-sm"><strong>Found an error?</strong> If a detection misfires in your environment or a
                 detail here is wrong, that feedback is welcome -
-                <a href="https://github.com/atraxsrc/umbrasec/issues" class="text-[#7aa2f7] hover:text-[#7dcfff]" target="_blank" rel="noopener">open an issue</a>.
+                <a href="https://github.com/umbrasecdev/umbrasec/issues" class="text-[#7aa2f7] hover:text-[#7dcfff]" target="_blank" rel="noopener">open an issue</a>.
                 Corrections are credited.</p>
             </div>
 
@@ -482,7 +482,7 @@ level: medium</code></pre>
                     <ul class="space-y-2 text-sm">
                         <li><a href="../tools/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">All tools</a></li>
                         <li><a href="../tools/blue-team-mapper/index.html" class="text-[#a9b1d6] hover:text-[#7aa2f7]">Blue Team Mapper</a></li>
-                        <li><a href="https://github.com/atraxsrc/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-[#7aa2f7]">GitHub</a></li>
+                        <li><a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener" class="text-[#a9b1d6] hover:text-[#7aa2f7]">GitHub</a></li>
                     </ul>
                 </div>
             </div>
