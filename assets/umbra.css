@@ -429,6 +429,8 @@ html { scroll-behavior: smooth; }
 .btn-tertiary:hover  { transform: translateY(-2px); box-shadow: 0 12px 32px -12px rgba(125,207,255,0.55); }
 .btn-ghost:hover     { transform: translateY(-2px); border-color: var(--border-hi); }
 .btn-primary:active, .btn-secondary:active, .btn-tertiary:active, .btn-ghost:active { transform: translateY(0); }
+/* icon-only copy button: flash green to confirm the copy (no visible address to swap) */
+.copy-email.copied { background-color: #9ece6a; }
 .arrow { display: inline-block; transition: transform 0.2s ease; }
 .btn-primary:hover .arrow, .btn-ghost:hover .arrow { transform: translateX(4px); }
 
