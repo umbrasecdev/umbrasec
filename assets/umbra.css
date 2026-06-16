@@ -432,7 +432,8 @@ html { scroll-behavior: smooth; }
 /* icon-only copy button: flash green to confirm the copy (no visible address to swap) */
 .copy-email.copied { background-color: #9ece6a; }
 .arrow { display: inline-block; transition: transform 0.2s ease; }
-.btn-primary:hover .arrow, .btn-ghost:hover .arrow { transform: translateX(4px); }
+.btn-primary:hover .arrow, .btn-secondary:hover .arrow,
+.btn-tertiary:hover .arrow, .btn-ghost:hover .arrow { transform: translateX(4px); }
 
 /* ── Research row chevron (slides in on hover) ────────────────── */
 .row-chev {
