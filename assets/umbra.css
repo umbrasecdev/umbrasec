@@ -651,10 +651,16 @@ html { scroll-behavior: smooth; }
     font-size: 0.85rem;
     text-decoration: none;
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    transition: color 0.18s ease, border-color 0.18s ease,
+                transform 0.18s ease, box-shadow 0.18s ease;
 }
-.share-btn:hover { color: var(--text); border-color: var(--border-hi); }
-.share-btn:active { transform: translateY(1px); }
+.share-btn:hover {
+    color: var(--text);
+    border-color: var(--border-hi);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -12px rgba(122,162,247,0.5);
+}
+.share-btn:active { transform: translateY(0); }
 .share-btn.copied { color: var(--green); border-color: #2a3a2a; }
 
 /* ── Research filter chips + card grid ────────────────────────── */
@@ -698,6 +704,36 @@ html { scroll-behavior: smooth; }
     line-height: 0;
 }
 .footer-coin.copied { color: var(--green); }
+
+/* ── Unified icon-button hover (matches the .btn-* "guide button" lift) ──
+   Three shapes share one motion language: a -2px lift + a soft accent glow.
+   Boxed icons (nav square, footer coins) glow via box-shadow / drop-shadow;
+   bare glyphs (footer coins, hero social links) bloom in their own
+   currentColor so the halo always matches the hover tint. */
+.nav-icon {
+    transition: background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+.nav-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -12px rgba(122,162,247,0.5);
+}
+.nav-icon:active { transform: translateY(0); }
+
+.footer-coin, .social-ico {
+    transition: color 0.18s ease, transform 0.18s ease, filter 0.18s ease;
+}
+.footer-coin:hover, .social-ico:hover {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 3px 7px currentColor);
+}
+.footer-coin:active, .social-ico:active { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-icon, .share-btn, .footer-coin, .social-ico { transition: none; }
+    .nav-icon:hover, .share-btn:hover, .footer-coin:hover, .social-ico:hover {
+        transform: none; box-shadow: none; filter: none;
+    }
+}
 
 /* ── QR tip popup (footer coins) ──────────────────────────────── */
 .qr-overlay {
