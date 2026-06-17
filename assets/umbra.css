@@ -604,6 +604,10 @@ html { scroll-behavior: smooth; }
 .kev-prod { color: var(--text); }
 .kev-date { color: #565f89; }
 .kev-ransom { color: var(--orange); }
+/* clickable entries: link out to the CISA KEV catalog, but keep the row clean */
+a.kev-item { text-decoration: none; transition: opacity 0.15s ease; }
+a.kev-item:hover { opacity: 0.9; }
+a.kev-item:hover .kev-cve { color: var(--cyan); text-decoration: underline; text-underline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
     .kev-track { animation: none; overflow-x: auto; max-width: 100%; }
     .kev-live-dot { animation: none; }
