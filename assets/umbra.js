@@ -507,20 +507,6 @@
     }
   })();
 
-  /* ── Magnetic buttons ─────────────────────────────────────────── */
-  (function magneticButtons() {
-    if (reduceMotion || window.matchMedia("(hover: none)").matches) return;
-    $$(".btn-primary, .btn-ghost").forEach((btn) => {
-      btn.addEventListener("mousemove", (e) => {
-        const r = btn.getBoundingClientRect();
-        const x = (e.clientX - r.left - r.width / 2) * 0.3;
-        const y = (e.clientY - r.top - r.height / 2) * 0.3;
-        btn.style.transform = "translate(" + x + "px," + (y - 2) + "px)";
-      });
-      btn.addEventListener("mouseleave", () => { btn.style.transform = ""; });
-    });
-  })();
-
   /* ── Article table of contents + scrollspy ────────────────────── */
   (function tableOfContents() {
     const rail = $("[data-toc]");
