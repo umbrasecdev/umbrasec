@@ -589,10 +589,9 @@
             ? ' <i class="fa-solid fa-skull-crossbones kev-ransom" title="Known ransomware campaign use"></i>'
             : "";
           const cve = v.cveID || "";
-          const href = "https://www.cisa.gov/known-exploited-vulnerabilities-catalog?search_api_fulltext=" +
-            encodeURIComponent(cve);
+          const href = "https://www.cve.org/CVERecord?id=" + encodeURIComponent(cve);
           return '<a class="kev-item" href="' + href + '" target="_blank" rel="noopener"' +
-              ' title="Look up ' + escapeHtml(cve) + ' in the CISA KEV catalog">' +
+              ' title="View ' + escapeHtml(cve) + ' on CVE.org">' +
               '<span class="kev-cve">' + escapeHtml(cve) + "</span>" +
               '<span class="kev-prod">' + escapeHtml(((v.vendorProject || "") + " " + (v.product || "")).trim()) + "</span>" +
               ransom +
