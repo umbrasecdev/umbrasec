@@ -46,7 +46,7 @@ Public data only; it reads one JSON feed and never touches a target system.
 | [`tools/kev-watch/`](tools/kev-watch/) | Zero-dependency Python monitor for the CISA KEV catalog. Tracks newly added, actively exploited CVEs, filters to your stack, flags ransomware-linked entries, warns on remediation deadlines. |
 | [`tools/sigma-pack/`](tools/sigma-pack/) | The detection rules from the research writeups as runnable files: Kerberoasting Sigma rules (T1558.003), OAuth consent-phishing KQL queries (T1528), and LiteLLM command-injection Sigma rules (CVE-2026-42271, T1190) so far, each with tuning and false-positive notes. Sigma rules are syntax-validated with sigma-cli in CI, and a per-rule [ATT&CK coverage table](tools/sigma-pack/#attck-coverage) maps every artifact to its technique. |
 | [`tools/blue-team-mapper/`](tools/blue-team-mapper/) | A single-page defender reference covering the defensive lifecycle: SIEM/log-source priority, detection engineering, IR flow chains, threat hunting, identity and cloud hardening, SOAR playbooks - ATT&CK-aligned. [Use it live](https://umbrasec.dev/tools/blue-team-mapper/). |
-| [`research/`](https://umbrasec.dev/research/) | Detection writeups: [Kerberoasting](https://umbrasec.dev/research/detecting-kerberoasting.html), [OAuth consent phishing in M365](https://umbrasec.dev/research/detecting-oauth-consent-phishing.html), [OWASP LLM Top 10 for defenders](https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html), [LiteLLM command injection (CVE-2026-42271)](https://umbrasec.dev/research/detecting-litellm-command-injection.html). Every rule in `sigma-pack` comes from one of these. |
+| [`research/`](https://umbrasec.dev/research/) | Detection and threat writeups: [Kerberoasting](https://umbrasec.dev/research/detecting-kerberoasting.html), [OAuth consent phishing in M365](https://umbrasec.dev/research/detecting-oauth-consent-phishing.html), [OWASP LLM Top 10 for defenders](https://umbrasec.dev/research/owasp-llm-top-10-for-defenders.html), [Securing AI agents](https://umbrasec.dev/research/securing-ai-agents.html), [LiteLLM command injection (CVE-2026-42271)](https://umbrasec.dev/research/detecting-litellm-command-injection.html), plus threat profiles of ransomware crews active against Australian SMBs - [INC Ransom](https://umbrasec.dev/research/inc-ransom-australian-smb.html) and [SafePay](https://umbrasec.dev/research/safepay-australian-smb.html). Every rule in `sigma-pack` comes from one of the detection writeups. |
 | [`guide/`](https://umbrasec.dev/guide/) | A free, staged security guide for small and mid-sized businesses - from zero to a defensible baseline, with every recommendation mapped to the ASD Essential Eight, ISO 27001:2022, and NIST CSF 2.0, and each step explained as what it is, why it matters, and what it costs. |
 
 ## The KEV feed, as a feed
@@ -80,8 +80,8 @@ deliberately a recent-entries feed, not a mirror - for the full catalog, go to
 - **Honest threat analysis** - technical breakdowns of real techniques and CVEs, every
   claim tied to a primary source.
 - **Open-source defensive tooling** - small, useful tools for defenders, built in the open.
-- **LLM / AI security** - defensive coverage of prompt injection and the OWASP LLM Top 10
-  as a class of risk (first writeup live).
+- **LLM / AI security** - defensive coverage of prompt injection, the OWASP LLM Top 10,
+  and securing tool-calling AI agents as a class of risk (several writeups live).
 - **SMB security guidance** - a free, framework-grounded [guide](https://umbrasec.dev/guide/)
   taking a small business from zero to a defensible baseline, one stage at a time (plus a
   paid one-person [vCISO service](https://umbrasec.dev/services) for businesses that want
@@ -107,6 +107,24 @@ Site: **[umbrasec.dev](https://umbrasec.dev)** · Contact: **0xdev1@umbrasec.dev
 Planned directions as the project grows - not live yet, listed honestly as intent:
 
 - **Threat intelligence** - tracking and analysis of real-world campaigns and infrastructure.
+
+## Working on this repo
+
+The research lists - the `index.html` featured trio, the `research/index.html` grid,
+`feed.xml`, `sitemap.xml`, and each article's prev/next footer nav - are **generated**
+from `research/articles.json` by `tools/site-build/build_indexes.py`. That manifest is the
+single source of truth; CI (`Site build check`) fails if any derived file drifts from it.
+
+A tracked pre-commit hook keeps them in sync: it regenerates the derived files and stages
+them on every commit. Enable it once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Or regenerate by hand any time with `python3 tools/site-build/build_indexes.py` (add
+`--check` to verify without writing). When you add an article, add it to
+`research/articles.json` - dropping an HTML file into `research/` alone will not list it.
 
 ## Forking the site
 
