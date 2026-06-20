@@ -362,6 +362,22 @@ def site_pages():
 
 # ---- driver --------------------------------------------------------------------
 
+def find_orphans(articles):
+    """research/*.html pages on disk that no manifest entry points to.
+
+    These are articles that were dropped into research/ but never registered in
+    research/articles.json, so nothing links to them - they are unreachable from
+    the homepage, grid, feed, sitemap, and palette. research/index.html is the
+    generated grid, not an article, so it is excluded."""
+    slugs = {a["slug"] for a in articles}
+    orphans = []
+    for p in sorted((ROOT / "research").glob("*.html")):
+        if p.stem == "index" or p.stem in slugs:
+            continue
+        orphans.append(p.relative_to(ROOT))
+    return orphans
+
+
 def build(check: bool) -> int:
     articles = load_articles()
     transforms = {}  # rel path -> list of text->text callables, applied in order
@@ -406,12 +422,23 @@ def build(check: bool) -> int:
         if new != old:
             changes.append((path, new))
 
+    orphans = find_orphans(articles)
+
     if check:
+        problems = False
+        if orphans:
+            print("site-build: ORPHAN - research pages not listed in research/articles.json:")
+            for rel in orphans:
+                print(f"  - {rel}")
+            print("\nAdd an entry to research/articles.json (then regenerate), or delete the file.")
+            problems = True
         if changes:
             print("site-build: DRIFT - these files are out of sync with research/articles.json:")
             for path, _ in changes:
                 print(f"  - {path.relative_to(ROOT)}")
             print("\nRun:  python3 tools/site-build/build_indexes.py   then commit the result.")
+            problems = True
+        if problems:
             return 1
         print(f"site-build: OK - {len(articles)} articles, all derived files in sync.")
         return 0
@@ -423,6 +450,13 @@ def build(check: bool) -> int:
         print(f"site-build: nothing to do - {len(articles)} articles already in sync.")
     else:
         print(f"site-build: regenerated {len(changes)} file(s) from {len(articles)} articles.")
+    # Regeneration cannot register an orphan (it has no metadata for it), so warn
+    # loudly; --check (CI + the pre-commit hook gate) is what enforces this.
+    if orphans:
+        print("site-build: WARNING - orphaned research pages not in research/articles.json:")
+        for rel in orphans:
+            print(f"  - {rel}")
+        print("Add them to the manifest or delete them; CI will fail while they exist.")
     return 0
 
 

@@ -2,15 +2,19 @@
 #
 # UMBRASEC pre-commit hook: keep derived files in sync with research/articles.json
 #
-# The CI "Site build check" runs build_indexes.py --check and fails if any
-# generated file drifts from the manifest. This hook regenerates those files
-# locally and stages them so a drift can never reach a commit (or CI).
+# The CI "Site build check" runs build_indexes.py --check and fails if:
+#   - any generated file drifts from the manifest, or
+#   - a research/*.html page exists that no manifest entry points to (orphan).
+#
+# This hook regenerates the derived files and stages them so a drift can never
+# reach a commit. It cannot auto-fix an orphan (it has no metadata for it), so it
+# re-runs --check as a gate and blocks the commit until you register the page in
+# research/articles.json or delete it.
 #
 # Generated files: index.html, research/index.html, feed.xml, sitemap.xml,
-# and each research/<slug>.html prev/next footer nav.
+# assets/umbra.js (command palette), and each research/<slug>.html prev/next nav.
 #
 # Bypass with: git commit --no-verify
-#
 # Enable (once per clone): git config core.hooksPath .githooks
 
 set -euo pipefail
@@ -23,12 +27,12 @@ if ! command -v python3 >/dev/null 2>&1; then
     exit 0
 fi
 
-# Fast path: if already in sync, do nothing.
+# Fast path: if everything is in sync and there are no orphans, do nothing.
 if python3 tools/site-build/build_indexes.py --check >/dev/null 2>&1; then
     exit 0
 fi
 
-echo "pre-commit: derived files drifted from research/articles.json, regenerating..."
+echo "pre-commit: site-build out of sync, regenerating derived files..."
 if ! python3 tools/site-build/build_indexes.py; then
     echo "pre-commit: build_indexes.py failed; aborting commit" >&2
     exit 1
@@ -36,7 +40,15 @@ fi
 
 # Stage only already-tracked generated files (-u never adds new untracked files,
 # so a brand-new article you have not git-added yet is left for you to add).
-git add -u -- index.html feed.xml sitemap.xml research
+git add -u -- index.html feed.xml sitemap.xml assets/umbra.js research
+
+# Gate: regeneration fixes drift but not orphans. If --check still fails, an
+# unregistered research page exists - block so it cannot reach CI.
+if ! python3 tools/site-build/build_indexes.py --check; then
+    echo "pre-commit: unresolved site-build problem (see above); aborting commit" >&2
+    echo "pre-commit: fix it, or bypass once with: git commit --no-verify" >&2
+    exit 1
+fi
 
 echo "pre-commit: regenerated derived files staged into this commit."
 exit 0

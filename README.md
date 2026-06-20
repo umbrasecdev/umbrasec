@@ -113,7 +113,8 @@ Planned directions as the project grows - not live yet, listed honestly as inten
 The research lists - the `index.html` featured trio, the `research/index.html` grid,
 `feed.xml`, `sitemap.xml`, and each article's prev/next footer nav - are **generated**
 from `research/articles.json` by `tools/site-build/build_indexes.py`. That manifest is the
-single source of truth; CI (`Site build check`) fails if any derived file drifts from it.
+single source of truth; CI (`Site build check`) fails if any derived file drifts from it, or
+if a `research/*.html` page exists that the manifest does not list (an orphan).
 
 A tracked pre-commit hook keeps them in sync: it regenerates the derived files and stages
 them on every commit. Enable it once per clone:
@@ -124,7 +125,8 @@ git config core.hooksPath .githooks
 
 Or regenerate by hand any time with `python3 tools/site-build/build_indexes.py` (add
 `--check` to verify without writing). When you add an article, add it to
-`research/articles.json` - dropping an HTML file into `research/` alone will not list it.
+`research/articles.json` - dropping an HTML file into `research/` alone will not list it,
+and CI (and the hook) will flag it as an orphan until you do.
 
 ## Forking the site
 
