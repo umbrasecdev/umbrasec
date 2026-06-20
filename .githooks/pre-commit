@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+#
+# UMBRASEC pre-commit hook: keep derived files in sync with research/articles.json
+#
+# The CI "Site build check" runs build_indexes.py --check and fails if any
+# generated file drifts from the manifest. This hook regenerates those files
+# locally and stages them so a drift can never reach a commit (or CI).
+#
+# Generated files: index.html, research/index.html, feed.xml, sitemap.xml,
+# and each research/<slug>.html prev/next footer nav.
+#
+# Bypass with: git commit --no-verify
+#
+# Enable (once per clone): git config core.hooksPath .githooks
+
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "pre-commit: python3 not found; skipping site-build regen" >&2
+    exit 0
+fi
+
+# Fast path: if already in sync, do nothing.
+if python3 tools/site-build/build_indexes.py --check >/dev/null 2>&1; then
+    exit 0
+fi
+
+echo "pre-commit: derived files drifted from research/articles.json, regenerating..."
+if ! python3 tools/site-build/build_indexes.py; then
+    echo "pre-commit: build_indexes.py failed; aborting commit" >&2
+    exit 1
+fi
+
+# Stage only already-tracked generated files (-u never adds new untracked files,
+# so a brand-new article you have not git-added yet is left for you to add).
+git add -u -- index.html feed.xml sitemap.xml research
+
+echo "pre-commit: regenerated derived files staged into this commit."
+exit 0
