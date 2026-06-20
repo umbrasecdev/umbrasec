@@ -6,16 +6,8 @@
     <atom:link href="https://umbrasec.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Independent defensive security research - detection engineering, threat analysis, and open-source tooling.</description>
     <language>en-us</language>
-    <!-- AUTO:builddate START --><lastBuildDate>Sat, 20 Jun 2026 12:00:00 +0000</lastBuildDate><!-- AUTO:builddate END -->
+    <!-- AUTO:builddate START --><lastBuildDate>Mon, 15 Jun 2026 12:00:00 +0000</lastBuildDate><!-- AUTO:builddate END -->
     <!-- AUTO:items START -->
-    <item>
-      <title>SafePay Is Claiming Australian Victims - Why Real Estate SMBs Are in the Blast Radius</title>
-      <link>https://umbrasec.dev/research/safepay-australian-smb.html</link>
-      <guid isPermaLink="true">https://umbrasec.dev/research/safepay-australian-smb.html</guid>
-      <pubDate>Sat, 20 Jun 2026 12:00:00 +0000</pubDate>
-      <category>Threat Analysis</category>
-      <description>SafePay is a centralized (non-RaaS) ransomware crew now claiming Australian victims, and real-estate SMBs fit its target profile almost perfectly: data-rich, cash-handling via trust accounts, thinly defended, and spread across franchise offices under one brand. The playbook stage by stage - unpatched edge devices, infostealer-harvested logins reused over RDP/VPN, PsExec/WinRM movement, rclone and FileZilla exfiltration, backup and shadow-copy deletion - mapped to the Essential Eight controls that break each link. Built entirely from public vendor reporting, naming no individual victim.</description>
-    </item>
     <item>
       <title>How INC Ransom Hits Australian SMBs - and the Essential Eight That Stops It</title>
       <link>https://umbrasec.dev/research/inc-ransom-australian-smb.html</link>
