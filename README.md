@@ -51,7 +51,7 @@ Public data only; it reads one JSON feed and never touches a target system.
 
 ## The KEV feed, as a feed
 
-A GitHub Action [syncs the CISA KEV catalog daily](.github/workflows/kev-sync.yml) into
+A GitHub Action [syncs the CISA KEV catalog twice daily](.github/workflows/kev-sync.yml) into
 a small JSON file holding the **10 most recently added** actively-exploited CVEs,
 newest first - handy for dashboards, tickers, and "what just got exploited" checks
 without CORS issues or hitting cisa.gov yourself:
