@@ -1,9 +1,25 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.06.23",
+  "catalogVersion": "2026.06.25",
   "synced": "2026-06-25",
-  "count": 1627,
+  "count": 1629,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-12569",
+      "vendorProject": "PTC",
+      "product": "Windchill and FlexPLM",
+      "vulnerabilityName": "PTC Windchill and FlexPLM Improper Input Validation Vulnerability",
+      "dateAdded": "2026-06-25",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-20230",
+      "vendorProject": "Cisco",
+      "product": "Unified Communications Manager",
+      "vulnerabilityName": "Cisco Unified Communications Manager Server-Side Request Forgery (SSRF) Vulnerability",
+      "dateAdded": "2026-06-25",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2025-67038",
       "vendorProject": "Lantronix",
@@ -66,22 +82,6 @@
       "product": "Catalyst SD-WAN Manager",
       "vulnerabilityName": "Cisco Catalyst SD-WAN Manager Directory or Path Traversal Vulnerability",
       "dateAdded": "2026-06-15",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-35273",
-      "vendorProject": "Oracle",
-      "product": " PeopleSoft Enterprise PeopleTools",
-      "vulnerabilityName": "Oracle PeopleSoft Enterprise PeopleTools Missing Authentication for Critical Function Vulnerability",
-      "dateAdded": "2026-06-12",
-      "knownRansomwareCampaignUse": "Known"
-    },
-    {
-      "cveID": "CVE-2026-10520",
-      "vendorProject": "Ivanti",
-      "product": "Sentry",
-      "vulnerabilityName": "Ivanti Sentry OS Command Injection Vulnerability",
-      "dateAdded": "2026-06-11",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
