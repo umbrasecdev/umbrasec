@@ -85,7 +85,6 @@ Do NOT run `git push`. Do NOT add `Co-Authored-By` trailers.
 GitHub Actions:
 - `kev-sync.yml` - twice-daily CISA KEV fetch (06:17 + 18:17 UTC), writes `assets/kev-latest.json`, auto-commits and pushes to `master` as `github-actions[bot]` (needs `permissions: contents: write`)
 - `sigma-validate.yml` - validates sigma rules on push/PR
-- The `0xdev1@umbrasec.dev` email in `kev-sync.yml` is the user's own - do not flag or change it
 
 ## Hard rules
 
