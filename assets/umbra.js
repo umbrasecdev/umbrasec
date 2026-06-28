@@ -590,6 +590,10 @@
       track.classList.add("is-interactive");
       viewport.classList.add("is-grabbable");
 
+      // Links and icons are natively draggable; without this the browser starts
+      // a link drag on mouse-move, which fires pointercancel and kills our drag.
+      viewport.addEventListener("dragstart", (e) => e.preventDefault());
+
       let half = track.scrollWidth / 2;      // width of one (un-duplicated) row
       let speed = half / 42000;              // px/ms — matches the old 42s / -50% drift
       let offset = 0, paused = false, dragging = false, moved = false;
@@ -659,7 +663,7 @@
             : "";
           const cve = v.cveID || "";
           const href = "https://www.cve.org/CVERecord?id=" + encodeURIComponent(cve);
-          return '<a class="kev-item" href="' + href + '" target="_blank" rel="noopener"' +
+          return '<a class="kev-item" href="' + href + '" target="_blank" rel="noopener" draggable="false"' +
               ' title="View ' + escapeHtml(cve) + ' on CVE.org">' +
               '<span class="kev-cve">' + escapeHtml(cve) + "</span>" +
               '<span class="kev-prod">' + escapeHtml(((v.vendorProject || "") + " " + (v.product || "")).trim()) + "</span>" +
