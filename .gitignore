@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 .kev_state.json
 .DS_Store
+tools/local-sync/sync.log
