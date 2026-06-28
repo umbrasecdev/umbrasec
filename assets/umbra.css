@@ -593,6 +593,12 @@ html { scroll-behavior: smooth; }
 }
 .kev-viewport:hover .kev-track { animation-play-state: paused; }
 @keyframes kevScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* drag-to-scroll: once JS takes over, the CSS drift is replaced by a rAF loop
+   driving translateX, so the strip can be grabbed and pulled back and forth */
+.kev-track.is-interactive { animation: none; will-change: transform; }
+.kev-viewport.is-grabbable { cursor: grab; }
+.kev-viewport.is-grabbing  { cursor: grabbing; user-select: none; }
+.kev-viewport.is-grabbing .kev-item { pointer-events: none; }
 .kev-item {
     display: inline-flex; align-items: center; gap: 0.5rem;
     font-family: 'JetBrains Mono', monospace;

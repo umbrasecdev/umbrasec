@@ -579,6 +579,74 @@
     const track = $("[data-kev-track]", strip);
     if (!track) return;
 
+    // Turn the CSS marquee into a grab-and-drag strip: a rAF loop drives the
+    // same left-drift, and pointer drags pull it back and forth, wrapping
+    // seamlessly. On release the auto-scroll resumes. Reduced-motion users keep
+    // the native overflow-x scroll fallback and never reach this.
+    function makeKevDraggable(strip, track) {
+      const viewport = $(".kev-viewport", strip);
+      if (!viewport) return;
+
+      track.classList.add("is-interactive");
+      viewport.classList.add("is-grabbable");
+
+      let half = track.scrollWidth / 2;      // width of one (un-duplicated) row
+      let speed = half / 42000;              // px/ms — matches the old 42s / -50% drift
+      let offset = 0, paused = false, dragging = false, moved = false;
+      let pointerId = null, startX = 0, startOffset = 0, last = 0;
+
+      const wrap = (x) => { let m = half > 0 ? x % half : 0; if (m > 0) m -= half; return m; };
+      const apply = () => { track.style.transform = "translateX(" + offset + "px)"; };
+
+      function frame(now) {
+        const dt = last ? now - last : 0; last = now;
+        if (!paused && !dragging && half > 0) { offset = wrap(offset - speed * dt); apply(); }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+
+      // Hovering pauses the drift, matching the old CSS behaviour.
+      viewport.addEventListener("mouseenter", () => { paused = true; });
+      viewport.addEventListener("mouseleave", () => { if (!dragging) paused = false; });
+
+      viewport.addEventListener("pointerdown", (e) => {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        dragging = true; moved = false; paused = true;
+        startX = e.clientX; startOffset = offset; pointerId = e.pointerId;
+        half = track.scrollWidth / 2;        // re-measure in case fonts shifted widths
+        try { viewport.setPointerCapture(pointerId); } catch (_) {}
+        viewport.classList.add("is-grabbing");
+      });
+
+      viewport.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 3) moved = true;
+        offset = wrap(startOffset + dx);
+        apply();
+      });
+
+      function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        viewport.classList.remove("is-grabbing");
+        if (pointerId !== null) { try { viewport.releasePointerCapture(pointerId); } catch (_) {} pointerId = null; }
+        paused = viewport.matches(":hover");  // resume once the pointer leaves
+      }
+      viewport.addEventListener("pointerup", endDrag);
+      viewport.addEventListener("pointercancel", endDrag);
+
+      // A drag ends in a click on the underlying link — swallow it so we don't
+      // navigate to CVE.org after the user was only scrubbing the strip.
+      track.addEventListener("click", (e) => {
+        if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+      }, true);
+
+      window.addEventListener("resize", () => {
+        half = track.scrollWidth / 2; speed = half / 42000;
+      }, { passive: true });
+    }
+
     fetch(url("assets/kev-latest.json"), { cache: "no-cache" })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("http " + r.status))))
       .then((data) => {
@@ -606,6 +674,10 @@
         const tag = $(".kev-tag", strip);
         if (tag && data.synced) tag.title = "Latest CISA KEV additions · synced " + data.synced;
         strip.classList.remove("hidden");
+
+        // Enable drag-to-scroll once the strip is laid out (reduced-motion keeps
+        // the native scroll fallback, so skip the rAF marquee there).
+        if (!reduceMotion) makeKevDraggable(strip, track);
       })
       .catch(() => { /* leave the strip hidden - show real data or nothing */ });
   })();
