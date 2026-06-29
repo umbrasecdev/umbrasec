@@ -1,9 +1,17 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.06.25",
+  "catalogVersion": "2026.06.29",
   "synced": "2026-06-29",
-  "count": 1629,
+  "count": 1630,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-48558",
+      "vendorProject": "SimpleHelp ",
+      "product": "SimpleHelp",
+      "vulnerabilityName": "SimpleHelp Authentication Bypass Vulnerability",
+      "dateAdded": "2026-06-29",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-12569",
       "vendorProject": "PTC",
@@ -73,14 +81,6 @@
       "vendorProject": "LiteSpeed",
       "product": "cPanel Plugin",
       "vulnerabilityName": "LiteSpeed cPanel Plugin UNIX Symbolic Link (Symlink) Following Vulnerability",
-      "dateAdded": "2026-06-15",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-20262",
-      "vendorProject": "Cisco",
-      "product": "Catalyst SD-WAN Manager",
-      "vulnerabilityName": "Cisco Catalyst SD-WAN Manager Directory or Path Traversal Vulnerability",
       "dateAdded": "2026-06-15",
       "knownRansomwareCampaignUse": "Unknown"
     }
