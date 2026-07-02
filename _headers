@@ -11,5 +11,12 @@
 # Fix: keep exactly ONE Cache-Control rule so nothing can merge. Everything
 # revalidates against its ETag, so a deploy shows up immediately and unchanged
 # files (images, fonts) still come back as cheap 304s with no body transfer.
+#
+# The merge quirk is per-header, so the security headers below are safe to add
+# here - just never introduce a second rule that sets any of the same names.
 /*
   Cache-Control: public, max-age=0, must-revalidate
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: object-src 'none'; base-uri 'self'; frame-ancestors 'none'
