@@ -1,9 +1,25 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.07.07",
+  "catalogVersion": "2026.07.10",
   "synced": "2026-07-10",
-  "count": 1635,
+  "count": 1637,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-56291",
+      "vendorProject": "Balbooa",
+      "product": "Forms",
+      "vulnerabilityName": "Balbooa Forms Unrestricted Upload of File with Dangerous Type Vulnerability",
+      "dateAdded": "2026-07-10",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-48939",
+      "vendorProject": "iCagenda",
+      "product": "iCagenda",
+      "vulnerabilityName": "iCagenda Unrestricted Upload of File with Dangerous Type Vulnerability",
+      "dateAdded": "2026-07-10",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-48908",
       "vendorProject": "JoomShaper",
@@ -66,22 +82,6 @@
       "product": "Unified Communications Manager",
       "vulnerabilityName": "Cisco Unified Communications Manager Server-Side Request Forgery (SSRF) Vulnerability",
       "dateAdded": "2026-06-25",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2025-67038",
-      "vendorProject": "Lantronix",
-      "product": "EDS5000",
-      "vulnerabilityName": "Lantronix EDS5000 Code Injection Vulnerability",
-      "dateAdded": "2026-06-23",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-34910",
-      "vendorProject": "Ubiquiti",
-      "product": "UniFi OS",
-      "vulnerabilityName": "Ubiquiti UniFi OS Improper Input Validation Vulnerability",
-      "dateAdded": "2026-06-23",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
