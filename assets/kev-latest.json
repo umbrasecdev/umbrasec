@@ -1,9 +1,17 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.07.10",
+  "catalogVersion": "2026.07.13",
   "synced": "2026-07-13",
-  "count": 1637,
+  "count": 1638,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2008-4128",
+      "vendorProject": "Cisco",
+      "product": "IOS",
+      "vulnerabilityName": "Cisco IOS Cross-Site Request Forgery Vulnerability",
+      "dateAdded": "2026-07-13",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-56291",
       "vendorProject": "Balbooa",
@@ -73,14 +81,6 @@
       "vendorProject": "PTC",
       "product": "Windchill and FlexPLM",
       "vulnerabilityName": "PTC Windchill and FlexPLM Improper Input Validation Vulnerability",
-      "dateAdded": "2026-06-25",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-20230",
-      "vendorProject": "Cisco",
-      "product": "Unified Communications Manager",
-      "vulnerabilityName": "Cisco Unified Communications Manager Server-Side Request Forgery (SSRF) Vulnerability",
       "dateAdded": "2026-06-25",
       "knownRansomwareCampaignUse": "Unknown"
     }
