@@ -1,9 +1,25 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.07.14",
+  "catalogVersion": "2026.07.15",
   "synced": "2026-07-15",
-  "count": 1642,
+  "count": 1644,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-46817",
+      "vendorProject": "Oracle",
+      "product": "E-Business Suite",
+      "vulnerabilityName": "Oracle E-Business Suite Improper Privilege Management Vulnerability",
+      "dateAdded": "2026-07-15",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2023-4346",
+      "vendorProject": "KNX Association",
+      "product": "KNX Protocol Connection Authorization Option 1",
+      "vulnerabilityName": "KNX Association KNX Protocol Connection Authorization Option 1 Overly Restrictive Account Lockout Mechanism Vulnerability",
+      "dateAdded": "2026-07-15",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-56155",
       "vendorProject": "Microsoft",
@@ -65,22 +81,6 @@
       "vendorProject": "JoomShaper",
       "product": "SP Page Builder",
       "vulnerabilityName": "JoomShaper SP Page Builder Unrestricted Upload of File with Dangerous Type Vulnerability",
-      "dateAdded": "2026-07-07",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-55255",
-      "vendorProject": "Langflow",
-      "product": "Langflow",
-      "vulnerabilityName": "Langflow Authorization Bypass Through User-Controlled Key Vulnerability",
-      "dateAdded": "2026-07-07",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-56290",
-      "vendorProject": "Joomlack",
-      "product": "Page Builder",
-      "vulnerabilityName": "Joomlack Page Builder Improper Access Control Vulnerability",
       "dateAdded": "2026-07-07",
       "knownRansomwareCampaignUse": "Unknown"
     }
