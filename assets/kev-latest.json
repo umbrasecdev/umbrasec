@@ -1,9 +1,33 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.07.15",
+  "catalogVersion": "2026.07.16",
   "synced": "2026-07-16",
-  "count": 1644,
+  "count": 1647,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-58644",
+      "vendorProject": "Microsoft",
+      "product": "SharePoint",
+      "vulnerabilityName": "Microsoft SharePoint Deserialization of Untrusted Data Vulnerability",
+      "dateAdded": "2026-07-16",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-25089",
+      "vendorProject": "Fortinet",
+      "product": "FortiSandbox",
+      "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
+      "dateAdded": "2026-07-16",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-39808",
+      "vendorProject": "Fortinet",
+      "product": "FortiSandbox",
+      "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
+      "dateAdded": "2026-07-16",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-46817",
       "vendorProject": "Oracle",
@@ -58,30 +82,6 @@
       "product": "IOS",
       "vulnerabilityName": "Cisco IOS Cross-Site Request Forgery Vulnerability",
       "dateAdded": "2026-07-13",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-56291",
-      "vendorProject": "Balbooa",
-      "product": "Forms",
-      "vulnerabilityName": "Balbooa Forms Unrestricted Upload of File with Dangerous Type Vulnerability",
-      "dateAdded": "2026-07-10",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-48939",
-      "vendorProject": "iCagenda",
-      "product": "iCagenda",
-      "vulnerabilityName": "iCagenda Unrestricted Upload of File with Dangerous Type Vulnerability",
-      "dateAdded": "2026-07-10",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-48908",
-      "vendorProject": "JoomShaper",
-      "product": "SP Page Builder",
-      "vulnerabilityName": "JoomShaper SP Page Builder Unrestricted Upload of File with Dangerous Type Vulnerability",
-      "dateAdded": "2026-07-07",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
