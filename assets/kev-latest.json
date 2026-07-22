@@ -1,9 +1,25 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.07.21",
+  "catalogVersion": "2026.07.22",
   "synced": "2026-07-22",
-  "count": 1651,
+  "count": 1653,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-16232",
+      "vendorProject": "Check Point",
+      "product": "SmartConsole",
+      "vulnerabilityName": "Check Point SmartConsole Improper Authentication Vulnerability",
+      "dateAdded": "2026-07-22",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-50522",
+      "vendorProject": "Microsoft",
+      "product": "SharePoint",
+      "vulnerabilityName": "Microsoft SharePoint Deserialization of Untrusted Data Vulnerability ",
+      "dateAdded": "2026-07-22",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-60137",
       "vendorProject": "WordPress",
@@ -66,22 +82,6 @@
       "product": "E-Business Suite",
       "vulnerabilityName": "Oracle E-Business Suite Improper Privilege Management Vulnerability",
       "dateAdded": "2026-07-15",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2023-4346",
-      "vendorProject": "KNX Association",
-      "product": "KNX Protocol Connection Authorization Option 1",
-      "vulnerabilityName": "KNX Association KNX Protocol Connection Authorization Option 1 Overly Restrictive Account Lockout Mechanism Vulnerability",
-      "dateAdded": "2026-07-15",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-56155",
-      "vendorProject": "Microsoft",
-      "product": "Active Directory Federation Services",
-      "vulnerabilityName": "Microsoft Active Directory Federation Services Insufficient Granularity of Access Control Vulnerability ",
-      "dateAdded": "2026-07-14",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
