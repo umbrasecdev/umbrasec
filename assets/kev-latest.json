@@ -1,9 +1,25 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.07.24",
+  "catalogVersion": "2026.07.27",
   "synced": "2026-07-27",
-  "count": 1653,
+  "count": 1655,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2025-68686",
+      "vendorProject": "Fortinet",
+      "product": "FortiOS",
+      "vulnerabilityName": "Fortinet FortiOS Exposure of Sensitive Information to an Unauthorized Actor Vulnerability",
+      "dateAdded": "2026-07-27",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-16812",
+      "vendorProject": "Arista",
+      "product": "VeloCloud Orchestrator",
+      "vulnerabilityName": "Arista VeloCloud Orchestrator On-Prem OS Command Injection Vulnerability",
+      "dateAdded": "2026-07-27",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-16232",
       "vendorProject": "Check Point",
@@ -66,22 +82,6 @@
       "product": "FortiSandbox",
       "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
       "dateAdded": "2026-07-16",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-39808",
-      "vendorProject": "Fortinet",
-      "product": "FortiSandbox",
-      "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
-      "dateAdded": "2026-07-16",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-46817",
-      "vendorProject": "Oracle",
-      "product": "E-Business Suite",
-      "vulnerabilityName": "Oracle E-Business Suite Improper Privilege Management Vulnerability",
-      "dateAdded": "2026-07-15",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
