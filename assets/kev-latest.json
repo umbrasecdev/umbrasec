@@ -1,9 +1,17 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.07.27",
+  "catalogVersion": "2026.07.29",
   "synced": "2026-07-29",
-  "count": 1655,
+  "count": 1656,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-20316",
+      "vendorProject": "Cisco",
+      "product": "Secure Firewall Management Center (FMC)",
+      "vulnerabilityName": "Cisco Secure Firewall Management Center Use of Hard-coded Password Vulnerability",
+      "dateAdded": "2026-07-29",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2025-68686",
       "vendorProject": "Fortinet",
@@ -73,14 +81,6 @@
       "vendorProject": "Microsoft",
       "product": "SharePoint",
       "vulnerabilityName": "Microsoft SharePoint Deserialization of Untrusted Data Vulnerability",
-      "dateAdded": "2026-07-16",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-25089",
-      "vendorProject": "Fortinet",
-      "product": "FortiSandbox",
-      "vulnerabilityName": "Fortinet FortiSandbox OS Command Injection Vulnerability",
       "dateAdded": "2026-07-16",
       "knownRansomwareCampaignUse": "Unknown"
     }
