@@ -1,9 +1,17 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.07.29",
+  "catalogVersion": "2026.08.03",
   "synced": "2026-08-03",
-  "count": 1656,
+  "count": 1657,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-18577",
+      "vendorProject": "N-able",
+      "product": "N-central",
+      "vulnerabilityName": "N-able N-central Authentication Bypass Using an Alternate Path or Channel Vulnerability",
+      "dateAdded": "2026-08-03",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-20316",
       "vendorProject": "Cisco",
@@ -74,14 +82,6 @@
       "product": "DD-WRT",
       "vulnerabilityName": "DD-WRT Stack-Based Buffer Overflow Vulnerability",
       "dateAdded": "2026-07-21",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-58644",
-      "vendorProject": "Microsoft",
-      "product": "SharePoint",
-      "vulnerabilityName": "Microsoft SharePoint Deserialization of Untrusted Data Vulnerability",
-      "dateAdded": "2026-07-16",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
