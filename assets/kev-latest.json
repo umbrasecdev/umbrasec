@@ -1,9 +1,33 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.08.03",
+  "catalogVersion": "2026.08.04",
   "synced": "2026-08-04",
-  "count": 1657,
+  "count": 1660,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-18556",
+      "vendorProject": "N-able",
+      "product": "N-central",
+      "vulnerabilityName": "N-able N-central Authentication Bypass Using an Alternate Path or Channel Vulnerability",
+      "dateAdded": "2026-08-04",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-34486",
+      "vendorProject": "Apache",
+      "product": "Tomcat",
+      "vulnerabilityName": "Apache Tomcat Missing Encryption of Sensitive Data Vulnerability",
+      "dateAdded": "2026-08-04",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-9198",
+      "vendorProject": "IBM",
+      "product": "Langflow",
+      "vulnerabilityName": "IBM Langflow Code Injection Vulnerability",
+      "dateAdded": "2026-08-04",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-18577",
       "vendorProject": "N-able",
@@ -57,30 +81,6 @@
       "vendorProject": "WordPress",
       "product": "Core",
       "vulnerabilityName": "WordPress Core SQL Injection Vulnerability",
-      "dateAdded": "2026-07-21",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-63030",
-      "vendorProject": "WordPress",
-      "product": "Core",
-      "vulnerabilityName": "WordPress Core Interpretation Conflict Vulnerability",
-      "dateAdded": "2026-07-21",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-0770",
-      "vendorProject": "Langflow",
-      "product": "Langflow",
-      "vulnerabilityName": "Langflow Inclusion of Functionality from Untrusted Control Sphere Vulnerability",
-      "dateAdded": "2026-07-21",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2021-27137",
-      "vendorProject": "DD-WRT",
-      "product": "DD-WRT",
-      "vulnerabilityName": "DD-WRT Stack-Based Buffer Overflow Vulnerability",
       "dateAdded": "2026-07-21",
       "knownRansomwareCampaignUse": "Unknown"
     }
