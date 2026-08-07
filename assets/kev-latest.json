@@ -1,9 +1,17 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.08.06",
+  "catalogVersion": "2026.08.07",
   "synced": "2026-08-07",
-  "count": 1661,
+  "count": 1662,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-8037",
+      "vendorProject": "Progress",
+      "product": "LoadMaster",
+      "vulnerabilityName": "Progress LoadMaster Command Injection Vulnerability",
+      "dateAdded": "2026-08-07",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-63077",
       "vendorProject": "JetBrains",
@@ -73,14 +81,6 @@
       "vendorProject": "Check Point",
       "product": "SmartConsole",
       "vulnerabilityName": "Check Point SmartConsole Improper Authentication Vulnerability",
-      "dateAdded": "2026-07-22",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-50522",
-      "vendorProject": "Microsoft",
-      "product": "SharePoint",
-      "vulnerabilityName": "Microsoft SharePoint Deserialization of Untrusted Data Vulnerability ",
       "dateAdded": "2026-07-22",
       "knownRansomwareCampaignUse": "Unknown"
     }
