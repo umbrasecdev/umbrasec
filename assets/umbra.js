@@ -22,22 +22,26 @@
   $$("[data-kbd]").forEach((el) => { el.textContent = isMac ? "⌘K" : "Ctrl K"; });
 
   /* ── Command palette data ─────────────────────────────────────── */
+  // Keep entries grouped together and in GROUP_ORDER below. renderList emits a
+  // group heading whenever the group changes as it walks the array, so a group
+  // split across the array renders its heading more than once. The stable sort
+  // after this array enforces it regardless of how new entries get appended.
   const COMMANDS = [
     { group: "Navigate", label: "Home", hint: "overview", icon: "fa-house", href: "index.html" },
-    { group: "Navigate", label: "Research", hint: "all writeups", icon: "fa-flask", href: "research/index.html", keywords: "articles posts" },
-    { group: "Guide", label: "SMB Security Guide", hint: "zero to defensible", icon: "fa-route", href: "guide/index.html", keywords: "smb maturity essential eight iso 27001 nist csf roadmap journey foundation identity detection governance vciso" },
-    { group: "Guide", label: "Stage 1: Foundation", hint: "the cheap basics", icon: "fa-shield-halved", href: "guide/foundation.html", keywords: "foundation mfa backups patching admin asset inventory email phishing macros essential eight maturity level 1 basics" },
-    { group: "Guide", label: "Stage 2: Identity & Access", hint: "the login is the perimeter", icon: "fa-id-badge", href: "guide/identity-and-access.html", keywords: "identity access sso single sign on conditional access mfa passkeys fido2 admin privileged joiner mover leaver password manager service accounts oauth consent least privilege" },
-    { group: "Guide", label: "Stage 3: Detection & Response", hint: "someone has to watch the logs", icon: "fa-tower-observation", href: "guide/detection-and-response.html", keywords: "detection response edr mdr mssp soc logging audit log alerts incident response plan tabletop exercise notifiable data breach ransomware reporting build vs buy monitoring" },
-    { group: "Guide", label: "Stage 4: Governance & Maturity", hint: "make the program provable", icon: "fa-landmark", href: "guide/governance-and-maturity.html", keywords: "governance maturity risk register policies supplier third party vendor risk board reporting metrics iso 27001 certification soc 2 smb1001 essential eight ml2 application control govern" },
     { group: "Navigate", label: "Approach", hint: "how this works", icon: "fa-compass", href: "index.html#approach", keywords: "method principles" },
+    { group: "Navigate", label: "Research", hint: "all writeups", icon: "fa-flask", href: "research/index.html", keywords: "articles posts" },
     { group: "Navigate", label: "Open Source", hint: "tools", icon: "fa-code-branch", href: "tools/index.html", keywords: "tools github kev sigma blue team mapper kev-watch" },
-    { group: "Tools", label: "Blue Team Mapper", hint: "defender reference", icon: "fa-shield-halved", href: "tools/blue-team-mapper/index.html", keywords: "blue team mapper detection siem incident response threat hunting hardening soc defender reference soar" },
     { group: "Navigate", label: "Services", hint: "work with us", icon: "fa-handshake", href: "services.html", keywords: "hire consulting detection engineering m365 hardening advisory incident response retainer" },
     { group: "Navigate", label: "Virtual CISO (vCISO)", hint: "security strategy", icon: "fa-user-tie", href: "services.html#vciso", keywords: "vciso virtual ciso fractional ciso grc governance risk compliance strategy iso 27001 essential eight board policy uplift assess strategise implement run" },
     { group: "Navigate", label: "Start a scoping conversation", hint: "free, low-pressure", icon: "fa-comments", href: "services.html#talk", keywords: "book call quote hire engage contact email talk" },
     { group: "Navigate", label: "About", hint: "the project", icon: "fa-circle-info", href: "about.html" },
     { group: "Navigate", label: "Contact", hint: "get in touch", icon: "fa-envelope", href: "index.html#contact", keywords: "email" },
+    { group: "Guide", label: "SMB Security Guide", hint: "zero to defensible", icon: "fa-route", href: "guide/index.html", keywords: "smb maturity essential eight iso 27001 nist csf roadmap journey foundation identity detection governance vciso" },
+    { group: "Guide", label: "Stage 1: Foundation", hint: "the cheap basics", icon: "fa-shield-halved", href: "guide/foundation.html", keywords: "foundation mfa backups patching admin asset inventory email phishing macros essential eight maturity level 1 basics" },
+    { group: "Guide", label: "Stage 2: Identity & Access", hint: "the login is the perimeter", icon: "fa-id-badge", href: "guide/identity-and-access.html", keywords: "identity access sso single sign on conditional access mfa passkeys fido2 admin privileged joiner mover leaver password manager service accounts oauth consent least privilege" },
+    { group: "Guide", label: "Stage 3: Detection & Response", hint: "someone has to watch the logs", icon: "fa-tower-observation", href: "guide/detection-and-response.html", keywords: "detection response edr mdr mssp soc logging audit log alerts incident response plan tabletop exercise notifiable data breach ransomware reporting build vs buy monitoring" },
+    { group: "Guide", label: "Stage 4: Governance & Maturity", hint: "make the program provable", icon: "fa-landmark", href: "guide/governance-and-maturity.html", keywords: "governance maturity risk register policies supplier third party vendor risk board reporting metrics iso 27001 certification soc 2 smb1001 essential eight ml2 application control govern" },
+    { group: "Tools", label: "Blue Team Mapper", hint: "defender reference", icon: "fa-shield-halved", href: "tools/blue-team-mapper/index.html", keywords: "blue team mapper detection siem incident response threat hunting hardening soc defender reference soar" },
     /* AUTO:articles START */
     { group: "Articles", label: "SafePay & Australian Real Estate", hint: "ransomware + Essential Eight", icon: "fa-building", href: "research/safepay-australian-smb.html", keywords: "safepay ransomware centralized non-raas australian real estate agency smb trust account essential eight asd acsc rdp vpn infostealer psexec winrm rclone filezilla exfiltration shadow copy backup deletion living off the land edge device fortinet citrix threat profile mitigation franchise" },
     { group: "Articles", label: "How INC Ransom Hits Australian SMBs", hint: "RaaS + Essential Eight", icon: "fa-skull-crossbones", href: "research/inc-ransom-australian-smb.html", keywords: "inc ransom ransomware raas affiliate australian smb essential eight acsc asd cert nz double extortion rclone megasync screenconnect rdp citrix netscaler fortinet phishing initial access broker living off the land net.exe defender lolbin threat profile mitigation" },
@@ -50,6 +54,17 @@
     { group: "External", label: "GitHub", hint: "github.com/umbrasecdev/umbrasec", icon: "fa-github", brand: true, href: "https://github.com/umbrasecdev/umbrasec", external: true },
     { group: "External", label: "Email 0xdev1@umbrasec.dev", hint: "mail", icon: "fa-paper-plane", href: "mailto:0xdev1@umbrasec.dev", external: true },
   ];
+
+  // Stable sort into GROUP_ORDER so each group heading renders exactly once,
+  // whatever order entries were written or generated in. Array.prototype.sort
+  // is stable in every browser that ships ES2019, so within-group order above
+  // is preserved. Unknown groups sort to the end rather than being dropped.
+  const GROUP_ORDER = ["Navigate", "Guide", "Tools", "Articles", "External"];
+  const groupRank = (g) => {
+    const i = GROUP_ORDER.indexOf(g);
+    return i === -1 ? GROUP_ORDER.length : i;
+  };
+  COMMANDS.sort((a, b) => groupRank(a.group) - groupRank(b.group));
 
   /* ── Build command palette DOM ────────────────────────────────── */
   const overlay = document.createElement("div");
@@ -89,7 +104,7 @@
     let lastGroup = null;
     filtered.forEach((c, i) => {
       if (c.group !== lastGroup) {
-        html += '<div class="cmdk-group-label">' + c.group + "</div>";
+        html += '<div class="cmdk-group-label">' + escapeHtml(c.group) + "</div>";
         lastGroup = c.group;
       }
       html +=

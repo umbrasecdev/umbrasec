@@ -3,7 +3,27 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Blue Team Mapper v4.0</title>
+<title>Blue Team Mapper - UMBRASEC</title>
+<meta name="description" content="A single-page defender reference covering the full defensive lifecycle: SIEM and log-source priority, detection engineering, incident response, threat hunting, SOAR playbooks, identity and cloud hardening, and LLM-app defense. MITRE ATT&amp;CK mapped.">
+<link rel="canonical" href="https://umbrasec.dev/tools/blue-team-mapper/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="UMBRASEC">
+<meta property="og:url" content="https://umbrasec.dev/tools/blue-team-mapper/">
+<meta property="og:title" content="Blue Team Mapper - UMBRASEC">
+<meta property="og:description" content="The full defensive lifecycle on one page: SIEM, detection engineering, IR, threat hunting, SOAR, hardening, and LLM-app defense - mapped to MITRE ATT&amp;CK.">
+<meta property="og:image" content="https://umbrasec.dev/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="UMBRASEC - Attackers improve. Defenders should too.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blue Team Mapper - UMBRASEC">
+<meta name="twitter:description" content="The full defensive lifecycle on one page - mapped to MITRE ATT&amp;CK.">
+<meta name="twitter:image" content="https://umbrasec.dev/assets/og.png">
+<link rel="alternate" type="application/rss+xml" title="UMBRASEC Research" href="https://umbrasec.dev/feed.xml">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="512x512" href="../../assets/umbra-avatar.png">
+<link rel="apple-touch-icon" href="../../assets/umbra-avatar.png">
+<meta name="theme-color" content="#1a1b26">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -696,10 +716,31 @@ footer {
   text-align: center;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--text);
 }
 
-footer strong { color: var(--text-dim); }
+footer strong { color: var(--text-bright); }
+
+/* Route back into the rest of the site - this page carries none of the
+   shared site chrome, so the footer is the only way out of it besides the
+   sidebar's home link. */
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  margin-bottom: 16px;
+}
+.footer-nav a {
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.footer-nav a:hover {
+  color: var(--cyan);
+  border-bottom-color: var(--cyan);
+}
+.footer-meta { font-size: 10px; margin-top: 8px; display: block; color: var(--text); }
 
 /* ═══════════════════════════════════════════════════════════
    SCROLLBAR
@@ -793,6 +834,25 @@ footer strong { color: var(--text-dim); }
   color: var(--blue);
   border-bottom-color: var(--blue);
 }
+
+/* MITRE ATT&CK technique ID under a matrix row's technique name.
+   Deliberately --blue rather than --text-dim/--text-muted: those two sit at
+   2.8:1 and 1.9:1 on the card background and fail WCAG AA for body text. */
+.attck-id {
+  display: block;
+  margin-top: 4px;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+.data-table .attck-id a {
+  color: var(--blue);
+  border-bottom: none;
+}
+.data-table .attck-id a:hover {
+  color: var(--cyan);
+  border-bottom: 1px solid var(--cyan);
+}
 </style>
 </head>
 <body>
@@ -811,7 +871,7 @@ footer strong { color: var(--text-dim); }
   <div class="sidebar-logo">
     <div class="logo-title">Blue Team <span>Mapper</span></div>
     <div class="logo-ver">v4.0 · DEFENDER REFERENCE</div>
-    <a class="logo-home" href="/index.html">&larr; <b>UMBRASEC</b></a>
+    <a class="logo-home" href="../../index.html">&larr; <b>UMBRASEC</b></a>
   </div>
 
   <div class="nav-section">
@@ -1479,133 +1539,133 @@ footer strong { color: var(--text-dim); }
       </thead>
       <tbody>
         <tr>
-          <td>Spear phishing (HTML smuggling)</td>
+          <td>Spear phishing (HTML smuggling)<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1566/001/" target="_blank" rel="noopener">T1566.001</a> · <a href="https://attack.mitre.org/techniques/T1027/006/" target="_blank" rel="noopener">T1027.006</a></span></td>
           <td>Email gateway + browser telemetry</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Block sender/domain · hunt all recipients · check for execution</td>
         </tr>
         <tr>
-          <td>LNK / ISO file delivery</td>
+          <td>LNK / ISO file delivery<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1566/001/" target="_blank" rel="noopener">T1566.001</a> · <a href="https://attack.mitre.org/techniques/T1204/002/" target="_blank" rel="noopener">T1204.002</a></span></td>
           <td>Email attachment scan · Sysmon Event 1</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Block file type at gateway · hunt org-wide for execution</td>
         </tr>
         <tr>
-          <td>Shellcode loader (custom)</td>
+          <td>Shellcode loader (custom)<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1620/" target="_blank" rel="noopener">T1620</a></span></td>
           <td>EDR behavioral + AMSI if PowerShell-staged</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Isolate host · memory forensics before reboot</td>
         </tr>
         <tr>
-          <td>Process injection</td>
+          <td>Process injection<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1055/" target="_blank" rel="noopener">T1055</a></span></td>
           <td>Sysmon 8/10 · ETW-TI · EDR behavioral</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Isolate · terminate injected process · investigate parent</td>
         </tr>
         <tr>
-          <td>DLL sideloading</td>
+          <td>DLL sideloading<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1574/002/" target="_blank" rel="noopener">T1574.002</a></span></td>
           <td>Sysmon 7 (DLL load) · PE signature check</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Block sideload path · hunt similar DLL pairs fleet-wide</td>
         </tr>
         <tr>
-          <td>LSASS credential dump</td>
+          <td>LSASS credential dump<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1003/001/" target="_blank" rel="noopener">T1003.001</a></span></td>
           <td>Sysmon 10 GrantedAccess 0x1FFFFF · EDR</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Full cred scope → reset ALL exposed credentials immediately</td>
         </tr>
         <tr>
-          <td>Kerberoasting</td>
+          <td>Kerberoasting<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1558/003/" target="_blank" rel="noopener">T1558.003</a></span></td>
           <td>Event 4769 etype=0x17 (RC4)</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Rotate SPN passwords · enforce AES on all service accounts</td>
         </tr>
         <tr>
-          <td>DCSync</td>
+          <td>DCSync<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1003/006/" target="_blank" rel="noopener">T1003.006</a></span></td>
           <td>Event 4662 + DRS rights + non-DC source</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Full DA scope · krbtgt ×2 · all Domain Admin creds reset</td>
         </tr>
         <tr>
-          <td>Pass-the-Hash</td>
+          <td>Pass-the-Hash<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1550/002/" target="_blank" rel="noopener">T1550.002</a></span></td>
           <td>Event 4624 Type 3 NTLM without prior 4648</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Scope impacted account · rotate · enable Credential Guard</td>
         </tr>
         <tr>
-          <td>Golden Ticket</td>
+          <td>Golden Ticket<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1558/001/" target="_blank" rel="noopener">T1558.001</a></span></td>
           <td>Event 4769 anomalous PAC data · unusual lifetimes</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>krbtgt ×2 (48hr apart) · re-scope all access</td>
         </tr>
         <tr>
-          <td>PsExec lateral movement</td>
+          <td>PsExec lateral movement<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1021/002/" target="_blank" rel="noopener">T1021.002</a> · <a href="https://attack.mitre.org/techniques/T1543/003/" target="_blank" rel="noopener">T1543.003</a></span></td>
           <td>Event 7045 (service install) · Sysmon 1/17/18</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Block at other hosts · trace source creds · scope spread</td>
         </tr>
         <tr>
-          <td>WMI remote execution</td>
+          <td>WMI remote execution<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1047/" target="_blank" rel="noopener">T1047</a></span></td>
           <td>WMI-Activity log · WmiPrvSE child processes</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Investigate source credentials · scope lateral reach</td>
         </tr>
         <tr>
-          <td>Scheduled task persistence</td>
+          <td>Scheduled task persistence<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1053/005/" target="_blank" rel="noopener">T1053.005</a></span></td>
           <td>Event 4698 · Sysmon 1 (schtasks.exe)</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Delete task · investigate creator account · hunt fleet</td>
         </tr>
         <tr>
-          <td>Registry Run key persistence</td>
+          <td>Registry Run key persistence<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1547/001/" target="_blank" rel="noopener">T1547.001</a></span></td>
           <td>Sysmon 13 · Autoruns baseline diff</td>
           <td><span class="sev sev-med">MED</span></td>
           <td>Remove key · hunt similar on all hosts · investigate parent</td>
         </tr>
         <tr>
-          <td>DNS exfiltration</td>
+          <td>DNS exfiltration<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1048/003/" target="_blank" rel="noopener">T1048.003</a> · <a href="https://attack.mitre.org/techniques/T1071/004/" target="_blank" rel="noopener">T1071.004</a></span></td>
           <td>Sysmon 22 · Zeek dns.log · volume anomaly</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Block domain · sinkhole · investigate originating host</td>
         </tr>
         <tr>
-          <td>HTTPS C2 beaconing</td>
+          <td>HTTPS C2 beaconing<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1071/001/" target="_blank" rel="noopener">T1071.001</a></span></td>
           <td>Beaconing detection (RITA) · JA3 · Zeek</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Block C2 domain/IP · isolate host · full memory forensics</td>
         </tr>
         <tr>
-          <td>Cloud token theft / device code</td>
+          <td>Cloud token theft / device code<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1528/" target="_blank" rel="noopener">T1528</a> · <a href="https://attack.mitre.org/techniques/T1550/001/" target="_blank" rel="noopener">T1550.001</a></span></td>
           <td>Sign-in risk · Entra ID Protection · IP mismatch</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Revoke all tokens · CAP review · audit app registrations</td>
         </tr>
         <tr>
-          <td>ADCS ESC1 exploitation</td>
+          <td>ADCS ESC1 exploitation<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1649/" target="_blank" rel="noopener">T1649</a></span></td>
           <td>ADCS audit log Event 4887 · SAN for DA UPN</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Revoke cert · fix template perms · Locksmith full audit</td>
         </tr>
         <tr>
-          <td>Ransomware encryption</td>
+          <td>Ransomware encryption<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1486/" target="_blank" rel="noopener">T1486</a></span></td>
           <td>Controlled Folder Access · mass file rename pattern</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>EMERGENCY - activate BC/DR · segment network · validate backups</td>
         </tr>
         <tr>
-          <td>BYOVD vulnerable driver</td>
+          <td>BYOVD vulnerable driver<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1068/" target="_blank" rel="noopener">T1068</a> · <a href="https://attack.mitre.org/techniques/T1562/001/" target="_blank" rel="noopener">T1562.001</a></span></td>
           <td>Sysmon 6 (driver load) · WDAC block</td>
           <td><span class="sev sev-crit">CRIT</span></td>
           <td>Block driver hash · update WDAC policy · isolate host</td>
         </tr>
         <tr>
-          <td>ClickFix / clipboard paste</td>
+          <td>ClickFix / clipboard paste<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1204/004/" target="_blank" rel="noopener">T1204.004</a> · <a href="https://attack.mitre.org/techniques/T1059/001/" target="_blank" rel="noopener">T1059.001</a></span></td>
           <td>PowerShell ScriptBlock 4104 · Run dialog</td>
           <td><span class="sev sev-high">HIGH</span></td>
           <td>Block execution · user education campaign · hunt recipients</td>
         </tr>
         <tr>
-          <td>AS-REP Roasting</td>
+          <td>AS-REP Roasting<span class="attck-id"><a href="https://attack.mitre.org/techniques/T1558/004/" target="_blank" rel="noopener">T1558.004</a></span></td>
           <td>Event 4768 with pre-auth disabled accounts</td>
           <td><span class="sev sev-med">MED</span></td>
           <td>Enable pre-auth on all accounts · rotate exposed passwords</td>
@@ -2358,7 +2418,7 @@ footer strong { color: var(--text-dim); }
   <div class="section-head">
     <div class="section-eyebrow col-green">AI &amp; LLM Defense</div>
     <h2 class="section-title">Defending LLM-Integrated Apps</h2>
-    <p class="section-desc">Your org is shipping chatbots, copilots, RAG, and tool-calling agents whether security signed off or not. Treat every LLM as an <strong>untrusted component</strong> that will eventually follow someone else's instructions - there is no patch for prompt injection, so defense is least privilege, egress control, and logging. Full writeup: <a href="/research/owasp-llm-top-10-for-defenders.html">Prompt Injection &amp; the OWASP LLM Top 10 for Defenders</a>.</p>
+    <p class="section-desc">Your org is shipping chatbots, copilots, RAG, and tool-calling agents whether security signed off or not. Treat every LLM as an <strong>untrusted component</strong> that will eventually follow someone else's instructions - there is no patch for prompt injection, so defense is least privilege, egress control, and logging. Full writeup: <a href="../../research/owasp-llm-top-10-for-defenders.html">Prompt Injection &amp; the OWASP LLM Top 10 for Defenders</a>.</p>
   </div>
 
   <div class="callout callout-warn">
@@ -2703,8 +2763,18 @@ footer strong { color: var(--text-dim); }
 </section>
 
 <footer>
+  <nav class="footer-nav" aria-label="UMBRASEC site navigation">
+    <a href="../../index.html">UMBRASEC home</a>
+    <a href="../../guide/index.html">SMB Guide</a>
+    <a href="../../research/index.html">Research</a>
+    <a href="../index.html">Open Source</a>
+    <a href="../../services.html">Services</a>
+    <a href="../../about.html">About</a>
+    <a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener">GitHub</a>
+  </nav>
   <strong>Blue Team Mapper v4.0</strong> · Comprehensive Defender Reference · MITRE ATT&amp;CK Aligned<br>
-  <span style="font-size:10px;margin-top:6px;display:block">Detection · Triage · Response · Hardening · Intel · Recovery</span>
+  <span class="footer-meta">Detection · Triage · Response · Hardening · Intel · Recovery</span>
+  <span class="footer-meta">Part of <a href="../../index.html" style="color:var(--blue);text-decoration:none">UMBRASEC</a> - independent defensive security research. Corrections welcome: <a href="mailto:0xdev1@umbrasec.dev" style="color:var(--blue);text-decoration:none">0xdev1@umbrasec.dev</a></span>
 </footer>
 
 </main>

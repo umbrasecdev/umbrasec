@@ -38,8 +38,15 @@ body {
     font-weight: 600;
 }
 
+/* Section-page hero (Research, Open source, Services) - smaller than the
+   landing hero. Must be a class, not an inline style: an inline font-size
+   outranks the media query below and pins these headings at desktop size
+   on phones, where a single long word then overflows the viewport. */
+.hero-headline--sm { font-size: 64px; }
+
 @media (max-width: 768px) {
     .hero-headline { font-size: 56px; }
+    .hero-headline--sm { font-size: 40px; }
 }
 
 .section-label {

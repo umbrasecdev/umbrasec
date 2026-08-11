@@ -63,10 +63,18 @@
                     <a href="about.html" class="nav-link">About</a>
                     <a href="index.html#contact" class="nav-link">Contact</a>
                 </div>
-                <a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener"
-                   class="nav-icon w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e]" title="GitHub">
-                    <i class="fa-brands fa-github text-xl"></i>
-                </a>
+                <div class="flex items-center gap-x-3">
+                    <button data-cmdk type="button"
+                            class="hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-[#2a2c38] hover:bg-[#16161e] transition-colors"
+                            title="Open command palette">
+                        <span data-kbd>Ctrl K</span>
+                        <span class="text-[#a9b1d6]">Search</span>
+                    </button>
+                    <a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener"
+                       class="nav-icon w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e]" title="GitHub">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -75,8 +83,8 @@
     <section class="hero max-w-[1280px] mx-auto px-8 pt-16 pb-14 tokyo-grid">
         <div class="max-w-[820px]">
             <div class="section-label mb-5">VIRTUAL CISO &amp; SECURITY SERVICES</div>
-            <h1 class="hero-headline font-semibold tracking-[-0.045em] leading-none mb-6" style="font-size:64px;">
-                A CISO for businesses<br>that don't have one.
+            <h1 class="hero-headline hero-headline--sm font-semibold tracking-[-0.045em] leading-none mb-6">
+                A CISO for businesses <br>that don't have one.
             </h1>
             <p class="max-w-[660px] text-xl text-[#a9b1d6] leading-snug">
                 Most small and mid-sized businesses can't justify a full-time Chief Information Security Officer - but

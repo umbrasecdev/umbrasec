@@ -51,10 +51,18 @@
                     <a href="about.html" class="nav-link text-[#c0caf5]">About</a>
                     <a href="index.html#contact" class="nav-link">Contact</a>
                 </div>
-                <a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener"
-                   class="nav-icon w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e]" title="GitHub">
-                    <i class="fa-brands fa-github text-xl"></i>
-                </a>
+                <div class="flex items-center gap-x-3">
+                    <button data-cmdk type="button"
+                            class="hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-[#2a2c38] hover:bg-[#16161e] transition-colors"
+                            title="Open command palette">
+                        <span data-kbd>Ctrl K</span>
+                        <span class="text-[#a9b1d6]">Search</span>
+                    </button>
+                    <a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener"
+                       class="nav-icon w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e]" title="GitHub">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>

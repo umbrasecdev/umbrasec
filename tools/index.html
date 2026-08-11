@@ -51,17 +51,25 @@
                     <a href="../about.html" class="nav-link">About</a>
                     <a href="../index.html#contact" class="nav-link">Contact</a>
                 </div>
-                <a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener"
-                   class="nav-icon w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e]" title="GitHub">
-                    <i class="fa-brands fa-github text-xl"></i>
-                </a>
+                <div class="flex items-center gap-x-3">
+                    <button data-cmdk type="button"
+                            class="hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-[#2a2c38] hover:bg-[#16161e] transition-colors"
+                            title="Open command palette">
+                        <span data-kbd>Ctrl K</span>
+                        <span class="text-[#a9b1d6]">Search</span>
+                    </button>
+                    <a href="https://github.com/umbrasecdev/umbrasec" target="_blank" rel="noopener"
+                       class="nav-icon w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#16161e]" title="GitHub">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
     <section class="max-w-[1280px] mx-auto px-8 pt-16 pb-10 tokyo-grid">
         <div class="section-label mb-4">OPEN SOURCE</div>
-        <h1 class="hero-headline font-semibold tracking-[-0.045em] mb-6" style="font-size:64px;">Open source.</h1>
+        <h1 class="hero-headline hero-headline--sm font-semibold tracking-[-0.045em] mb-6">Open source.</h1>
         <p class="max-w-[640px] text-xl text-[#a9b1d6]">
             Small, useful, open-source tools for defenders - built in the open on GitHub. Honest status labels;
             nothing here claims to be more finished than it is.
@@ -84,7 +92,7 @@
                     <div class="font-semibold text-xl">sigma-pack</div>
                     <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#2a2410] text-[#e0af68] border border-[#3a341a]">EARLY</span>
                 </div>
-                <p class="text-sm text-[#a9b1d6]">The Sigma rules and KQL queries from the research writeups, shipped as runnable files - three Kerberoasting detections and three OAuth consent-phishing queries so far. Grows one writeup at a time.</p>
+                <p class="text-sm text-[#a9b1d6]">The Sigma rules and KQL queries from the research writeups, shipped as runnable files - five Sigma rules (Kerberoasting, LiteLLM command injection) and three OAuth consent-phishing KQL queries so far, each mapped to its ATT&amp;CK technique. Grows one writeup at a time.</p>
                 <a href="https://github.com/umbrasecdev/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener" class="mt-6 inline-block text-sm text-[#7aa2f7] hover:text-[#7dcfff]">View on GitHub →</a>
             </div>
 
