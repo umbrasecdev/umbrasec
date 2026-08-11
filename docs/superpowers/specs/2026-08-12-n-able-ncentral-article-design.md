@@ -62,6 +62,32 @@ Note for the article: the "conflicting" CVSS scores in circulating coverage are
 not a conflict - 8.1 is v3.1 and 8.2 is v4.0. Worth one clarifying sentence
 because it models the site's sourcing discipline.
 
+### What the vectors themselves tell a defender
+
+This is published data, not inference, and it carries more signal than the
+single headline number. Print the vectors in the article so readers can check
+the reading.
+
+- **Both CVEs are `AC:H`** - high attack complexity, meaning exploitation
+  depends on conditions outside the attacker's control. It was still burned as
+  a zero-day against a live customer environment on 31 July. The defender
+  lesson: attack complexity is not a deprioritisation signal, and a KEV listing
+  overrides any complexity-based triage.
+- **Both are `AV:N/PR:N/UI:N`** - reachable over the network, no prior
+  privileges, no user interaction. Nothing the victim does or fails to click is
+  a factor.
+- **The v3.1 delta:** 18556 is `C:H/I:H/A:N`; 18577 is `C:H/I:H/A:H`.
+  Availability impact went from none to high.
+- **The v4.0 delta is the interesting one:** 18556 carries
+  `SC:N/SI:N/SA:N`; 18577 carries `SC:L/SI:L/SA:L`. Subsequent-system impact
+  went from none to low - the scoring records that the second flaw was
+  understood to reach *past* the N-central server into downstream managed
+  systems. That is this article's thesis, encoded in the vector by the people
+  who assigned it.
+
+Label this section as reading the published vectors. It is analysis of sourced
+data, not a claim about the underlying code.
+
 ### CISA KEV
 - Official catalog name for **both** CVEs: "N-able N-central Authentication
   Bypass Using an Alternate Path or Channel Vulnerability" (maps to CWE-288)
@@ -104,12 +130,31 @@ potentially compromised** and review accounts and activity.
 
 ## Explicit honesty constraints
 
-1. **The root cause is not public.** Horizon3 states the initial remediation
-   "did not completely eliminate the underlying authentication flaw" but no
-   source explains the code-level mechanism, the alternate path, or why the
-   first patch failed. The article must say this plainly and must not
-   reconstruct, infer, or illustrate a mechanism. This is the single biggest
-   risk of the piece.
+1. **The code-level root cause is not public - but the mechanism section is
+   still writable.** No source discloses which endpoint or route was involved,
+   what the alternate channel was, which parameter carried it, or what the
+   first patch changed such that a bypass survived. Horizon3 states only that
+   the initial remediation "did not completely eliminate the underlying
+   authentication flaw."
+
+   The line to hold: **do not reconstruct an exploit path.** A confident
+   paragraph inventing "a secondary API route that didn't inherit the auth
+   middleware" would read as authoritative, be unfalsifiable to most readers,
+   and stand a good chance of being wrong. On a site whose pitch is "if it
+   isn't cited, it isn't stated," a fabricated mechanism discredits everything
+   around it.
+
+   What IS in scope, all from published data:
+   - the weakness class, named by CISA - Authentication Bypass Using an
+     Alternate Path or Channel (CWE-288) - explained as a category, explicitly
+     labelled as describing the class rather than this instance
+   - the CVSS vector reading above, with vectors printed for checking
+   - the confirmed outcome: unauthenticated network attacker to administrative
+     control of the N-central server
+   - the confirmed fact that fix #1 was incomplete and fix #2 superseded it
+
+   Say once, plainly, that the code-level cause has not been disclosed. Then
+   write the section from the class, the vectors, and the outcome.
 2. **No IOC IP list.** Approved by user. Sources disagree on at least one
    address (N-able renders `73.249.252.200`; Rapid7 and Huntress both have
    `173.249.252.200`), and VPN exit nodes rot fast. Point readers to the vendor
@@ -128,27 +173,36 @@ potentially compromised** and review accounts and activity.
 2. **What actually happened** - the timeline table. Lead with Adlumin catching
    it as a 0-day on 31 July, because "the vendor's own MDR found it in a
    customer environment" sets the stakes honestly.
-3. **Why there are two CVEs** - the incomplete fix. The generalisable lesson:
-   "we patched it" and "we are not exploitable" are different claims. Include
-   the explicit statement that the root cause has not been publicly detailed.
-4. **You don't run N-central. So what can you do?** - the pivot. Establishes
+3. **What the advisories actually tell you** - the mechanism section, built
+   from the weakness class (CWE-288, explained as a category), the published
+   CVSS vectors and what their deltas encode, and the confirmed outcome. States
+   once and plainly that the code-level cause has not been disclosed, then
+   works with what has. Carries the `AC:H`-was-still-exploited lesson and the
+   `SC:N` to `SC:L` observation that the scoring itself anticipated downstream
+   blast radius.
+4. **Why there are two CVEs** - the incomplete fix, Hotfix 1 superseded by
+   Hotfix 2 four days later. The generalisable lesson: "we patched it" and "we
+   are not exploitable" are different claims, and N-able's own guidance to
+   treat late-patching environments as potentially compromised is the vendor
+   conceding exactly that.
+5. **You don't run N-central. So what can you do?** - the pivot. Establishes
    that the attacker's actions land on client hardware and are therefore
    client-detectable.
-5. **What to log on your endpoints** - process creation (Sysmon 1 / 4688),
+6. **What to log on your endpoints** - process creation (Sysmon 1 / 4688),
    service installation (7045), and the N-central Take Control log directory.
    Written for an SMB with modest tooling; notes what each costs to turn on.
-6. **Detection** - two Sigma rules plus one hunt, each with tuning and FP notes
+7. **Detection** - two Sigma rules plus one hunt, each with tuning and FP notes
    (see below).
-7. **Questions to put to your MSP this week** - 5-6 concrete, answerable
+8. **Questions to put to your MSP this week** - 5-6 concrete, answerable
    questions with "what a good answer sounds like" for each. This is the
    section most likely to get shared, and it is the vCISO/third-party-risk
    hook.
-8. **Where the Essential Eight actually helps** - patch applications (the MSP's
+9. **Where the Essential Eight actually helps** - patch applications (the MSP's
    obligation, and how you verify it), MFA (N-able explicitly recommends it),
    restrict admin privileges, application control against the masqueraded
    binary. Honest about which controls the SMB cannot unilaterally apply.
-9. **Honest limitations**
-10. **References**
+10. **Honest limitations**
+11. **References**
 
 ## Detections
 
@@ -197,6 +251,9 @@ and a note on what to correlate.
 - Huntress analysis (Take Control artifacts, hunting guidance)
 - Horizon3 vulnerability page
 - MITRE ATT&CK pages for T1036.005, T1543.003, T1572
+- MITRE CWE-288 (Authentication Bypass Using an Alternate Path or Channel) -
+  for the weakness-class explanation in section 3
+- FIRST CVSS v3.1 and v4.0 specifications - for the vector reading
 - ASD Essential Eight Maturity Model
 
 ## Build steps (per CLAUDE.md)
@@ -216,7 +273,11 @@ and a note on what to correlate.
 ## Success criteria
 
 - Every technical claim traces to a source in the References list
-- The root-cause gap is stated, not filled
+- The code-level root-cause gap is stated once and plainly, and no exploit path
+  is reconstructed - while the mechanism section still does real work from the
+  weakness class, the published vectors, and the confirmed outcome
+- CVSS vectors are printed in full so a reader can check the reading rather
+  than take it on trust
 - No IOC IP list
 - Two Sigma rules pass `sigma-validate.yml`
 - Derived files regenerate cleanly and `--check` passes
