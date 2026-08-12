@@ -243,7 +243,7 @@ CVE-2026-18577  CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:L/SI:L/SA:L 
             <h2>You don't run N-central. So what can you do?</h2>
             <p>
                 Everything above happened on a server you cannot reach. Everything below happened on hardware you own.
-                With control of the console, the operators used the product's own features:
+                The operators then used the product's own features:
             </p>
             <ul>
                 <li>Using <strong>Take Control</strong>, N-central's remote control, to reach managed endpoints including
@@ -265,7 +265,7 @@ CVE-2026-18577  CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:L/SI:L/SA:L 
             <ul>
                 <li><strong>Process creation with command lines.</strong> Sysmon Event ID 1, or Windows Security Event
                     ID <strong>4688</strong> - which carries no command line unless you separately enable "Include
-                    command line in process creation events". Sysmon is free but is a deployment project; 4688 plus
+                    command line in process creation events". Sysmon is free but a deployment project; 4688 plus
                     command-line auditing is cheaper.</li>
                 <li><strong>Service installation.</strong> System log Event ID <strong>7045</strong>, with the service name
                     and image path. On by default, low volume, rarely collected.</li>
@@ -277,7 +277,7 @@ CVE-2026-18577  CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:L/SI:L/SA:L 
 
             <h2>Detection</h2>
             <p>
-                Two Sigma rules and one hunt. The rules live in
+                Two Sigma rules and one hunt. The rules are in
                 <a href="https://github.com/umbrasecdev/umbrasec/tree/master/tools/sigma-pack" target="_blank" rel="noopener">sigma-pack</a>,
                 validated in CI; convert with
                 <a href="https://github.com/SigmaHQ/sigma-cli" target="_blank" rel="noopener">sigma-cli</a>.
@@ -286,8 +286,8 @@ CVE-2026-18577  CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:L/SI:L/SA:L 
             <h3>1. A binary named svchost.exe outside System32 (high fidelity)</h3>
             <p>
                 Genuine Windows service hosting only ever runs from a small set of system directories. A process named
-                <code>svchost.exe</code> in a Documents folder is not an edge case - it is a name chosen to survive a
-                glance at Task Manager.
+                <code>svchost.exe</code> in a Documents folder is a name chosen to survive a glance at Task
+                Manager.
             </p>
             <pre><code>title: Masquerading svchost.exe Outside System32
 id: 1991446b-a433-4c51-97c8-ab493c79afcd
@@ -330,7 +330,7 @@ level: high</code></pre>
                 <p class="text-sm"><strong>Tuning note.</strong> The filter paths are hard-coded to
                 <code>C:\Windows\</code>, so a host with Windows on another drive alerts on every genuine
                 <code>svchost.exe</code>. Adjust them, then run report-only for a week and allowlist installer temp
-                paths exactly, not by pattern.</p>
+                paths exactly.</p>
             </div>
 
             <h3>2. A Cloudflare Tunnel service appears (tune before you trust)</h3>
@@ -398,7 +398,7 @@ level: medium</code></pre>
                 and <strong>8193</strong>, and the default <code>mspsupport@n-able.com</code> account - reported, not
                 verified by us; the file path is the unambiguous part. Correlate timestamps against your ticket queue
                 and change log: a session into a domain controller at 2am with no ticket is not subtle. Focus on
-                31 July to 10 August 2026, servers first.
+                31 July to 10 August 2026.
             </p>
 
             <h2>Questions to put to your MSP this week</h2>
@@ -414,7 +414,7 @@ level: medium</code></pre>
                 <li><strong>Is MFA enforced on every N-central account?</strong> Enforced rather than available, no
                     carve-outs, and a date it was turned on.</li>
                 <li><strong>Are the in-product support accounts disabled?</strong> Disabled unless a support case needs
-                    them. If permanently on, ask what monitors them.</li>
+                    them; if permanently on, ask what monitors them.</li>
                 <li><strong>Have you reviewed the console for unfamiliar accounts and password resets since
                     31 July?</strong> What they checked and what they found, including "nothing".</li>
                 <li><strong>Can you give us the Take Control session log for our endpoints, 31 July to 10 August?</strong>
@@ -434,9 +434,9 @@ level: medium</code></pre>
             <p>
                 The reframing worth keeping:
                 <a href="https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/essential-eight" target="_blank" rel="noopener">ASD's recommended baseline</a>
-                is also a checklist for interrogating whoever operates your controls. Working out which of the two you
-                are doing, control by control, is what the <a href="../services.html#vciso">vCISO engagement</a> is
-                for; the <a href="../guide/index.html">guide</a> is free.
+                is also a checklist for interrogating whoever operates your controls. Which of the two you are doing,
+                control by control, is what the <a href="../services.html#vciso">vCISO engagement</a> is for; the
+                <a href="../guide/index.html">guide</a> is free.
             </p>
 
             <h2>Honest limitations</h2>
@@ -462,9 +462,9 @@ level: medium</code></pre>
                 <li><a href="https://www.tenable.com/cve/CVE-2026-18577" target="_blank" rel="noopener">Tenable - CVE-2026-18577</a></li>
                 <li><a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA - KEV catalog</a></li>
                 <li><a href="https://www.n-able.com/blog/n-central-security-update-august-6-2026" target="_blank" rel="noopener">N-able - N-central Security Update (live indicator source)</a></li>
-                <li><a href="https://www.rapid7.com/blog/tag/emergent-threat-response/" target="_blank" rel="noopener">Rapid7 - Emergent Threat Response</a></li>
-                <li><a href="https://www.huntress.com/blog" target="_blank" rel="noopener">Huntress - N-central analysis</a></li>
-                <li><a href="https://horizon3.ai/attack-research/" target="_blank" rel="noopener">Horizon3.ai - CVE-2026-18577</a></li>
+                <li><a href="https://www.rapid7.com/blog/post/etr-cve-2026-18577-n-able-n-central-authentication-bypass-exploited-in-the-wild/" target="_blank" rel="noopener">Rapid7 - Emergent Threat Response: CVE-2026-18577 N-able N-central Authentication Bypass Exploited in the Wild</a></li>
+                <li><a href="https://www.huntress.com/blog/n-able-vulnerability-exploitation" target="_blank" rel="noopener">Huntress - Critical N-able N-central Vulnerability and Active Exploitation</a></li>
+                <li><a href="https://horizon3.ai/attack-research/vulnerabilities/cve-2026-18556-cve-2026-18577/" target="_blank" rel="noopener">Horizon3 - N-able N-central Auth Bypass: CVE-2026-18556 and CVE-2026-18577</a></li>
                 <li><a href="https://cwe.mitre.org/data/definitions/288.html" target="_blank" rel="noopener">MITRE - CWE-288</a></li>
                 <li><a href="https://attack.mitre.org/techniques/T1036/005/" target="_blank" rel="noopener">MITRE ATT&amp;CK - T1036.005</a></li>
                 <li><a href="https://attack.mitre.org/techniques/T1543/003/" target="_blank" rel="noopener">MITRE ATT&amp;CK - T1543.003</a></li>
