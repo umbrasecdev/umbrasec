@@ -25,6 +25,8 @@ every change - that's what the badge above checks.
 | [`app-role-assignment.kql`](queries/kql/app-role-assignment.kql) | KQL | [T1528](https://attack.mitre.org/techniques/T1528/) Steal Application Access Token | Credential Access | query |
 | [`litellm-proxy-spawns-shell.yml`](rules/linux/litellm-proxy-spawns-shell.yml) | Sigma | [T1190](https://attack.mitre.org/techniques/T1190/) Exploit Public-Facing App; [T1059](https://attack.mitre.org/techniques/T1059/) Command &amp; Scripting | Initial Access / Execution | experimental |
 | [`litellm-mcp-test-endpoint.yml`](rules/web/litellm-mcp-test-endpoint.yml) | Sigma | [T1190](https://attack.mitre.org/techniques/T1190/) Exploit Public-Facing App | Initial Access | experimental |
+| [`masquerading-svchost-outside-system32.yml`](rules/windows/masquerading-svchost-outside-system32.yml) | Sigma | [T1036.005](https://attack.mitre.org/techniques/T1036/005/) Match Legitimate Name or Location | Defense Evasion | experimental |
+| [`cloudflared-tunnel-service-install.yml`](rules/windows/cloudflared-tunnel-service-install.yml) | Sigma | [T1543.003](https://attack.mitre.org/techniques/T1543/003/) Windows Service; [T1572](https://attack.mitre.org/techniques/T1572/) Protocol Tunneling | Persistence / Command &amp; Control | experimental |
 
 `experimental` is the [Sigma status](https://sigmahq.io/docs/basics/rules.html) the
 rules themselves declare - new rules, not yet battle-tested by many environments.
@@ -75,6 +77,26 @@ access logs from the reverse proxy / ingress in front of LiteLLM. Scope the host
 rule to your LiteLLM hosts to cut generic `python` parent noise. Patch status is
 the real control - these cover the window before you've patched and the assets you
 haven't found yet.
+
+### N-able N-central intrusion artifacts - CVE-2026-18556 / CVE-2026-18577 (T1036.005, T1543.003, T1572)
+
+These two rules do not detect the N-central authentication bypass itself - that
+happens on the MSP's server, not on your endpoints. They detect what the
+operators did *after* it, on the managed machines, which is the part a managed
+client can actually see.
+
+| Rule | What it catches | Level |
+|---|---|---|
+| [`rules/windows/masquerading-svchost-outside-system32.yml`](rules/windows/masquerading-svchost-outside-system32.yml) | A binary named `svchost.exe` running from anywhere other than System32/SysWOW64/WinSxS - the Documents-folder drop reported by N-able is one instance | high |
+| [`rules/windows/cloudflared-tunnel-service-install.yml`](rules/windows/cloudflared-tunnel-service-install.yml) | Registration of a `Cloudflared` service, used here to hold access after N-central credentials were revoked | medium |
+
+Prerequisite: Windows process-creation telemetry (Sysmon Event 1 or Security
+4688 with command line auditing) for the first rule, and the Windows System log
+(Event 7045) for the second.
+
+Read the [writeup](https://umbrasec.dev/research/n-able-ncentral-msp-supply-chain.html)
+before deploying - the Cloudflare Tunnel rule in particular is a tuning
+exercise, not a drop-in alert.
 
 ## How to use these
 

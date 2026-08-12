@@ -1,0 +1,40 @@
+title: Cloudflare Tunnel Service Installed
+id: bf3f2f8a-f904-4978-9ff1-6dc3c79a2afb
+status: experimental
+description: >
+    A Windows service was created for cloudflared, the Cloudflare Tunnel
+    client. A tunnel client gives an operator inbound reach to a host without
+    any inbound firewall rule, and it keeps working after whatever access
+    established it has been revoked. Observed in the August 2026 N-able
+    N-central intrusions, where a service named Cloudflared was registered on
+    managed endpoints specifically to hold access after N-central credentials
+    were revoked.
+references:
+    - https://attack.mitre.org/techniques/T1543/003/
+    - https://attack.mitre.org/techniques/T1572/
+    - https://www.n-able.com/blog/n-central-security-update-august-6-2026
+    - https://umbrasec.dev/research/n-able-ncentral-msp-supply-chain.html
+author: UMBRASEC
+date: 2026/08/12
+tags:
+    - attack.persistence
+    - attack.t1543.003
+    - attack.command_and_control
+    - attack.t1572
+logsource:
+    product: windows
+    service: system
+detection:
+    selection_name:
+        EventID: 7045
+        ServiceName|contains: 'cloudflared'
+    selection_image:
+        EventID: 7045
+        ImagePath|contains: 'cloudflared'
+    condition: 1 of selection_*
+falsepositives:
+    - Cloudflare Tunnel is legitimate dual-use software. If your organisation
+      deploys it deliberately, allowlist the known install path and service
+      account and alert only on installs outside it
+    - A sanctioned vendor or MSP deploying Cloudflare Tunnel for remote support
+level: medium

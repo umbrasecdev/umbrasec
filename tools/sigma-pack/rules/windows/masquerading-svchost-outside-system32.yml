@@ -1,0 +1,37 @@
+title: Masquerading svchost.exe Outside System32
+id: 1991446b-a433-4c51-97c8-ab493c79afcd
+status: experimental
+description: >
+    A process named svchost.exe executed from a path outside System32,
+    SysWOW64 or WinSxS. Genuine Windows service hosting only ever runs from
+    those directories, so a match is a strong masquerading signal rather than
+    a behavioural guess. Observed in the August 2026 N-able N-central
+    intrusions, where operators placed svchost.exe in a user's Documents
+    directory on managed endpoints.
+references:
+    - https://attack.mitre.org/techniques/T1036/005/
+    - https://www.n-able.com/blog/n-central-security-update-august-6-2026
+    - https://umbrasec.dev/research/n-able-ncentral-msp-supply-chain.html
+author: UMBRASEC
+date: 2026/08/12
+tags:
+    - attack.defense_evasion
+    - attack.t1036.005
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\svchost.exe'
+    filter_windows_paths:
+        Image|startswith:
+            - 'C:\Windows\System32\'
+            - 'C:\Windows\SysWOW64\'
+            - 'C:\Windows\WinSxS\'
+    condition: selection and not 1 of filter_*
+falsepositives:
+    - Installers or update packages that stage a temporary copy of svchost.exe
+    - Windows installed to a drive or directory other than C:\Windows - adjust
+      the filter paths to match your build before deploying
+    - Software test harnesses and imaging tools that copy system binaries
+level: high
