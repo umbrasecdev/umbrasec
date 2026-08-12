@@ -6,8 +6,16 @@
     <atom:link href="https://umbrasec.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Independent defensive security research - detection engineering, threat analysis, and open-source tooling.</description>
     <language>en-us</language>
-    <!-- AUTO:builddate START --><lastBuildDate>Sat, 20 Jun 2026 12:00:00 +0000</lastBuildDate><!-- AUTO:builddate END -->
+    <!-- AUTO:builddate START --><lastBuildDate>Wed, 12 Aug 2026 12:00:00 +0000</lastBuildDate><!-- AUTO:builddate END -->
     <!-- AUTO:items START -->
+    <item>
+      <title>Your MSP's RMM Is Your Attack Surface - What the N-central Compromise Means for SMBs</title>
+      <link>https://umbrasec.dev/research/n-able-ncentral-msp-supply-chain.html</link>
+      <guid isPermaLink="true">https://umbrasec.dev/research/n-able-ncentral-msp-supply-chain.html</guid>
+      <pubDate>Wed, 12 Aug 2026 12:00:00 +0000</pubDate>
+      <category>Threat Analysis</category>
+      <description>CVE-2026-18556 and CVE-2026-18577 are authentication bypasses in N-able N-central, an RMM platform used by MSPs to manage client fleets. Both were added to CISA KEV in early August 2026 after in-the-wild exploitation, and the second exists because the fix for the first was incomplete. For an SMB with outsourced IT the vulnerable server is not theirs to patch - but the Take Control sessions, the svchost.exe dropped into a user's Documents folder, and the Cloudflared persistence service all executed on their endpoints. The timeline, what the published CVSS vectors tell a defender, two Sigma rules, a hunt procedure, and the supplier questions that follow.</description>
+    </item>
     <item>
       <title>SafePay Is Claiming Australian Victims - Why Real Estate SMBs Are in the Blast Radius</title>
       <link>https://umbrasec.dev/research/safepay-australian-smb.html</link>

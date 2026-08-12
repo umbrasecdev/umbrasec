@@ -2,6 +2,23 @@
   "_comment": "Single source of truth for all research articles. Add one entry per article (newest first), then run: python3 tools/site-build/build_indexes.py. The generator rewrites the homepage featured trio, the research index cards + count, feed.xml, the sitemap research entries, the command palette, and every article's prev/next nav. Raw text only: use literal & and \" - the generator escapes per output format. Categories: threat | detection | ai | tooling.",
   "articles": [
     {
+      "slug": "n-able-ncentral-msp-supply-chain",
+      "title": "Your MSP's RMM Is Your Attack Surface - What the N-central Compromise Means for SMBs",
+      "nav_title": "Your MSP's RMM Is Your Attack Surface",
+      "category": "threat",
+      "date": "2026-08-12",
+      "read_min": 11,
+      "home_blurb": "Two authentication bypasses in N-able N-central were exploited in the wild in early August 2026. If your IT is outsourced, the vulnerable server sits in your provider's rack and you have no patch to apply - but the remote-control sessions, the masqueraded binary and the tunnel service all landed on your endpoints. What you can still detect, and what to ask your MSP.",
+      "card_blurb": "N-central is the RMM platform your MSP uses to manage your fleet, and in early August 2026 two authentication bypasses in it were exploited in the wild. You cannot patch someone else's server - but every artifact the operators left behind ran on your machines. The timeline, what the advisories actually tell you, endpoint-side detections, and the questions to put to your provider this week.",
+      "feed_desc": "CVE-2026-18556 and CVE-2026-18577 are authentication bypasses in N-able N-central, an RMM platform used by MSPs to manage client fleets. Both were added to CISA KEV in early August 2026 after in-the-wild exploitation, and the second exists because the fix for the first was incomplete. For an SMB with outsourced IT the vulnerable server is not theirs to patch - but the Take Control sessions, the svchost.exe dropped into a user's Documents folder, and the Cloudflared persistence service all executed on their endpoints. The timeline, what the published CVSS vectors tell a defender, two Sigma rules, a hunt procedure, and the supplier questions that follow.",
+      "palette": {
+        "label": "Your MSP's RMM Is Your Attack Surface",
+        "hint": "N-central + third-party risk",
+        "icon": "fa-network-wired",
+        "keywords": "n-able n-central rmm msp managed service provider supply chain third party risk cve-2026-18556 cve-2026-18577 authentication bypass cwe-288 cisa kev take control cloudflared cloudflare tunnel svchost masquerading persistence essential eight patch applications mfa supplier assurance australian smb sigma t1036.005 t1543.003 t1572"
+      }
+    },
+    {
       "slug": "safepay-australian-smb",
       "title": "SafePay Is Claiming Australian Victims - Why Real Estate SMBs Are in the Blast Radius",
       "nav_title": "SafePay & Australian Real Estate",

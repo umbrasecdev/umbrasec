@@ -4,7 +4,7 @@
 
 The detection rules and queries published in [UMBRASEC research writeups](https://umbrasec.dev/research/),
 collected as runnable files. Honest status: **early** - this pack grows one writeup
-at a time, and right now it contains exactly what the two published writeups cover.
+at a time, and right now it contains exactly what the three published writeups cover.
 Nothing here claims to be more finished than it is.
 
 Every rule ships with the context that makes it usable: the writeup explains the
