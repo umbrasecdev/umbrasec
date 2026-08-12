@@ -611,7 +611,7 @@
       viewport.addEventListener("dragstart", (e) => e.preventDefault());
 
       let half = track.scrollWidth / 2;      // width of one (un-duplicated) row
-      let speed = half / 42000;              // px/ms — matches the old 42s / -50% drift
+      let speed = half / 42000;              // px/ms - matches the old 42s / -50% drift
       let offset = 0, paused = false, dragging = false, moved = false;
       let pointerId = null, startX = 0, startOffset = 0, last = 0;
 
@@ -656,7 +656,7 @@
       viewport.addEventListener("pointerup", endDrag);
       viewport.addEventListener("pointercancel", endDrag);
 
-      // A drag ends in a click on the underlying link — swallow it so we don't
+      // A drag ends in a click on the underlying link - swallow it so we don't
       // navigate to CVE.org after the user was only scrubbing the strip.
       track.addEventListener("click", (e) => {
         if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }

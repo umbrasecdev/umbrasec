@@ -3,3 +3,4 @@ __pycache__/
 .kev_state.json
 .DS_Store
 tools/local-sync/sync.log
+.claude/

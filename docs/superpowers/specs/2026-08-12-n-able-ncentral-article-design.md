@@ -243,13 +243,23 @@ and a note on what to correlate.
 
 ## References to cite
 
-- NVD / Tenable records for CVE-2026-18556 and CVE-2026-18577
-- CISA KEV catalog
-- N-able, "N-central Security Update" (10 Aug 2026) - primary vendor advisory
-  and the live IOC source
-- Rapid7 emergent threat report on CVE-2026-18577
-- Huntress analysis (Take Control artifacts, hunting guidance)
-- Horizon3 vulnerability page
+All URLs below were fetched directly during research and resolve. Use these
+exact strings - do not reconstruct slugs from memory.
+
+- `https://www.tenable.com/cve/CVE-2026-18556` and
+  `https://www.tenable.com/cve/CVE-2026-18577` - CVSS vectors and official
+  descriptions. NVD (`nvd.nist.gov/vuln/detail/<CVE>`) returned HTTP 502
+  during research; cite Tenable, or re-verify NVD before substituting it.
+- CISA KEV catalog: `https://www.cisa.gov/known-exploited-vulnerabilities-catalog`
+  (the dated alert pages returned HTTP 403 on fetch; the catalog entries were
+  confirmed against the locally synced `assets/kev-latest.json`)
+- N-able vendor advisory and live IOC source:
+  `https://www.n-able.com/blog/n-central-security-update-august-6-2026`
+  Note the slug says August 6 but the page carries the August 10 consolidated
+  update. Do not assert a date the URL does not carry.
+- Rapid7: `https://www.rapid7.com/blog/post/etr-cve-2026-18577-n-able-n-central-authentication-bypass-exploited-in-the-wild/`
+- Huntress: `https://www.huntress.com/blog/n-able-vulnerability-exploitation`
+- Horizon3: `https://horizon3.ai/attack-research/vulnerabilities/cve-2026-18556-cve-2026-18577/`
 - MITRE ATT&CK pages for T1036.005, T1543.003, T1572
 - MITRE CWE-288 (Authentication Bypass Using an Alternate Path or Channel) -
   for the weakness-class explanation in section 3
