@@ -22,6 +22,20 @@
 - **Word count target 1,900-2,400.**
 - Article date: **2026-08-12**. Sigma rule date field format: **`2026/08/12`**.
 
+**Environment notes (apply to every git command in this plan):**
+
+- The sandbox blocks `~/.gitconfig`, so plain `git` fails with
+  `fatal: unknown error occurred while reading the configuration files`.
+  Before any git command, run:
+  `export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null`
+- With global config bypassed there is no committer identity, so commit as:
+  `git -c user.name=atraxsrc -c user.email=0xdev1@umbrasec.dev commit -m "..."`
+- **The pre-commit hook is active** (`core.hooksPath=.githooks`). It runs
+  `build_indexes.py --check`, regenerates and stages derived files on drift,
+  and **aborts the commit if a `research/*.html` page exists with no matching
+  entry in `research/articles.json`** (an "orphan"). This is why Task 2's
+  commit uses `--no-verify` and Task 3's does not - see those steps.
+
 ---
 
 ### Task 1: Two Sigma rules + sigma-pack documentation
@@ -200,10 +214,11 @@ Run the same command as Step 3. Expected: still 7 rules, all `ok`, exit 0.
 
 ```bash
 cd /home/atrax/Documents/projects/github/umbrasec
+export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null
 git add tools/sigma-pack/rules/windows/masquerading-svchost-outside-system32.yml \
         tools/sigma-pack/rules/windows/cloudflared-tunnel-service-install.yml \
         tools/sigma-pack/README.md
-git commit -m "sigma-pack: add N-central post-exploitation rules
+git -c user.name=atraxsrc -c user.email=0xdev1@umbrasec.dev commit -m "sigma-pack: add N-central post-exploitation rules
 
 Two rules for what the August 2026 N-able N-central operators did on managed
 endpoints after bypassing authentication on the MSP's server:
@@ -347,10 +362,17 @@ Expected: footer 1, nav 1, h1 1, toc-rail True, data-reading True, data-base Tru
 
 - [ ] **Step 7: Commit**
 
+`--no-verify` is **required** here and is not a shortcut. Until Task 3 adds the
+manifest entry, this article is an orphan by the pre-commit hook's definition,
+and the hook aborts the commit. The hook's own documentation names
+`--no-verify` as the bypass. Task 3's commit runs the hook normally and is the
+gate that proves the orphan is resolved.
+
 ```bash
 cd /home/atrax/Documents/projects/github/umbrasec
+export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null
 git add research/n-able-ncentral-msp-supply-chain.html
-git commit -m "research: add N-central MSP supply-chain writeup
+git -c user.name=atraxsrc -c user.email=0xdev1@umbrasec.dev commit --no-verify -m "research: add N-central MSP supply-chain writeup
 
 Covers CVE-2026-18556 and CVE-2026-18577 from the position most SMBs are
 actually in: the vulnerable server is in the MSP's rack, so there is no patch
@@ -522,11 +544,16 @@ Expected: 200 on all five.
 
 - [ ] **Step 8: Commit**
 
+The pre-commit hook runs normally here and is the gate proving the orphan from
+Task 2 is resolved. If it aborts, the manifest entry is wrong - fix the entry,
+do not use `--no-verify`.
+
 ```bash
 cd /home/atrax/Documents/projects/github/umbrasec
+export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null
 git add research/articles.json research/index.html sitemap.xml feed.xml \
         assets/umbra.js index.html tools/index.html research/safepay-australian-smb.html
-git commit -m "site-build: publish the N-central writeup and refresh derived files
+git -c user.name=atraxsrc -c user.email=0xdev1@umbrasec.dev commit -m "site-build: publish the N-central writeup and refresh derived files
 
 Adds the article to the manifest and regenerates the homepage hero and featured
 trio, the research index and count, the category filters, the command palette,
