@@ -1,7 +1,7 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
   "catalogVersion": "2026.08.19",
-  "synced": "2026-08-19",
+  "synced": "2026-08-20",
   "count": 1671,
   "vulnerabilities": [
     {
