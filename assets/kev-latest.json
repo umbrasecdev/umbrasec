@@ -1,9 +1,17 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.08.21",
+  "catalogVersion": "2026.08.24",
   "synced": "2026-08-24",
-  "count": 1674,
+  "count": 1675,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-21962",
+      "vendorProject": "Oracle",
+      "product": "HTTP Server and Oracle Weblogic Server Proxy Plug-in",
+      "vulnerabilityName": "Oracle HTTP Server and Oracle Weblogic Server Proxy Plug-in Improper Access Control Vulnerability",
+      "dateAdded": "2026-08-24",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-73570",
       "vendorProject": "Synacor",
@@ -74,14 +82,6 @@
       "product": "Ray",
       "vulnerabilityName": "Ray-Project Ray Code Injection Vulnerability",
       "dateAdded": "2026-08-17",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-20349",
-      "vendorProject": "Cisco",
-      "product": "Secure Firewall Adaptive Security Appliance (ASA) and Secure Firewall Threat Defense (FTD) ",
-      "vulnerabilityName": "Cisco Secure Firewall Adaptive Security Appliance (ASA) and Secure Firewall Threat Defense (FTD) Heap Inspection Vulnerability",
-      "dateAdded": "2026-08-11",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
