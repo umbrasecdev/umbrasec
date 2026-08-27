@@ -1,9 +1,33 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.08.26",
-  "synced": "2026-08-26",
-  "count": 1682,
+  "catalogVersion": "2026.08.27",
+  "synced": "2026-08-27",
+  "count": 1685,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2023-49105",
+      "vendorProject": "ownCloud",
+      "product": "ownCloud",
+      "vulnerabilityName": "ownCloud Improper Authentication Vulnerability",
+      "dateAdded": "2026-08-27",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-53362",
+      "vendorProject": "Linux",
+      "product": "Kernel",
+      "vulnerabilityName": "Linux Kernel Unspecified Vulnerability",
+      "dateAdded": "2026-08-27",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-66384",
+      "vendorProject": "JFrog",
+      "product": "Artifactory",
+      "vulnerabilityName": "JFrog Artifactory Improper Limitation of a Pathname to a Restricted Directory Vulnerability",
+      "dateAdded": "2026-08-27",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2021-23758",
       "vendorProject": "Ajax.NET Professional",
@@ -58,30 +82,6 @@
       "product": "Gitea",
       "vulnerabilityName": "Gitea Code Injection Vulnerability",
       "dateAdded": "2026-08-25",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-21962",
-      "vendorProject": "Oracle",
-      "product": "HTTP Server and Oracle Weblogic Server Proxy Plug-in",
-      "vulnerabilityName": "Oracle HTTP Server and Oracle Weblogic Server Proxy Plug-in Improper Access Control Vulnerability",
-      "dateAdded": "2026-08-24",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-73570",
-      "vendorProject": "Synacor",
-      "product": "Zimbra Collaboration Suite (ZCS)",
-      "vulnerabilityName": "Zimbra Collaboration Suite (ZCS) OS Command Injection Vulnerability",
-      "dateAdded": "2026-08-21",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-72530",
-      "vendorProject": "TrueConf",
-      "product": "Server",
-      "vulnerabilityName": "TrueConf Server Code Injection Vulnerability",
-      "dateAdded": "2026-08-20",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
