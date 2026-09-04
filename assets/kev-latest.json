@@ -1,9 +1,17 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.09.02",
+  "catalogVersion": "2026.09.04",
   "synced": "2026-09-04",
-  "count": 1694,
+  "count": 1695,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-85046",
+      "vendorProject": "Google",
+      "product": "Chromium V8",
+      "vulnerabilityName": "Google Chromium V8 Type Confusion Vulnerability",
+      "dateAdded": "2026-09-04",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-59822",
       "vendorProject": "BerriAI",
@@ -74,14 +82,6 @@
       "product": "NG/MF",
       "vulnerabilityName": "PaperCut NG/MF Missing Authentication for Critical Function Vulnerability",
       "dateAdded": "2026-08-31",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2023-49105",
-      "vendorProject": "ownCloud",
-      "product": "ownCloud",
-      "vulnerabilityName": "ownCloud Improper Authentication Vulnerability",
-      "dateAdded": "2026-08-27",
       "knownRansomwareCampaignUse": "Unknown"
     }
   ]
