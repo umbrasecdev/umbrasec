@@ -1,9 +1,41 @@
 {
   "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalogVersion": "2026.09.08",
+  "catalogVersion": "2026.09.09",
   "synced": "2026-09-09",
-  "count": 1699,
+  "count": 1703,
   "vulnerabilities": [
+    {
+      "cveID": "CVE-2026-19490",
+      "vendorProject": "Citrix",
+      "product": "NetScaler",
+      "vulnerabilityName": "Citrix NetScaler Authentication Bypass Using an Alternate Path or Channel Vulnerability",
+      "dateAdded": "2026-09-09",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2025-25249",
+      "vendorProject": "Fortinet",
+      "product": "Multiple Products",
+      "vulnerabilityName": "Fortinet Multiple Products Heap-based Buffer Overflow Vulnerability",
+      "dateAdded": "2026-09-09",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-87491",
+      "vendorProject": "Google",
+      "product": "Chromium V8",
+      "vulnerabilityName": "Google Chromium V8 Out of Bounds Write Vulnerability",
+      "dateAdded": "2026-09-09",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
+    {
+      "cveID": "CVE-2026-20079",
+      "vendorProject": "Cisco",
+      "product": "Secure Firewall Management Center (FMC) and Security Cloud Control (SCC) Firewall Management",
+      "vulnerabilityName": "Cisco Firewall Management Center Authentication Bypass Using an Alternate Path or Channel Vulnerability",
+      "dateAdded": "2026-09-09",
+      "knownRansomwareCampaignUse": "Unknown"
+    },
     {
       "cveID": "CVE-2026-75650",
       "vendorProject": "Adobe",
@@ -49,38 +81,6 @@
       "vendorProject": "BerriAI",
       "product": "LiteLLM",
       "vulnerabilityName": "BerriAI LiteLLM Improper Authentication Vulnerability",
-      "dateAdded": "2026-09-02",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-48710",
-      "vendorProject": "Kludex",
-      "product": "Starlette",
-      "vulnerabilityName": "Kludex Starlette HTTP Request/Response Smuggling Vulnerability",
-      "dateAdded": "2026-09-02",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-49869",
-      "vendorProject": "Kestra",
-      "product": "Kestra OSS",
-      "vulnerabilityName": "Kestra OSS OS Command Injection Vulnerability",
-      "dateAdded": "2026-09-02",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-82329",
-      "vendorProject": "JFrog",
-      "product": "Artifactory",
-      "vulnerabilityName": "JFrog Artifactory Improper Authentication Vulnerability",
-      "dateAdded": "2026-09-02",
-      "knownRansomwareCampaignUse": "Unknown"
-    },
-    {
-      "cveID": "CVE-2026-9586",
-      "vendorProject": "Sangoma",
-      "product": "Switchvox",
-      "vulnerabilityName": "Sangoma Switchvox SQL Injection Vulnerability",
       "dateAdded": "2026-09-02",
       "knownRansomwareCampaignUse": "Unknown"
     }
