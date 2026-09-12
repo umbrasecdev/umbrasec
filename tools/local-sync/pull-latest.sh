@@ -7,7 +7,7 @@
 #    --ff-only refuses and the script exits non-zero without changing anything
 #
 # Install (hourly, quiet unless something changed):
-#   crontab -l 2>/dev/null | { cat; echo '17 * * * * /home/atrax/Documents/projects/github/umbrasec/tools/local-sync/pull-latest.sh >> /home/atrax/Documents/projects/github/umbrasec/tools/local-sync/sync.log 2>&1'; } | crontab -
+#   crontab -l 2>/dev/null | { cat; echo '17 * * * * /path/to/umbrasec/tools/local-sync/pull-latest.sh >> /path/to/umbrasec/tools/local-sync/sync.log 2>&1'; } | crontab -
 
 set -euo pipefail
 
